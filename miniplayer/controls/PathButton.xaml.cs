@@ -31,17 +31,15 @@ namespace miniplayer.controls
         public static readonly DependencyProperty PathFillProperty =
             DependencyProperty.Register("PathFill", typeof(Brush), typeof(PathButton), new PropertyMetadata(Brushes.DodgerBlue));
 
-
-
-        public object Path
+        public Geometry PathData
         {
-            get { return (object)GetValue(PathProperty); }
-            set { SetValue(PathProperty, value); }
+            get { return (Geometry)GetValue(PathDataProperty); }
+            set { SetValue(PathDataProperty, value); }
         }
+        
+        public static readonly DependencyProperty PathDataProperty =
+            DependencyProperty.Register("PathData", typeof(Geometry), typeof(PathButton), new PropertyMetadata(Geometry.Empty));
 
-        // Using a DependencyProperty as the backing store for Path.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register("Path", typeof(object), typeof(PathButton), new PropertyMetadata(new object()));
 
 
 

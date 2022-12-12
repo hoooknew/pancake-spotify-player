@@ -26,14 +26,15 @@
         <StackPanel Orientation="Horizontal">
         </StackPanel>-->
 
-        <Viewbox>
+        <!--<Viewbox>
             <Viewbox.Resources>
                 <Style TargetType="Path">
                     <Setter Property="Fill" Value="Orange"/>
                 </Style>
             </Viewbox.Resources>
             <Path Data="{StaticResource geo_play_circle_filled}"/>
-        </Viewbox>
-        <!--<ctrl:PathButton Path ="{StaticResource path_skip_next}"/>-->
+        </Viewbox>-->
+        
+        <ctrl:PathButton Path="{StaticResource geo_skip_next}"/>
     </Grid>
 </Window>
