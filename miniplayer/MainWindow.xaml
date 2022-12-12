@@ -3,10 +3,37 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:miniplayer"
+        xmlns:svg="clr-namespace:SVGImage.SVG;assembly=SVGImage"
+        xmlns:ctrl="clr-namespace:miniplayer.controls"
+        xmlns:local="clr-namespace:miniplayer"        
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="70" Width="400">
+    <Window.Resources>
+    </Window.Resources>
     <Grid>
+        <!--<Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+        </Grid>
 
+        <StackPanel Orientation="Horizontal">
+        </StackPanel>-->
+
+        <Viewbox>
+            <Viewbox.Resources>
+                <Style TargetType="Path">
+                    <Setter Property="Fill" Value="Orange"/>
+                </Style>
+            </Viewbox.Resources>
+            <Path Data="{StaticResource geo_play_circle_filled}"/>
+        </Viewbox>
+        <!--<ctrl:PathButton Path ="{StaticResource path_skip_next}"/>-->
     </Grid>
 </Window>
