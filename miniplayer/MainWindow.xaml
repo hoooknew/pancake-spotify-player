@@ -22,12 +22,12 @@
 
         <Grid Grid.Column="0" Margin="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MaxWidth="{Binding DesiredSize.Width, ElementName=_title_artist_text}"/>
+                <ColumnDefinition Width="*" MaxWidth="{Binding DesiredSize.Width, ElementName=_title_text}"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
-                <TextBlock FontWeight="DemiBold" TextTrimming="CharacterEllipsis">title title title title title title title title title title</TextBlock>
+                <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis">aaa title title title title title title title title title title zzz</TextBlock>
                 <TextBlock Grid.Row="1">artist artist</TextBlock>
             </StackPanel>
 
