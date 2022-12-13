@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:miniplayer.controls"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Button.Resources>
         <Style TargetType="Path">
@@ -135,6 +135,11 @@
         </ControlTemplate>
     </Button.Template>-->
     <Viewbox>
-        <ContentPresenter Content="{Binding Path, RelativeSource={RelativeSource AncestorType={x:Type local:PathButton}}}"/>
+        <Path
+            DataContext="{Binding '', RelativeSource={RelativeSource AncestorType={x:Type local:PathButton}}}"
+            Data="{Binding PathData}"
+            Fill="{Binding PathFill}"
+            Stroke="{Binding PathStroke}"
+            StrokeThickness="{Binding PathStrokeThickness}"/>
     </Viewbox>
 </Button>
