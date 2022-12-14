@@ -10,84 +10,105 @@
         mc:Ignorable="d"
         SizeToContent="Height"
         WindowStyle="None"
-        ResizeMode="CanResize"
+        ResizeMode="NoResize"
         Title="MainWindow" Height="80" Width="400"
         MouseDown="Window_MouseDown">
     <Window.Resources>
         <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>
+
+        <!--https://learn.microsoft.com/en-us/answers/questions/652068/mouse-resizing-cursor-changes-to-normal-in-wpf.html-->
+        <Style x:Key="ResizeGripStyle" TargetType="Rectangle">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Fill" Value="Transparent" />
+            <EventSetter Event="MouseLeftButtonDown" Handler="Resize_Init"/>
+            <EventSetter Event="MouseLeftButtonUp" Handler="Resize_End"/>
+            <EventSetter Event="MouseMove" Handler="Resizing_Window"/>
+        </Style>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0" Margin="2">
+        <Rectangle Grid.Column="0" x:Name="_leftSizeGrip" Width="4" Cursor="SizeWE"  Style="{StaticResource ResizeGripStyle}" />
+        
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*">
-                    <ColumnDefinition.MaxWidth>
-                        <MultiBinding Converter="{StaticResource TextBoxsToMaxSizeMultiConverter}">
-                            <MultiBinding.Bindings>
-                                <Binding ElementName="_title_text"/>
-                                <Binding ElementName="_artist_text"/>
-                                <Binding Path="Text" ElementName="_title_text"/>
-                                <Binding Path="Text" ElementName="_artist_text"/>
-                            </MultiBinding.Bindings>
-                        </MultiBinding>
-                    </ColumnDefinition.MaxWidth>
-                </ColumnDefinition>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
 
-            <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
-                <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis">title title title title title title title title title title zzz</TextBlock>
-                <TextBlock x:Name="_artist_text" Grid.Row="1">artist artist</TextBlock>
-            </StackPanel>
+                <Grid Grid.Column="0" Margin="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*">
+                            <ColumnDefinition.MaxWidth>
+                                <MultiBinding Converter="{StaticResource TextBoxsToMaxSizeMultiConverter}">
+                                    <MultiBinding.Bindings>
+                                        <Binding ElementName="_title_text"/>
+                                        <Binding ElementName="_artist_text"/>
+                                        <Binding Path="Text" ElementName="_title_text"/>
+                                        <Binding Path="Text" ElementName="_artist_text"/>
+                                    </MultiBinding.Bindings>
+                                </MultiBinding>
+                            </ColumnDefinition.MaxWidth>
+                        </ColumnDefinition>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
 
-            <ctrl:PathButton 
-                Grid.Column="1" 
-                HorizontalAlignment="Left"
-                Margin="4,0,8,0" Height="30" Width="30"
-                Background="Transparent"
-                BorderThickness="0"
-                PathData="{StaticResource geo_favorite}" 
-                PathFill="LimeGreen"/>
+                    <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
+                        <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis">title title title title title title title title title title zzz</TextBlock>
+                        <TextBlock x:Name="_artist_text" Grid.Row="1">artist artist</TextBlock>
+                    </StackPanel>
+
+                    <ctrl:PathButton 
+                    Grid.Column="1" 
+                    HorizontalAlignment="Left"
+                    Margin="4,0,8,0" Height="30" Width="30"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    PathData="{StaticResource geo_favorite}" 
+                    PathFill="LimeGreen"/>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center">
+                    <StackPanel.Resources>
+                        <Style TargetType="ctrl:PathButton">
+                            <Setter Property="PathFill" Value="Black"/>
+                            <Setter Property="PathStroke" Value="Transparent"/>
+                            <Setter Property="PathStrokeThickness" Value="0"/>
+                            <Setter Property="Width" Value="20"/>
+                            <Setter Property="Height" Value="20"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="-2"/>
+                            <Setter Property="Margin" Value="1,0"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <ctrl:PathButton PathData="{StaticResource geo_shuffle}"/>
+                    <ctrl:PathButton PathData="{StaticResource geo_skip_previous}"/>
+                    <ctrl:PathButton PathData="{StaticResource geo_play_circle_filled}" Width="30" Height="30"/>
+                    <ctrl:PathButton PathData="{StaticResource geo_skip_next}"/>
+                    <ctrl:PathButton PathData="{StaticResource geo_repeat}"/>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ProgressBar Grid.Column="1" Value="50" Minimum="0" Maximum="100"/>
+            </Grid>
         </Grid>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center">
-            <StackPanel.Resources>
-                <Style TargetType="ctrl:PathButton">
-                    <Setter Property="PathFill" Value="Black"/>
-                    <Setter Property="PathStroke" Value="Transparent"/>
-                    <Setter Property="PathStrokeThickness" Value="0"/>
-                    <Setter Property="Width" Value="20"/>
-                    <Setter Property="Height" Value="20"/>
-                    <Setter Property="VerticalAlignment" Value="Center"/>
-                    <Setter Property="Padding" Value="-2"/>
-                    <Setter Property="Margin" Value="1,0"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                </Style>
-            </StackPanel.Resources>
-            <ctrl:PathButton PathData="{StaticResource geo_shuffle}"/>
-            <ctrl:PathButton PathData="{StaticResource geo_skip_previous}"/>
-            <ctrl:PathButton PathData="{StaticResource geo_play_circle_filled}" Width="30" Height="30"/>
-            <ctrl:PathButton PathData="{StaticResource geo_skip_next}"/>
-            <ctrl:PathButton PathData="{StaticResource geo_repeat}"/>
-        </StackPanel>
-    </Grid>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <ProgressBar Grid.Column="1" Value="50" Minimum="0" Maximum="100"/>
-        </Grid>
+        <Rectangle Grid.Column="2" x:Name="_rightSizeGrip"  Width="7"  HorizontalAlignment="Right"  Cursor="SizeWE"  Style="{StaticResource ResizeGripStyle}" />
     </Grid>
 </Window>
