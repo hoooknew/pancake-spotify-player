@@ -10,12 +10,15 @@ namespace miniplayer.converters
 {
     internal class TextBoxsToMaxSizeMultiConverter : IMultiValueConverter
     {
+
+        public int Padding { get; set; } = 0;
+
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             return values.OfType<TextBlock>()
                 .Select(r => MeasureString(r))
                 .Select(r => r.Width)
-                .Max();
+                .Max() + Padding;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

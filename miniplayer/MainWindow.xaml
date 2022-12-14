@@ -5,30 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:svg="clr-namespace:SVGImage.SVG;assembly=SVGImage"
         xmlns:ctrl="clr-namespace:miniplayer.controls"
+        xmlns:cvt="clr-namespace:miniplayer.converters"
         xmlns:local="clr-namespace:miniplayer"        
         mc:Ignorable="d"
         SizeToContent="Height"
         Title="MainWindow" Height="80" Width="400">
     <Window.Resources>
+        <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         
 
-        <Grid Grid.Column="0" Margin="2">
+        <Grid x:Name="_title_grid" Grid.Column="0" Margin="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MaxWidth="{Binding DesiredSize.Width, ElementName=_title_text}"/>
+                <!--MaxWidth="{Binding DesiredSize.Width, ElementName=_title_text}"-->
+                <ColumnDefinition Width="*">
+                    <ColumnDefinition.MaxWidth>
+                        <MultiBinding Converter="{StaticResource TextBoxsToMaxSizeMultiConverter}">
+                            <MultiBinding.Bindings>
+                                <Binding ElementName="_title_text"/>
+                                <Binding ElementName="_artist_text"/>
+                                <Binding Path="Text" ElementName="_title_text"/>
+                                <Binding Path="Text" ElementName="_artist_text"/>
+                            </MultiBinding.Bindings>
+                        </MultiBinding>
+                    </ColumnDefinition.MaxWidth>
+                </ColumnDefinition>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
 
             <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
-                <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis">aaa title title title title title title title title title title zzz</TextBlock>
-                <TextBlock Grid.Row="1">artist artist</TextBlock>
+                <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis">title title title title title title title title title title zzz</TextBlock>
+                <TextBlock x:Name="_artist_text" Grid.Row="1">artist artist</TextBlock>
             </StackPanel>
 
             <ctrl:PathButton 
@@ -39,7 +53,7 @@
                 PathFill="LimeGreen"/>
         </Grid>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="1">
+        <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center">
             <StackPanel.Resources>
                 <Style TargetType="ctrl:PathButton">
                     <Setter Property="PathFill" Value="Black"/>
