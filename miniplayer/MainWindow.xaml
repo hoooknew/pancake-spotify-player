@@ -14,18 +14,20 @@
         <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>
     </Window.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        
-
-        <Grid x:Name="_title_grid" Grid.Column="0" Margin="2">
-            <Grid.ColumnDefinitions>
-                <!--MaxWidth="{Binding DesiredSize.Width, ElementName=_title_text}"-->
-                <ColumnDefinition Width="*">
+        <Grid Grid.Column="0" Margin="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*">
                     <ColumnDefinition.MaxWidth>
                         <MultiBinding Converter="{StaticResource TextBoxsToMaxSizeMultiConverter}">
                             <MultiBinding.Bindings>
@@ -49,6 +51,8 @@
                 Grid.Column="1" 
                 HorizontalAlignment="Left"
                 Margin="4,0,8,0" Height="30" Width="30"
+                Background="Transparent"
+                BorderThickness="0"
                 PathData="{StaticResource geo_favorite}" 
                 PathFill="LimeGreen"/>
         </Grid>
@@ -74,5 +78,13 @@
             <ctrl:PathButton PathData="{StaticResource geo_skip_next}"/>
             <ctrl:PathButton PathData="{StaticResource geo_repeat}"/>
         </StackPanel>
+    </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ProgressBar Grid.Column="1" Value="50" Minimum="0" Maximum="100"/>
+        </Grid>
     </Grid>
 </Window>
