@@ -12,6 +12,7 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         Title="MainWindow" Height="80" Width="400"
+        MinWidth="250"
         MouseDown="Window_MouseDown">
     <Window.Resources>
         <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>
@@ -20,9 +21,24 @@
         <Style x:Key="ResizeGripStyle" TargetType="Rectangle">
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Fill" Value="Transparent" />
+            <Setter Property="Width" Value="4" />
+            <Setter Property="Cursor" Value="SizeWE" />
             <EventSetter Event="MouseLeftButtonDown" Handler="Resize_Init"/>
             <EventSetter Event="MouseLeftButtonUp" Handler="Resize_End"/>
             <EventSetter Event="MouseMove" Handler="Resizing_Window"/>
+        </Style>
+
+        <Style x:Key="buttonStyle" TargetType="ctrl:PathButton">
+            <Setter Property="PathFill" Value="Black"/>
+            <Setter Property="PathStroke" Value="Transparent"/>
+            <Setter Property="PathStrokeThickness" Value="0"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="-2"/>
+            <Setter Property="Margin" Value="1,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -32,7 +48,7 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Grid.Column="0" x:Name="_leftSizeGrip" Width="4" Cursor="SizeWE"  Style="{StaticResource ResizeGripStyle}" />
+        <Rectangle Grid.Column="0" x:Name="_leftSizeGrip" Style="{StaticResource ResizeGripStyle}" />
         
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
@@ -42,6 +58,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
@@ -80,18 +97,7 @@
 
                 <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center">
                     <StackPanel.Resources>
-                        <Style TargetType="ctrl:PathButton">
-                            <Setter Property="PathFill" Value="Black"/>
-                            <Setter Property="PathStroke" Value="Transparent"/>
-                            <Setter Property="PathStrokeThickness" Value="0"/>
-                            <Setter Property="Width" Value="20"/>
-                            <Setter Property="Height" Value="20"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Padding" Value="-2"/>
-                            <Setter Property="Margin" Value="1,0"/>
-                            <Setter Property="BorderThickness" Value="0"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                        </Style>
+                        <Style TargetType="ctrl:PathButton" BasedOn="{StaticResource buttonStyle}"/>
                     </StackPanel.Resources>
                     <ctrl:PathButton PathData="{StaticResource geo_shuffle}"/>
                     <ctrl:PathButton PathData="{StaticResource geo_skip_previous}"/>
@@ -99,6 +105,17 @@
                     <ctrl:PathButton PathData="{StaticResource geo_skip_next}"/>
                     <ctrl:PathButton PathData="{StaticResource geo_repeat}"/>
                 </StackPanel>
+
+                <ctrl:PathButton x:Name="_closeBtn" 
+                                 Grid.Column="3" 
+                                 PathData="{StaticResource geo_close}" 
+                                 Style="{StaticResource buttonStyle}"
+                                 Width="10"
+                                 Height="10" 
+                                 Margin="4,2,0,0"
+                                 VerticalAlignment="Top"
+                                 HorizontalAlignment="Left"
+                                 Click="_closeBtn_Click"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -109,6 +126,6 @@
             </Grid>
         </Grid>
 
-        <Rectangle Grid.Column="2" x:Name="_rightSizeGrip"  Width="7"  HorizontalAlignment="Right"  Cursor="SizeWE"  Style="{StaticResource ResizeGripStyle}" />
+        <Rectangle Grid.Column="2" x:Name="_rightSizeGrip" Style="{StaticResource ResizeGripStyle}" />
     </Grid>
 </Window>

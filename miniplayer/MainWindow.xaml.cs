@@ -74,5 +74,10 @@ namespace miniplayer
                 e.Handled = true;
             }
         }
+
+        private void _closeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
