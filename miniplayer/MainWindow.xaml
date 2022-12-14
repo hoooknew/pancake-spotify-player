@@ -9,7 +9,10 @@
         xmlns:local="clr-namespace:miniplayer"        
         mc:Ignorable="d"
         SizeToContent="Height"
-        Title="MainWindow" Height="80" Width="400">
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Title="MainWindow" Height="80" Width="400"
+        MouseDown="Window_MouseDown">
     <Window.Resources>
         <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>
     </Window.Resources>
