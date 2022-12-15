@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace test_auth
+namespace miniplayer.lib
 {
-    internal static class Authentication
+    public static class Authentication
     {
         public static IRefreshableToken? GetToken()
         {
@@ -112,7 +112,6 @@ namespace test_auth
                 }
             }
         }
-
         public static IAuthenticator CreateAuthenticator(IRefreshableToken? token)
         {
             var authenticator = new PKCEAuthenticator(Config.ClientId!, (token as PKCETokenResponse)!);

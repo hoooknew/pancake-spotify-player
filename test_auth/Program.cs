@@ -8,6 +8,7 @@ using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using Swan.Logging;
 using static SpotifyAPI.Web.Scopes;
+using miniplayer.lib;
 
 namespace test_auth
 {

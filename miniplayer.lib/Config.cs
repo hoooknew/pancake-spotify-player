@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace test_auth
+namespace miniplayer.lib
 {
-    internal static class Config
+    public static class Config
     {
         private static IConfiguration? __instance = null;
         public static IConfiguration Instance
