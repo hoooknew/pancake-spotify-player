@@ -10,9 +10,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test_auth", "test_auth\test_auth.csproj", "{930266A7-CAF4-4106-8DDE-336915283795}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test", "test\test.csproj", "{930266A7-CAF4-4106-8DDE-336915283795}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "miniplayer.lib", "miniplayer.lib\miniplayer.lib.csproj", "{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "miniplayer.lib", "miniplayer.lib\miniplayer.lib.csproj", "{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
