@@ -27,25 +27,34 @@ namespace test_auth
             // This is a bug in the SWAN Logging library, need this hack to bring back the cursor
             AppDomain.CurrentDomain.ProcessExit += (sender, e) => Exiting();
 
-            //if (string.IsNullOrEmpty(Config.ClientId))
-            //{
-            //    throw new NullReferenceException(
-            //      "Please set SPOTIFY_CLIENT_ID via environment variables before starting the program"
-            //    );
-            //}
+            if (string.IsNullOrEmpty(Config.ClientId))
+            {
+                throw new NullReferenceException(
+                  "Please set SPOTIFY_CLIENT_ID via environment variables before starting the program"
+                );
+            }
 
-            //if (File.Exists(CredentialsPath))
-            //{
-            //    await Start();
-            //}
-            //else
-            //{
-            //    await StartAuthentication();
-            //}
+            IRefreshableToken? token;
+            if (Config.TokenAvailable())
+                token = Config.LoadToken();
+            else
+            {
+                token = await Authentication.Login();
+                Config.SaveToken(token);
+            }
 
-            //Console.ReadKey();
+            if (token != null)
+            {
+                var authenticator = Authentication.CreateAuthenticator(token);
 
-            var creds = await Authenticator.Login();
+                var config = SpotifyClientConfig.CreateDefault()
+                    .WithAuthenticator(authenticator);
+
+                var spotify = new SpotifyClient(config);
+
+                var me = await spotify.UserProfile.Current();
+                Console.WriteLine($"Welcome {me.DisplayName} ({me.Id}), you're authenticated!");
+            }
 
             return 0;
         }
@@ -71,49 +80,6 @@ namespace test_auth
 
             _server.Dispose();
             Environment.Exit(0);
-        }
-
-        private static async Task StartAuthentication()
-        {
-            var (verifier, challenge) = PKCEUtil.GenerateCodes();
-
-            await _server.Start();
-            _server.AuthorizationCodeReceived += async (sender, response) =>
-            {
-                await _server.Stop();
-                PKCETokenResponse token = await new OAuthClient().RequestToken(
-                  new PKCETokenRequest(Config.ClientId!, response.Code, _server.BaseUri, verifier)
-                );
-
-                await File.WriteAllTextAsync(CredentialsPath, JsonConvert.SerializeObject(token));
-                await Start();
-            };
-
-            var request = new LoginRequest(_server.BaseUri, Config.ClientId!, LoginRequest.ResponseType.Code)
-            {
-                CodeChallenge = challenge,
-                CodeChallengeMethod = "S256",
-                Scope = new List<string> { 
-                    AppRemoteControl,
-                    UserReadCurrentlyPlaying,
-                    UserReadPlaybackState,
-                    UserReadPlaybackPosition,
-                    UserModifyPlaybackState,
-                    UserReadEmail, 
-                    UserReadPrivate, 
-                    PlaylistReadPrivate, 
-                    PlaylistReadCollaborative }
-            };
-
-            Uri uri = request.ToUri();
-            try
-            {
-                BrowserUtil.Open(uri);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Unable to open URL, manually open: {0}", uri);
-            }
-        }
+        }        
     }
 }

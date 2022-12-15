@@ -32,19 +32,30 @@ namespace test_auth
         }
 
         public static string? ClientId => Instance["clientId"];
+        
 
 
-        private static string _credentialsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "/miniplayer/credentials.json");
+        private static readonly string _credentialsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"miniplayer\credentials.json");
 
-        public static bool TokensAvailable() => File.Exists(_credentialsPath);
-        public static void SaveTokens(PKCETokenResponse? creds)
+        public static bool TokenAvailable() => File.Exists(_credentialsPath);
+
+        public static void SaveToken(IRefreshableToken? token)
         {
-            File.WriteAllText(_credentialsPath, JsonConvert.SerializeObject(creds));
+            if (token == null && File.Exists(_credentialsPath))
+                File.Delete(_credentialsPath);
+            else
+            {
+                var directory = Path.GetDirectoryName(_credentialsPath);
+                if (!Directory.Exists(directory))
+                    Directory.CreateDirectory(directory!);
+
+                File.WriteAllText(_credentialsPath, JsonConvert.SerializeObject(token));
+            }
         }
 
-        public static PKCETokenResponse? GetTokens()
+        public static IRefreshableToken? LoadToken()
         {
-            if (TokensAvailable())
+            if (TokenAvailable())
             {
                 var json = File.ReadAllText(_credentialsPath);
                 return JsonConvert.DeserializeObject<PKCETokenResponse>(json);

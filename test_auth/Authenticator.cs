@@ -9,9 +9,16 @@ using System.Threading.Tasks;
 
 namespace test_auth
 {
-    internal class Authenticator
+    internal static class Authentication
     {
-        public static async Task<PKCETokenResponse?> Login()
+        public static IRefreshableToken? GetToken()
+        {
+            if (Config.TokenAvailable())
+                return Config.LoadToken();
+            else
+                return null;
+        }
+        public static async Task<IRefreshableToken?> Login()
         {
             if (string.IsNullOrEmpty(Config.ClientId))
                 throw new NullReferenceException(
@@ -83,7 +90,7 @@ namespace test_auth
 
                     if (resetEvent.WaitOne(20_000) && result != null)
                     {
-                        if (result is PKCETokenResponse token)
+                        if (result is IRefreshableToken token)
                             return token;
                         else if (result is string error)
                         {
@@ -99,10 +106,19 @@ namespace test_auth
                     else
                     {
                         await server.Stop();
+                        Console.Error.WriteLine($"Timeout waiting for an authorization response.");
                         return null;
                     }
                 }
             }
+        }
+
+        public static IAuthenticator CreateAuthenticator(IRefreshableToken? token)
+        {
+            var authenticator = new PKCEAuthenticator(Config.ClientId!, (token as PKCETokenResponse)!);
+            authenticator.TokenRefreshed += (sender, token) => Config.SaveToken(token);
+
+            return authenticator;
         }
     }
 }
