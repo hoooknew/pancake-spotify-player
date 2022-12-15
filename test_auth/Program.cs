@@ -9,7 +9,7 @@ using SpotifyAPI.Web.Auth;
 using Swan.Logging;
 using static SpotifyAPI.Web.Scopes;
 
-namespace Example.CLI.PersistentConfig
+namespace test_auth
 {
     //https://github.com/JohnnyCrazy/SpotifyAPI-NET/blob/54f8f8960fbd859781fd971efaca94462ca52468/SpotifyAPI.Web.Examples/Example.CLI.PersistentConfig/Program.cs
     /// <summary>
@@ -18,8 +18,7 @@ namespace Example.CLI.PersistentConfig
     /// </summary>
     public class test_auth
     {
-        private const string CredentialsPath = "credentials.json";
-        private static readonly string? clientId = Config.ClientId;
+        private const string CredentialsPath = "credentials.json";        
         private static readonly EmbedIOAuthServer _server = new EmbedIOAuthServer(new Uri("http://localhost:3000/auth/callback"), 3000);
 
         private static void Exiting() => Console.CursorVisible = true;
@@ -28,23 +27,26 @@ namespace Example.CLI.PersistentConfig
             // This is a bug in the SWAN Logging library, need this hack to bring back the cursor
             AppDomain.CurrentDomain.ProcessExit += (sender, e) => Exiting();
 
-            if (string.IsNullOrEmpty(clientId))
-            {
-                throw new NullReferenceException(
-                  "Please set SPOTIFY_CLIENT_ID via environment variables before starting the program"
-                );
-            }
+            //if (string.IsNullOrEmpty(Config.ClientId))
+            //{
+            //    throw new NullReferenceException(
+            //      "Please set SPOTIFY_CLIENT_ID via environment variables before starting the program"
+            //    );
+            //}
 
-            if (File.Exists(CredentialsPath))
-            {
-                await Start();
-            }
-            else
-            {
-                await StartAuthentication();
-            }
+            //if (File.Exists(CredentialsPath))
+            //{
+            //    await Start();
+            //}
+            //else
+            //{
+            //    await StartAuthentication();
+            //}
 
-            Console.ReadKey();
+            //Console.ReadKey();
+
+            var creds = await Authenticator.Login();
+
             return 0;
         }
 
@@ -53,7 +55,7 @@ namespace Example.CLI.PersistentConfig
             var json = await File.ReadAllTextAsync(CredentialsPath);
             var token = JsonConvert.DeserializeObject<PKCETokenResponse>(json);
 
-            var authenticator = new PKCEAuthenticator(clientId!, token!);
+            var authenticator = new PKCEAuthenticator(Config.ClientId!, token!);
             authenticator.TokenRefreshed += (sender, token) => File.WriteAllText(CredentialsPath, JsonConvert.SerializeObject(token));
 
             var config = SpotifyClientConfig.CreateDefault()
@@ -80,18 +82,27 @@ namespace Example.CLI.PersistentConfig
             {
                 await _server.Stop();
                 PKCETokenResponse token = await new OAuthClient().RequestToken(
-                  new PKCETokenRequest(clientId!, response.Code, _server.BaseUri, verifier)
+                  new PKCETokenRequest(Config.ClientId!, response.Code, _server.BaseUri, verifier)
                 );
 
                 await File.WriteAllTextAsync(CredentialsPath, JsonConvert.SerializeObject(token));
                 await Start();
             };
 
-            var request = new LoginRequest(_server.BaseUri, clientId!, LoginRequest.ResponseType.Code)
+            var request = new LoginRequest(_server.BaseUri, Config.ClientId!, LoginRequest.ResponseType.Code)
             {
                 CodeChallenge = challenge,
                 CodeChallengeMethod = "S256",
-                Scope = new List<string> { UserReadEmail, UserReadPrivate, PlaylistReadPrivate, PlaylistReadCollaborative }
+                Scope = new List<string> { 
+                    AppRemoteControl,
+                    UserReadCurrentlyPlaying,
+                    UserReadPlaybackState,
+                    UserReadPlaybackPosition,
+                    UserModifyPlaybackState,
+                    UserReadEmail, 
+                    UserReadPrivate, 
+                    PlaylistReadPrivate, 
+                    PlaylistReadCollaborative }
             };
 
             Uri uri = request.ToUri();
@@ -104,30 +115,5 @@ namespace Example.CLI.PersistentConfig
                 Console.WriteLine("Unable to open URL, manually open: {0}", uri);
             }
         }
-    }
-
-    public static class Config
-    {
-        private static IConfiguration? __instance = null;
-        public static IConfiguration Instance
-        {
-            get
-            {
-                if (__instance == null)
-                    lock(typeof(Config))
-                    {
-                        if (__instance == null)
-                        {
-                            var builder = new ConfigurationBuilder()
-                                .AddJsonFile($"appsettings.json", true);
-                            __instance = builder.Build();
-                        }
-                    }
-
-                return __instance;
-            }
-        }
-
-        public static string? ClientId => Instance["clientId"];
     }
 }
