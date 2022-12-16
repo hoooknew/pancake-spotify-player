@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl="clr-namespace:miniplayer.controls"
         xmlns:cvt="clr-namespace:miniplayer.converters"
+        xmlns:mdl="clr-namespace:miniplayer.models"
         xmlns:local="clr-namespace:miniplayer"        
         mc:Ignorable="d"
         SizeToContent="Height"
@@ -12,6 +13,7 @@
         ResizeMode="NoResize"
         Title="MainWindow" Height="80" Width="400"
         MinWidth="250"
+        
         MouseDown="Window_MouseDown">
     <Window.Resources>
         <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>
@@ -27,6 +29,12 @@
                                       TrueValue="{StaticResource geo_favorite}" 
                                       FalseValue="{StaticResource geo_favorite_border}"
                                       NullValue="{StaticResource geo_favorite_border}"/>
+
+        <cvt:RepeatConverter x:Key="repeatConverter" 
+                             Off="{StaticResource geo_repeat}"
+                             Track="{StaticResource geo_repeat_one_on}"
+                             Context="{StaticResource geo_repeat_on}"/>
+
 
         <!--https://learn.microsoft.com/en-us/answers/questions/652068/mouse-resizing-cursor-changes-to-normal-in-wpf.html-->
         <Style x:Key="ResizeGripStyle" TargetType="Rectangle">
@@ -114,7 +122,7 @@
                     <ctrl:PathButton PathData="{StaticResource geo_skip_previous}"/>
                     <ctrl:PathButton x:Name="_play_pause_btn" PathData="{Binding IsPlaying, Converter={StaticResource PlayPauseConverter}}" Width="30" Height="30"/>
                     <ctrl:PathButton PathData="{StaticResource geo_skip_next}"/>
-                    <ctrl:PathButton PathData="{StaticResource geo_repeat}"/>
+                    <ctrl:PathButton PathData="{Binding RepeatState, Converter={StaticResource repeatConverter}}"/>
                 </StackPanel>
 
                 <ctrl:PathButton x:Name="_closeBtn" 

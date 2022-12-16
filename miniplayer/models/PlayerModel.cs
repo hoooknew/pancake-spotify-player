@@ -12,12 +12,12 @@ using System.Windows.Threading;
 
 namespace miniplayer.models
 {
-    internal enum RepeatState
-    {
-        off,
-        track,
-        context
-    }
+    //internal enum RepeatState
+    //{
+    //    off,
+    //    track,
+    //    context
+    //}
     internal class PlayerModel : IDisposable, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;        
@@ -85,7 +85,7 @@ namespace miniplayer.models
 
         public bool IsPlaying => _context?.IsPlaying ?? false;
         public bool IsShuffleOn => _context?.ShuffleState ?? false;
-        public RepeatState RepeatState => Enum.Parse<RepeatState>(_context?.RepeatState ?? nameof(RepeatState.off));
+        public string RepeatState => _context?.RepeatState ?? "off";
 
         private int _positionMs = 0;
         public int Position
