@@ -103,7 +103,7 @@
 
                     <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
                         <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis" Text="{Binding Title}"/>
-                        <TextBlock x:Name="_artist_text" Grid.Row="1" Text="{Binding Artist}"/>
+                        <TextBlock x:Name="_artist_text" Grid.Row="1" Foreground="SlateGray" FontWeight="Bold" FontSize="10" Text="{Binding Artist}"/>
                     </StackPanel>
 
                     <ctrl:PathButton 
@@ -141,7 +141,9 @@
             <Grid Grid.Row="1">
                 <Grid.Resources>
                     <Style TargetType="TextBlock">
-                        
+                        <Setter Property="FontSize" Value="11"/>
+                        <Setter Property="Margin" Value="0,0,0,2"/>
+                        <Setter Property="Foreground" Value="SlateGray"/>
                     </Style>
                 </Grid.Resources>
                 <Grid.ColumnDefinitions>
@@ -150,7 +152,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Position, Converter={StaticResource MStoStringConverter}}"/>
-                <ProgressBar Grid.Column="1" Height="4" Margin="2,0" BorderThickness="0" Background="LightGray" Value="{Binding Position}" Minimum="0" Maximum="{Binding Duration}"/>
+                <ProgressBar Grid.Column="1" Height="4" Margin="2,0" BorderThickness="0" Background="LightGray" Value="{Binding Position}" Minimum="0" Maximum="{Binding Duration}" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding Duration, Converter={StaticResource MStoStringConverter}}" Grid.Column="2"/>
             </Grid>
         </Grid>
