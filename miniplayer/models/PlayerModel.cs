@@ -84,7 +84,7 @@ namespace miniplayer.models
         }
 
         public bool IsPlaying => _context?.IsPlaying ?? false;
-        public bool ShuffleState => _context?.ShuffleState ?? false;
+        public bool IsShuffleOn => _context?.ShuffleState ?? false;
         public RepeatState RepeatState => Enum.Parse<RepeatState>(_context?.RepeatState ?? nameof(RepeatState.off));
 
         private int _positionMs = 0;
