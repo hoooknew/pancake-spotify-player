@@ -1,4 +1,7 @@
-﻿using System;
+﻿using miniplayer.lib;
+using miniplayer.models;
+using SpotifyAPI.Web;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -22,10 +25,37 @@ namespace miniplayer
     public partial class MainWindow : Window
     {
         bool ResizeInProcess = false;
+        private PlayerModel? _model = null;
 
         public MainWindow()
         {
             InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
+        }
+
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            IRefreshableToken? token;
+            if (Config.TokenAvailable())
+                token = Config.LoadToken();
+            else
+            {
+                token = await Authentication.Login();
+                Config.SaveToken(token);
+            }
+
+            if (token != null)
+            {
+                var authenticator = Authentication.CreateAuthenticator(token);
+
+                var config = SpotifyClientConfig.CreateDefault()
+                    .WithAuthenticator(authenticator);
+
+                var client = new SpotifyClient(config);
+
+                _model = new PlayerModel(client, this.Dispatcher);
+                this.DataContext = _model;
+            }
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

@@ -80,18 +80,18 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
-                        <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis">title title title title title title title title title title zzz</TextBlock>
-                        <TextBlock x:Name="_artist_text" Grid.Row="1">artist artist</TextBlock>
+                        <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis" Text="{Binding Title}"/>
+                        <TextBlock x:Name="_artist_text" Grid.Row="1" Text="{Binding Artist}"/>
                     </StackPanel>
 
                     <ctrl:PathButton 
-                    Grid.Column="1" 
-                    HorizontalAlignment="Left"
-                    Margin="4,0,8,0" Height="30" Width="30"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    PathData="{StaticResource geo_favorite}" 
-                    PathFill="LimeGreen"/>
+                        Grid.Column="1" 
+                        HorizontalAlignment="Left"
+                        Margin="4,0,8,0" Height="30" Width="30"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        PathData="{StaticResource geo_favorite}" 
+                        PathFill="LimeGreen"/>
                 </Grid>
 
                 <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center">
@@ -121,7 +121,7 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <ProgressBar Grid.Column="1" Value="50" Minimum="0" Maximum="100"/>
+                <ProgressBar Grid.Column="1" Value="{Binding Position}" Minimum="0" Maximum="{Binding Duration}"/>
             </Grid>
         </Grid>
 
