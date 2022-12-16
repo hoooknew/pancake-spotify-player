@@ -7,3 +7,10 @@ https://johnnycrazy.github.io/SpotifyAPI-NET/docs/pkce
 
 https://github.com/JohnnyCrazy/SpotifyAPI-NET/blob/master/SpotifyAPI.Web/Models/Response/FullEpisode.cs
 https://github.com/JohnnyCrazy/SpotifyAPI-NET/blob/master/SpotifyAPI.Web/Models/Response/FullTrack.cs
+
+https://github.com/dotnet/wpf/blob/89d172db0b7a192de720c6cfba5e28a1e7d46123/src/Microsoft.DotNet.Wpf/src/Themes/XAML/Window.xaml
+
+### checking and changing favorites
+https://developer.spotify.com/documentation/web-api/reference/#/operations/check-users-saved-tracks
+https://developer.spotify.com/documentation/web-api/reference/#/operations/save-tracks-user
+https://developer.spotify.com/documentation/web-api/reference/#/operations/remove-tracks-user
