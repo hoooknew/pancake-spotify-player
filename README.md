@@ -2,34 +2,49 @@
 ## TODO
 
 - [x] delete the tokens on auth or api error
+
 - [ ] add an *accurate* internal timer to update the track position so we can lengthen the time between status polls.
+- [ ] try to reduce bandwidth by using `GetCurrentlyPlaying` more often than `GetCurrentPlayback`.
 - [ ] move the poll delay into the config
+
+
 - [ ] refactor the main window into user controls to improve readability.
+
 - [ ] use routed commands instead of click events
   - [ ] disable the buttons while waiting on a state refresh from the server
+
+
 - [ ] handle `APITooManyRequestsException`
 - [ ] add theming and a dark theme
   - [ ] sync theme to the windows default
 - [x] reduce requested permission scope to a minimum.
+
+
 - [ ] customize the path button so it changes the button path color instead of using the default button behavior.
 - [ ] add a popover with extra track details, and album art.
 - [ ] add links to the popover that open the artist, song, or album in the desktop client
 - [ ] include at least part of the current playlist in the popover
+
+
 - [ ] add a settings right click that creates a user settings json in the app data folder
   - [ ] add a settings feature to remember the last app position
     - [ ] remember to only restore the position if the window is in the current screen dimensions.
   - [ ] add a settings feature to keep the app always on top
   - [ ] have the option of responding into the windows media?
   - [ ] add a setting to zoom the whole window.
-- [ ] try to reduce bandwidth by using `GetCurrentlyPlaying` more often than `GetCurrentPlayback`.
+
+
+- [ ] if there isn't a spotify client open, show a UI that indicates the issue
+- [ ] offer a button to launch the desktop client?
+
+
 - [ ] built an installer
   - [ ] figure out a versioning pattern
 - [ ] create a github actions workflow to create releases
 - [ ] make a readme that explains the app functionality
   - [ ] is there anything inside worth explaining how it works?
-- [ ] if there isn't a spotify client open, show a UI that indicates the issue
-- [ ] offer a button to launch the desktop client?
 - [ ] style the auth callback page?
+
 - [ ] expose errors in the login to the user.
 
 
