@@ -7,6 +7,7 @@
 - [ ] move the poll delay into the config
 - [ ] refactor the main window into user controls to improve readability.
 - [ ] use routed commands instead of click events
+- [ ] handle `APITooManyRequestsException`
 - [ ] add theming and a dark theme
   - [ ] sync theme to the windows default
 - [ ] reduce requested permission scope to a minimum.
