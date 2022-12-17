@@ -3,6 +3,7 @@ using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -81,7 +82,7 @@ namespace miniplayer.lib
                     Uri uri = request.ToUri();
                     try
                     {
-                        BrowserUtil.Open(uri);
+                        Process.Start(new ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true });
                     }
                     catch (Exception)
                     {
