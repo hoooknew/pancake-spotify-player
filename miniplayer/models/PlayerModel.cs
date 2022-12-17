@@ -101,9 +101,7 @@ namespace miniplayer.models
                     await timer.WaitForNextTickAsync(cancelToken);
                 }
             });
-        }
-
-        private static string? __GetItemId(IPlayableItem? item) => item switch { FullTrack f => f.Id, FullEpisode e => e.Id, _ => null };
+        }        
 
         private async Task _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
@@ -111,10 +109,10 @@ namespace miniplayer.models
             var oldContext = this._dispatcher.Invoke(() => this._context);
             this._dispatcher.Invoke(() => this._SetContext(newContext));
 
-            if (newContext?.Item != null && __GetItemId(oldContext?.Item) != __GetItemId(newContext?.Item))
+            if (newContext?.Item != null && oldContext?.Item?.GetItemId() != newContext?.Item?.GetItemId())
             {
                 this._dispatcher.Invoke(() => this.IsFavorite = null);
-                var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { __GetItemId(newContext!.Item)! }));
+                var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { newContext!.Item!.GetItemId()! }));
                 this.IsFavorite = isFavs.All(r => r);
             }
         }
@@ -190,7 +188,7 @@ namespace miniplayer.models
         {
             return await _TryCatchApiCalls(async () =>
             {
-                string? id = __GetItemId(_context?.Item);
+                string? id = _context?.Item?.GetItemId();
 
                 if (id != null)
                 {
