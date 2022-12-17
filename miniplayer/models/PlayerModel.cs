@@ -93,9 +93,7 @@ namespace miniplayer.models
                 var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, 500));
                 while (!cancelToken.IsCancellationRequested)
                 {
-                    var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
-                    var oldContext = this._dispatcher.Invoke(() => this._context);
-                    this._dispatcher.Invoke(() => this.SetContext(newContext));
+                    await RefreshState(cancelToken);
 
                     await timer.WaitForNextTickAsync(cancelToken);
                 }
@@ -103,8 +101,64 @@ namespace miniplayer.models
             catch (APIUnauthorizedException)
             {
                 this._StopStatusUpdates();
-                this._dispatcher.BeginInvoke(() => this.NeedToken = true);
+                this._dispatcher.Invoke(() => this.NeedToken = true);
             }
+        }
+
+        private async Task RefreshState(CancellationToken cancelToken = default(CancellationToken))
+        {            
+            var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
+            var oldContext = this._dispatcher.Invoke(() => this._context);
+            this._dispatcher.Invoke(() => this.SetContext(newContext));            
+        }
+
+        public async Task PlayPause()
+        {
+            if (this.IsPlaying)
+                await this._client!.Player.PausePlayback();
+            else
+                await this._client!.Player.ResumePlayback();
+
+            await RefreshState();
+        }
+
+        public async Task SkipNext()
+        {
+            await this._client!.Player.SkipNext();
+            await RefreshState();
+        }
+
+        public async Task SkipPrevious()
+        {
+            await this._client!.Player.SkipPrevious();
+            await RefreshState();
+        }
+
+        public async Task ToggleShuffle()
+        {
+            await this._client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
+            await RefreshState();
+        }
+
+        public async Task ToggleRepeat()
+        {
+            PlayerSetRepeatRequest.State nextState;
+            switch(RepeatState)
+            {
+                case "off":
+                    nextState = PlayerSetRepeatRequest.State.Context;
+                    break;
+                case "context":
+                    nextState = PlayerSetRepeatRequest.State.Track;
+                    break;
+                case "track":
+                default:
+                    nextState = PlayerSetRepeatRequest.State.Off;
+                    break;
+            }
+
+            await this._client!.Player.SetRepeat(new PlayerSetRepeatRequest(nextState));
+            await RefreshState();
         }
 
         private CurrentlyPlayingContext? _context;

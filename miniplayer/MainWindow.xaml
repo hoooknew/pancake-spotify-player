@@ -132,11 +132,11 @@
                         <StackPanel.Resources>
                             <Style TargetType="ctrl:PathButton" BasedOn="{StaticResource buttonStyle}"/>
                         </StackPanel.Resources>
-                        <ctrl:PathButton PathData="{Binding IsShuffleOn, Converter={StaticResource ShuffleConverter}}"/>
-                        <ctrl:PathButton PathData="{StaticResource geo_skip_previous}"/>
-                        <ctrl:PathButton x:Name="_play_pause_btn" PathData="{Binding IsPlaying, Converter={StaticResource PlayPauseConverter}}" Width="30" Height="30"/>
-                        <ctrl:PathButton PathData="{StaticResource geo_skip_next}"/>
-                        <ctrl:PathButton PathData="{Binding RepeatState, Converter={StaticResource repeatConverter}}"/>
+                        <ctrl:PathButton x:Name="_shuffle_btn" PathData="{Binding IsShuffleOn, Converter={StaticResource ShuffleConverter}}" Click="_shuffle_btn_Click"/>
+                        <ctrl:PathButton x:Name="_skip_prev_btn" PathData="{StaticResource geo_skip_previous}" Click="_skip_prev_btn_Click"/>
+                        <ctrl:PathButton x:Name="_play_pause_btn" PathData="{Binding IsPlaying, Converter={StaticResource PlayPauseConverter}}" Width="30" Height="30" Click="_play_pause_btn_Click"/>
+                        <ctrl:PathButton x:Name="_skip_next_btn" PathData="{StaticResource geo_skip_next}" Click="_skip_next_btn_Click"/>
+                        <ctrl:PathButton x:Name="_repeat_btn" PathData="{Binding RepeatState, Converter={StaticResource repeatConverter}}" Click="_repeat_btn_Click"/>
                     </StackPanel>
 
                 </Grid>

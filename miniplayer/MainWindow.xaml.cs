@@ -105,5 +105,30 @@ namespace miniplayer
             if (token != null)
                 _model.SetToken(token);
         }
+
+        private async void _play_pause_btn_Click(object sender, RoutedEventArgs e)
+        {
+            await _model.PlayPause();
+        }
+
+        private async void _repeat_btn_Click(object sender, RoutedEventArgs e)
+        {
+            await _model.ToggleRepeat();
+        }
+
+        private async void _skip_next_btn_Click(object sender, RoutedEventArgs e)
+        {
+            await _model.SkipNext();
+        }
+
+        private async void _skip_prev_btn_Click(object sender, RoutedEventArgs e)
+        {
+            await _model.SkipPrevious();
+        }
+
+        private async void _shuffle_btn_Click(object sender, RoutedEventArgs e)
+        {
+            await _model.ToggleShuffle();
+        }
     }
 }
