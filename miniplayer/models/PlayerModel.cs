@@ -130,7 +130,10 @@ namespace miniplayer.models
 
         public async Task SkipPrevious()
         {
-            await this._client!.Player.SkipPrevious();
+            if (Position < 3000)
+                await this._client!.Player.SkipPrevious();
+            else
+                await this._client!.Player.SeekTo(new PlayerSeekToRequest(0));
             await RefreshState();
         }
 
