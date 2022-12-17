@@ -5,7 +5,7 @@
 
 - [ ] add an *accurate* internal timer to update the track position so we can lengthen the time between status polls.
 - [ ] try to reduce bandwidth by using `GetCurrentlyPlaying` more often than `GetCurrentPlayback`.
-- [ ] move the poll delay into the config
+- [x] move the poll delay into the config
 
 
 - [ ] refactor the main window into user controls to improve readability.
@@ -46,6 +46,17 @@
 - [ ] style the auth callback page?
 
 - [ ] expose errors in the login to the user.
+
+
+## times to update the state
+
+### full refresh
+- we know the song ends
+- we see the song changed
+- after the user clicks a button?
+
+### small refresh 
+as time ticks
 
 
 ## References

@@ -21,7 +21,7 @@ namespace miniplayer.models
     //    context
     //}
     internal class PlayerModel : IDisposable, INotifyPropertyChanged
-    {        
+    {
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<ApiErrorEventArgs>? ApiError;
 
@@ -40,6 +40,8 @@ namespace miniplayer.models
         private SpotifyClient? _client = null;
         private Task? _updaterTask = null;
         private CancellationTokenSource? _updaterCancel = null;
+        private SemaphoreSlim _refreshLock = new SemaphoreSlim(1);
+        private readonly int REFRESH_DELAY = Config.RefreshDelayMS;
 
         public PlayerModel(Dispatcher dispatcher)
         {
@@ -95,7 +97,7 @@ namespace miniplayer.models
             await _TryCatchApiCalls(async () =>
             {
                 var cancelToken = this._updaterCancel!.Token;
-                var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, 500));
+                var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, REFRESH_DELAY));
                 while (!cancelToken.IsCancellationRequested)
                 {
                     await _RefreshState(cancelToken);
@@ -103,19 +105,30 @@ namespace miniplayer.models
                     await timer.WaitForNextTickAsync(cancelToken);
                 }
             });
-        }        
+        }
 
         private async Task _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
-            var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
-            var oldContext = this._dispatcher.Invoke(() => this._context);
-            this._dispatcher.Invoke(() => this._SetContext(newContext));
-
-            if (newContext?.Item != null && oldContext?.Item?.GetItemId() != newContext?.Item?.GetItemId())
+            if (await _refreshLock.WaitAsync(0))
             {
-                this._dispatcher.Invoke(() => this.IsFavorite = null);
-                var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { newContext!.Item!.GetItemId()! }));
-                this.IsFavorite = isFavs.All(r => r);
+                try
+                {
+                    var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
+                    var oldContext = this._dispatcher.Invoke(() => this._context);
+                    this._dispatcher.Invoke(() => this._SetContext(newContext));
+
+                    if (newContext?.Item != null && oldContext?.Item?.GetItemId() != newContext?.Item?.GetItemId())
+                    {
+                        this._dispatcher.Invoke(() => this.IsFavorite = null);
+                        var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { newContext!.Item!.GetItemId()! }));
+                        this.IsFavorite = isFavs.All(r => r);
+                    }
+
+                }
+                finally
+                {
+                    _refreshLock.Release();
+                }
             }
         }
         #endregion

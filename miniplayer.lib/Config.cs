@@ -32,7 +32,9 @@ namespace miniplayer.lib
         }
 
         public static string? ClientId => Instance["clientId"];
-        
+        public static int RefreshDelayMS => int.Parse(Instance["refreshDelayMS"] ?? "1000");
+
+
 
 
         private static readonly string _credentialsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"miniplayer\credentials.json");
