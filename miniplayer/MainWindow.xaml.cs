@@ -30,6 +30,14 @@ namespace miniplayer
             this.Loaded += MainWindow_Loaded;
 
             _model = new PlayerModel(this.Dispatcher);
+            _model.ApiError += _model_ApiError;
+        }
+
+        private void _model_ApiError(object? sender, ApiErrorEventArgs e)
+        {
+            Config.SaveToken(null);
+            if (!(e.Exception is APIUnauthorizedException))
+                MessageBox.Show(e.Exception.Message);
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
