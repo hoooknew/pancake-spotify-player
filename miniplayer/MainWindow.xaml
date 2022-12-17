@@ -119,13 +119,15 @@
                         </StackPanel>
 
                         <ctrl:PathButton 
+                            x:Name="_favorite_btn"
                             Grid.Column="1" 
                             HorizontalAlignment="Left"
                             Margin="4,0,8,0" Height="30" Width="30"
                             Background="Transparent"
                             BorderThickness="0"
                             PathData="{Binding IsFavorite, Converter={StaticResource FavoriteConverter}}" 
-                            PathFill="{StaticResource spotify_green}"/>
+                            PathFill="{StaticResource spotify_green}"
+                            Click="_favorite_btn_Click"/>
                     </Grid>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center" Margin="0,0,18,0">

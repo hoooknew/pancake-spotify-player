@@ -181,6 +181,27 @@ namespace miniplayer.models
             await RefreshState();
         }
 
+        public async Task ToggleFavorite()
+        {
+            string? id = GetItemId(_context?.Item);
+
+            if (id != null)
+            {
+                if (IsFavorite ?? false)
+                {
+                    var result = await this._client!.Library.RemoveTracks(new LibraryRemoveTracksRequest(new string[] { id }));
+                    if (result)
+                        this.IsFavorite = false;
+                }
+                else
+                {
+                    var result = await this._client!.Library.SaveTracks(new LibrarySaveTracksRequest(new string[] { id }));
+                    if (result)
+                        this.IsFavorite = true;
+                }
+            }
+        }
+
         private CurrentlyPlayingContext? _context;
         private FullTrack? _Track => _context?.Item as FullTrack;
         private FullEpisode? _Episode => _context?.Item as FullEpisode;

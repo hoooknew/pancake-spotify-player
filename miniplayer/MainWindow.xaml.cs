@@ -130,5 +130,10 @@ namespace miniplayer
         {
             await _model.ToggleShuffle();
         }
+
+        private async void _favorite_btn_Click(object sender, RoutedEventArgs e)
+        {
+            await _model.ToggleFavorite();
+        }
     }
 }
