@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 //using System.Timers;
 using System.Windows.Threading;
 
@@ -103,13 +104,29 @@ namespace miniplayer.models
                 this._StopStatusUpdates();
                 this._dispatcher.Invoke(() => this.NeedToken = true);
             }
+            catch(APIException e)
+            {
+                this._dispatcher.Invoke(() => MessageBox.Show(e.Message));
+
+                this._StopStatusUpdates();
+                this._dispatcher.Invoke(() => this.NeedToken = true);
+            }
         }
 
+        private static string? GetItemId(IPlayableItem? item) => item switch { FullTrack f => f.Id, FullEpisode e => e.Id, _ => null };
+
         private async Task RefreshState(CancellationToken cancelToken = default(CancellationToken))
-        {            
+        {
             var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
             var oldContext = this._dispatcher.Invoke(() => this._context);
-            this._dispatcher.Invoke(() => this.SetContext(newContext));            
+            this._dispatcher.Invoke(() => this.SetContext(newContext));
+            
+            if (newContext?.Item != null && GetItemId(oldContext?.Item) != GetItemId(newContext?.Item))
+            {
+                this._dispatcher.Invoke(() => this.IsFavorite = null);
+                var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { GetItemId(newContext!.Item)! }));
+                this.IsFavorite = isFavs.All(r => r);
+            }
         }
 
         public async Task PlayPause()
@@ -211,8 +228,7 @@ namespace miniplayer.models
         internal void SetContext(CurrentlyPlayingContext context)
         {
             _context = context;
-            _isFavorite = null;
-            _positionMs = context?.ProgressMs ?? 0;           
+            _positionMs = context?.ProgressMs ?? 0;
             OnPropertyChanged("");
         }
 

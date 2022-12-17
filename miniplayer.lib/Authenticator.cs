@@ -72,6 +72,8 @@ namespace miniplayer.lib
                     Scopes.UserReadCurrentlyPlaying,
                     Scopes.UserReadPlaybackState,
                     Scopes.UserReadPlaybackPosition,
+                    Scopes.UserLibraryRead,
+                    Scopes.UserLibraryModify,
                     Scopes.UserModifyPlaybackState,
                     Scopes.UserReadEmail,
                     Scopes.UserReadPrivate,
