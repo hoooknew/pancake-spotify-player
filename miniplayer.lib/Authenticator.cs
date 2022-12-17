@@ -27,7 +27,7 @@ namespace miniplayer.lib
                 );
 
             using (EmbedIOAuthServer server = new EmbedIOAuthServer(new Uri("http://localhost:3000/auth/callback"), 3000))
-            { 
+            {
 
                 var (verifier, challenge) = PKCEUtil.GenerateCodes();
 
@@ -67,18 +67,14 @@ namespace miniplayer.lib
                     {
                         CodeChallenge = challenge,
                         CodeChallengeMethod = "S256",
+                        //https://developer.spotify.com/documentation/general/guides/authorization/scopes/
                         Scope = new List<string> {
-                    Scopes.AppRemoteControl,
-                    Scopes.UserReadCurrentlyPlaying,
-                    Scopes.UserReadPlaybackState,
-                    Scopes.UserReadPlaybackPosition,
-                    Scopes.UserLibraryRead,
-                    Scopes.UserLibraryModify,
-                    Scopes.UserModifyPlaybackState,
-                    Scopes.UserReadEmail,
-                    Scopes.UserReadPrivate,
-                    Scopes.PlaylistReadPrivate,
-                    Scopes.PlaylistReadCollaborative }
+                            Scopes.UserReadCurrentlyPlaying,
+                            Scopes.UserReadPlaybackState,
+                            Scopes.UserModifyPlaybackState,
+                            Scopes.UserLibraryRead,
+                            Scopes.UserLibraryModify
+                        }
                     };
 
                     Uri uri = request.ToUri();
@@ -91,7 +87,7 @@ namespace miniplayer.lib
                         Console.Error.WriteLine("Unable to open URL, manually open: {0}", uri);
                     }
 
-                    if (resetEvent.WaitOne(20_000) && result != null)
+                    if (resetEvent.WaitOne(60_000) && result != null)
                     {
                         if (result is IRefreshableToken token)
                             return token;
