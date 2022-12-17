@@ -9,6 +9,7 @@
 - [ ] use routed commands instead of click events
 - [ ] add theming and a dark theme
   - [ ] sync theme to the windows default
+- [ ] reduce requested permission scope to a minimum.
 - [ ] customize the path button so it changes the button path color instead of using the default button behavior.
 - [ ] add a popover with extra track details, and album art.
 - [ ] add links to the popover that open the artist, song, or album in the desktop client
@@ -19,6 +20,11 @@
   - [ ] add a settings feature to keep the app always on top
   - [ ] have the option of responding into the windows media?
 - [ ] try to reduce bandwidth by using `GetCurrentlyPlaying` more often than `GetCurrentPlayback`.
+- [ ] built an installer
+  - [ ] figure out a versioning pattern
+- [ ] create a github actions workflow to create releases
+- [ ] make a readme that explains the app functionality
+  - [ ] is there anything inside worth explaining how it works?
 
 
 ## References
