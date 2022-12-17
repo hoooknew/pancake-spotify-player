@@ -21,10 +21,9 @@ namespace miniplayer.models
     //    context
     //}
     internal class PlayerModel : IDisposable, INotifyPropertyChanged
-    {
+    {        
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<ApiErrorEventArgs>? ApiError;
-
 
         private readonly Dispatcher _dispatcher;
 
@@ -39,8 +38,8 @@ namespace miniplayer.models
             }
         }
         private SpotifyClient? _client = null;
-        private Task? _stateUpdaterTask = null;
-        private CancellationTokenSource? _stateUpdaterCTS = null;
+        private Task? _updaterTask = null;
+        private CancellationTokenSource? _updaterCancel = null;
 
         public PlayerModel(Dispatcher dispatcher)
         {
@@ -49,7 +48,7 @@ namespace miniplayer.models
 
         public void SetToken(IRefreshableToken token)
         {
-            this._StopStatusUpdates();
+            this._StopUpdates();
 
             var authenticator = Authentication.CreateAuthenticator(token);
 
@@ -59,40 +58,43 @@ namespace miniplayer.models
             this._client = new SpotifyClient(config);
             NeedToken = false;
 
-            this._StartStatusUpdates();
+            this._StartUpdates();
         }
 
-        private void _StartStatusUpdates()
-        {
-            this._StopStatusUpdates();
 
-            this._stateUpdaterCTS = new CancellationTokenSource();
-            this._stateUpdaterTask = Task.Run(_StateUpdater, this._stateUpdaterCTS.Token);
+
+        #region Status Updater
+        private void _StartUpdates()
+        {
+            this._StopUpdates();
+
+            this._updaterCancel = new CancellationTokenSource();
+            this._updaterTask = Task.Run(_Updater, this._updaterCancel.Token);
         }
 
-        private void _StopStatusUpdates()
+        private void _StopUpdates()
         {
-            if (this._stateUpdaterCTS != null)
+            if (this._updaterCancel != null)
             {
-                this._stateUpdaterCTS.Cancel();
-                this._stateUpdaterCTS.Token.WaitHandle.WaitOne(1000);
-                this._stateUpdaterCTS.Dispose();
-                this._stateUpdaterCTS = null;
+                this._updaterCancel.Cancel();
+                this._updaterCancel.Token.WaitHandle.WaitOne(1000);
+                this._updaterCancel.Dispose();
+                this._updaterCancel = null;
             }
 
-            if (this._stateUpdaterTask != null)
+            if (this._updaterTask != null)
             {
-                if (this._stateUpdaterTask.Status != TaskStatus.WaitingForActivation)
-                    this._stateUpdaterTask.Dispose();
-                this._stateUpdaterTask = null;
+                if (this._updaterTask.Status != TaskStatus.WaitingForActivation)
+                    this._updaterTask.Dispose();
+                this._updaterTask = null;
             }
         }
 
-        private async Task _StateUpdater()
+        private async Task _Updater()
         {
             await _TryCatchApiCalls(async () =>
             {
-                var cancelToken = this._stateUpdaterCTS!.Token;
+                var cancelToken = this._updaterCancel!.Token;
                 var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, 500));
                 while (!cancelToken.IsCancellationRequested)
                 {
@@ -116,6 +118,9 @@ namespace miniplayer.models
                 this.IsFavorite = isFavs.All(r => r);
             }
         }
+        #endregion
+
+
 
         public async Task<bool> PlayPause()
         {
@@ -277,7 +282,7 @@ namespace miniplayer.models
         }
         private void _HandleAPIError(Exception e)
         {
-            _StopStatusUpdates();
+            _StopUpdates();
             _dispatcher.Invoke(() => this.NeedToken = true);
 
             _OnApiError(e);
@@ -290,7 +295,7 @@ namespace miniplayer.models
 
         public void Dispose()
         {
-            this._StopStatusUpdates();
+            this._StopUpdates();
         }
     }
 }
