@@ -1,4 +1,5 @@
-﻿using SpotifyAPI.Web;
+﻿using miniplayer.lib;
+using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,35 +24,86 @@ namespace miniplayer.models
         public event PropertyChangedEventHandler? PropertyChanged;        
         
         private readonly Dispatcher _dispatcher;
-        private readonly SpotifyClient _client;
-        private readonly Task _stateUpdaterTask;
-        private readonly CancellationTokenSource _stateUpdaterCTS;
 
-        public PlayerModel(SpotifyClient client, Dispatcher dispatcher) 
-        {            
-            this._client = client;
+        private bool _needToken = true;
+        public bool NeedToken 
+        { 
+            get => _needToken;
+            private set 
+            {
+                _needToken = value;
+                OnPropertyChanged(nameof(NeedToken));
+            }
+        }
+        private SpotifyClient? _client = null;
+        private Task? _stateUpdaterTask = null;
+        private CancellationTokenSource? _stateUpdaterCTS = null;
+
+        public PlayerModel(Dispatcher dispatcher) 
+        {
             this._dispatcher = dispatcher;
+        }
+
+        public void SetToken(IRefreshableToken token)
+        {
+            this._StopStatusUpdates();
+
+            var authenticator = Authentication.CreateAuthenticator(token);
+
+            var config = SpotifyClientConfig.CreateDefault()
+                .WithAuthenticator(authenticator);
+
+            this._client = new SpotifyClient(config);
+            NeedToken = false;
+
+            this._StartStatusUpdates();
+        }
+
+        private void _StartStatusUpdates()
+        {
+            this._StopStatusUpdates();
 
             this._stateUpdaterCTS = new CancellationTokenSource();
             this._stateUpdaterTask = Task.Run(_StateUpdater, this._stateUpdaterCTS.Token);
         }
 
+        private void _StopStatusUpdates()
+        {
+            if (this._stateUpdaterCTS != null)
+            {
+                this._stateUpdaterCTS.Cancel();
+                this._stateUpdaterCTS.Token.WaitHandle.WaitOne(1000);
+                this._stateUpdaterCTS.Dispose();
+                this._stateUpdaterCTS = null;
+            }
+
+            if (this._stateUpdaterTask != null)
+            {
+                if (this._stateUpdaterTask.Status != TaskStatus.WaitingForActivation)
+                    this._stateUpdaterTask.Dispose();
+                this._stateUpdaterTask = null;
+            }
+        }
+
         private async Task _StateUpdater()
         {
-            var cancelToken = this._stateUpdaterCTS.Token;
-            var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, 500));
-            while (!cancelToken.IsCancellationRequested)
+            try
             {
-                var newContext = await this._client.Player.GetCurrentPlayback(cancelToken);
-                var oldContext = this._dispatcher.Invoke(() => this._context);
-                this._dispatcher.Invoke(() => this.SetContext(newContext));
+                var cancelToken = this._stateUpdaterCTS!.Token;
+                var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, 500));
+                while (!cancelToken.IsCancellationRequested)
+                {
+                    var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
+                    var oldContext = this._dispatcher.Invoke(() => this._context);
+                    this._dispatcher.Invoke(() => this.SetContext(newContext));
 
-                //if (newContext?.Item is FullTrack track)
-                //{
-                //    Debug.WriteLine($"{track.Name} {TimeSpan.FromMilliseconds(newContext.ProgressMs)}");
-                //}
-
-                await timer.WaitForNextTickAsync(cancelToken);
+                    await timer.WaitForNextTickAsync(cancelToken);
+                }
+            }
+            catch (APIUnauthorizedException)
+            {
+                this._StopStatusUpdates();
+                this._dispatcher.BeginInvoke(() => this.NeedToken = true);
             }
         }
 
@@ -112,10 +164,7 @@ namespace miniplayer.models
 
         public void Dispose()
         {
-            this._stateUpdaterCTS.Cancel();
-            this._stateUpdaterCTS.Token.WaitHandle.WaitOne(1000);
-            this._stateUpdaterCTS.Dispose();
-            this._stateUpdaterTask.Dispose();
+            this._StopStatusUpdates();
         }
     }
 }

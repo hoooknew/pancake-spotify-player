@@ -43,19 +43,17 @@ namespace miniplayer
                 token = await Authentication.Login();
                 Config.SaveToken(token);
             }
+            
+            _model = new PlayerModel(this.Dispatcher);
 
+            _token = token;
             if (token != null)
             {
-                var authenticator = Authentication.CreateAuthenticator(token);
-
-                var config = SpotifyClientConfig.CreateDefault()
-                    .WithAuthenticator(authenticator);
-
-                var client = new SpotifyClient(config);
-
-                _model = new PlayerModel(client, this.Dispatcher);
-                this.DataContext = _model;
+                _model.SetToken(token);
+                _model.SetToken(token);
             }
+
+            this.DataContext = _model;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -108,6 +106,6 @@ namespace miniplayer
         private void _closeBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }
+        }        
     }
 }
