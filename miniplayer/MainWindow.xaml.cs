@@ -19,9 +19,6 @@ using System.Windows.Shapes;
 
 namespace miniplayer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         bool ResizeInProcess = false;
@@ -43,9 +40,11 @@ namespace miniplayer
             else
                 token = null;
             
+            if (token != null)
+                _model.SetToken(token);
+
             this.DataContext = _model;
         }
-
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -70,7 +69,6 @@ namespace miniplayer
                 e.Handled = true;                
             }
         }
-
         private void Resizing_Window(object sender, MouseEventArgs e)
         {            
             if (ResizeInProcess)
@@ -93,11 +91,11 @@ namespace miniplayer
             }
         }
 
+
         private void _closeBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
-
         private async void _signin_Click(object sender, RoutedEventArgs e)
         {
             var token = await Authentication.Login();
