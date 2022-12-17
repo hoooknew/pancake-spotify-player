@@ -25,12 +25,14 @@ namespace miniplayer
     public partial class MainWindow : Window
     {
         bool ResizeInProcess = false;
-        private PlayerModel? _model = null;
+        private readonly PlayerModel _model;
 
         public MainWindow()
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
+
+            _model = new PlayerModel(this.Dispatcher);
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -39,19 +41,10 @@ namespace miniplayer
             if (Config.TokenAvailable())
                 token = Config.LoadToken();
             else
-            {
-                token = await Authentication.Login();
-                Config.SaveToken(token);
-            }
-            
-            _model = new PlayerModel(this.Dispatcher);
+                token = null;                       
 
-            _token = token;
             if (token != null)
-            {
                 _model.SetToken(token);
-                _model.SetToken(token);
-            }
 
             this.DataContext = _model;
         }
@@ -106,6 +99,14 @@ namespace miniplayer
         private void _closeBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-        }        
+        }
+
+        private async void _signin_Click(object sender, RoutedEventArgs e)
+        {
+            var token = await Authentication.Login();
+            Config.SaveToken(token);
+            if (token != null)
+                _model.SetToken(token);
+        }
     }
 }

@@ -37,6 +37,9 @@
 
         <cvt:MStoStringConverter x:Key="MStoStringConverter" HoursFormat="h\:mm\:ss" MinutesFormat="m\:ss"/>
 
+        <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
+        <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+
 
         <!--https://learn.microsoft.com/en-us/answers/questions/652068/mouse-resizing-cursor-changes-to-normal-in-wpf.html-->
         <Style x:Key="ResizeGripStyle" TargetType="Rectangle">
@@ -68,10 +71,18 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
+        
 
         <Rectangle Grid.Column="0" x:Name="_leftSizeGrip" Style="{StaticResource ResizeGripStyle}" />
-        
-        <Grid Grid.Column="1">
+
+        <Grid x:Name="signin_grid" Grid.Column="1" Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}}">
+            <Button Padding="8,4" Click="_signin_Click">
+                Sign Into Spotify
+            </Button>
+        </Grid>
+
+        <Grid x:Name="ui_grid" Grid.Column="1" 
+              Visibility="{Binding NeedToken, Converter={StaticResource uiConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
