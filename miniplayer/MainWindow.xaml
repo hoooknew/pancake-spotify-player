@@ -71,7 +71,7 @@
             <Rectangle x:Name="_leftSizeGrip" Style="{StaticResource ResizeGripStyle}"  HorizontalAlignment="Left"/>
             <Rectangle x:Name="_rightSizeGrip" Style="{StaticResource ResizeGripStyle}" HorizontalAlignment="Right"/>
 
-            <Grid x:Name="signin_grid" Grid.Column="1" Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}}" Background="#DDDDDD">
+            <Grid x:Name="signin_grid" Grid.Column="1" Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}" Background="#DDDDDD">
                 <Button Padding="8,4" Click="_signin_Click" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Sign In to</TextBlock>
@@ -83,7 +83,7 @@
             </Grid>
 
             <Grid x:Name="ui_grid" Grid.Column="1" 
-              Visibility="{Binding NeedToken, Converter={StaticResource uiConverter}}">
+              Visibility="{Binding NeedToken, Converter={StaticResource uiConverter}, FallbackValue=Hidden}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>

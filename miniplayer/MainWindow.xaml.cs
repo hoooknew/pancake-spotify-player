@@ -36,12 +36,14 @@ namespace miniplayer
         {
             IRefreshableToken? token;
             if (Config.TokenAvailable())
+            {
                 token = Config.LoadToken();
+
+                if (token != null)
+                    _model.SetToken(token);
+            }
             else
                 token = null;
-            
-            if (token != null)
-                _model.SetToken(token);
 
             this.DataContext = _model;
         }
