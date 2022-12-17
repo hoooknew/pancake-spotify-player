@@ -42,6 +42,11 @@ namespace miniplayer.models
         private CancellationTokenSource? _updaterCancel = null;
         private SemaphoreSlim _refreshLock = new SemaphoreSlim(1);
         private readonly int REFRESH_DELAY = Config.RefreshDelayMS;
+        //private System.Threading.Timer
+
+        private CurrentlyPlayingContext? _context;
+        private int _positionMs = 0;
+        private bool? _isFavorite = null;
 
         public PlayerModel(Dispatcher dispatcher)
         {
@@ -63,6 +68,133 @@ namespace miniplayer.models
             this._StartUpdates();
         }
 
+        public string Title => _context.GetTrack()?.Name ?? _context.GetEpisode()?.Name ?? "";
+        public string Artist
+        {
+            get
+            {
+                var track = _context.GetTrack();
+                var episode = _context.GetEpisode();
+                if (track != null)
+                    return string.Join(", ", track.Artists.Select(r => r.Name));
+                else if (episode != null)
+                    return episode.Show.Name;
+                else
+                    return "";
+            }
+        }
+        public bool? IsFavorite
+        {
+            get => _isFavorite;
+            set
+            {
+                _isFavorite = value;
+                _OnPropertyChanged(nameof(IsFavorite));
+            }
+        }
+        public bool IsPlaying => _context?.IsPlaying ?? false;
+        public bool IsShuffleOn => _context?.ShuffleState ?? false;
+        /// <summary>
+        /// returns "off", "track", or "context"
+        /// </summary>
+        public string RepeatState => _context?.RepeatState ?? "off";
+        public int Position
+        {
+            get => _positionMs;
+            set
+            {
+                _positionMs = Math.Max(Math.Min(value, Duration), 0);
+                _OnPropertyChanged(nameof(Position));
+            }
+        }
+        public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
+
+
+        public async Task<bool> PlayPause()
+        {
+            return await _TryCatchApiCalls(async () =>
+            {
+                if (this.IsPlaying)
+                    await this._client!.Player.PausePlayback();
+                else
+                    await this._client!.Player.ResumePlayback();
+
+                await _RefreshState();
+            });
+        }
+        public async Task<bool> SkipNext()
+        {
+            return await _TryCatchApiCalls(async () =>
+            {
+                await this._client!.Player.SkipNext();
+                await _RefreshState();
+            });
+        }
+        public async Task<bool> SkipPrevious()
+        {
+            return await _TryCatchApiCalls(async () =>
+            {
+                if (Position < 3000)
+                    await this._client!.Player.SkipPrevious();
+                else
+                    await this._client!.Player.SeekTo(new PlayerSeekToRequest(0));
+                await _RefreshState();
+            });
+        }
+        public async Task<bool> ToggleShuffle()
+        {
+            return await _TryCatchApiCalls(async () =>
+            {
+                await this._client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
+                await _RefreshState();
+            });
+        }
+        public async Task<bool> ToggleRepeat()
+        {
+            return await _TryCatchApiCalls(async () =>
+            {
+                PlayerSetRepeatRequest.State nextState;
+                switch (RepeatState)
+                {
+                    case "off":
+                        nextState = PlayerSetRepeatRequest.State.Context;
+                        break;
+                    case "context":
+                        nextState = PlayerSetRepeatRequest.State.Track;
+                        break;
+                    case "track":
+                    default:
+                        nextState = PlayerSetRepeatRequest.State.Off;
+                        break;
+                }
+
+                await this._client!.Player.SetRepeat(new PlayerSetRepeatRequest(nextState));
+                await _RefreshState();
+            });
+        }
+        public async Task<bool> ToggleFavorite()
+        {
+            return await _TryCatchApiCalls(async () =>
+            {
+                string? id = _context?.Item?.GetItemId();
+
+                if (id != null)
+                {
+                    if (IsFavorite ?? false)
+                    {
+                        var result = await this._client!.Library.RemoveTracks(new LibraryRemoveTracksRequest(new string[] { id }));
+                        if (result)
+                            this.IsFavorite = false;
+                    }
+                    else
+                    {
+                        var result = await this._client!.Library.SaveTracks(new LibrarySaveTracksRequest(new string[] { id }));
+                        if (result)
+                            this.IsFavorite = true;
+                    }
+                }
+            });
+        }
 
 
         #region Status Updater
@@ -73,7 +205,6 @@ namespace miniplayer.models
             this._updaterCancel = new CancellationTokenSource();
             this._updaterTask = Task.Run(_Updater, this._updaterCancel.Token);
         }
-
         private void _StopUpdates()
         {
             if (this._updaterCancel != null)
@@ -91,7 +222,6 @@ namespace miniplayer.models
                 this._updaterTask = null;
             }
         }
-
         private async Task _Updater()
         {
             await _TryCatchApiCalls(async () =>
@@ -106,7 +236,6 @@ namespace miniplayer.models
                 }
             });
         }
-
         private async Task _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
             if (await _refreshLock.WaitAsync(0))
@@ -132,146 +261,7 @@ namespace miniplayer.models
             }
         }
         #endregion
-
-
-
-        public async Task<bool> PlayPause()
-        {
-            return await _TryCatchApiCalls(async () =>
-            {
-                if (this.IsPlaying)
-                    await this._client!.Player.PausePlayback();
-                else
-                    await this._client!.Player.ResumePlayback();
-
-                await _RefreshState();
-            });
-        }
-
-        public async Task<bool> SkipNext()
-        {
-            return await _TryCatchApiCalls(async () =>
-            {
-                await this._client!.Player.SkipNext();
-                await _RefreshState();
-            });
-        }
-
-        public async Task<bool> SkipPrevious()
-        {
-            return await _TryCatchApiCalls(async () =>
-            {
-                if (Position < 3000)
-                    await this._client!.Player.SkipPrevious();
-                else
-                    await this._client!.Player.SeekTo(new PlayerSeekToRequest(0));
-                await _RefreshState();
-            });
-        }
-
-        public async Task<bool> ToggleShuffle()
-        {
-            return await _TryCatchApiCalls(async () =>
-            {
-                await this._client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
-                await _RefreshState();
-            });
-        }
-
-        public async Task<bool> ToggleRepeat()
-        {
-            return await _TryCatchApiCalls(async () =>
-            {
-                PlayerSetRepeatRequest.State nextState;
-                switch (RepeatState)
-                {
-                    case "off":
-                        nextState = PlayerSetRepeatRequest.State.Context;
-                        break;
-                    case "context":
-                        nextState = PlayerSetRepeatRequest.State.Track;
-                        break;
-                    case "track":
-                    default:
-                        nextState = PlayerSetRepeatRequest.State.Off;
-                        break;
-                }
-
-                await this._client!.Player.SetRepeat(new PlayerSetRepeatRequest(nextState));
-                await _RefreshState();
-            });
-        }
-
-        public async Task<bool> ToggleFavorite()
-        {
-            return await _TryCatchApiCalls(async () =>
-            {
-                string? id = _context?.Item?.GetItemId();
-
-                if (id != null)
-                {
-                    if (IsFavorite ?? false)
-                    {
-                        var result = await this._client!.Library.RemoveTracks(new LibraryRemoveTracksRequest(new string[] { id }));
-                        if (result)
-                            this.IsFavorite = false;
-                    }
-                    else
-                    {
-                        var result = await this._client!.Library.SaveTracks(new LibrarySaveTracksRequest(new string[] { id }));
-                        if (result)
-                            this.IsFavorite = true;
-                    }
-                }
-            });
-        }
-
-        private CurrentlyPlayingContext? _context;
-        private FullTrack? _Track => _context?.Item as FullTrack;
-        private FullEpisode? _Episode => _context?.Item as FullEpisode;
-        public string Title => _Track?.Name ?? _Episode?.Name ?? "";
-        public string Artist
-        {
-            get
-            {
-                if (_Track != null)
-                    return string.Join(", ", _Track!.Artists.Select(r => r.Name));
-                else if (_Episode != null)
-                    return _Episode!.Show.Name;
-                else
-                    return "";
-            }
-        }
-
-        private bool? _isFavorite = null;
-        public bool? IsFavorite
-        {
-            get => _isFavorite;
-            set
-            {
-                _isFavorite = value;
-                _OnPropertyChanged(nameof(IsFavorite));
-            }
-        }
-
-        public bool IsPlaying => _context?.IsPlaying ?? false;
-        public bool IsShuffleOn => _context?.ShuffleState ?? false;
-        /// <summary>
-        /// returns "off", "track", or "context"
-        /// </summary>
-        public string RepeatState => _context?.RepeatState ?? "off";
-
-        private int _positionMs = 0;
-        public int Position
-        {
-            get => _positionMs;
-            set
-            {
-                _positionMs = Math.Max(Math.Min(value, Duration), 0);
-                _OnPropertyChanged(nameof(Position));
-            }
-        }
-        public int Duration => _Track?.DurationMs ?? _Episode?.DurationMs ?? 0;
+                        
 
         private void _SetContext(CurrentlyPlayingContext context)
         {
@@ -279,7 +269,6 @@ namespace miniplayer.models
             _positionMs = context?.ProgressMs ?? 0;
             _OnPropertyChanged("");
         }
-
         private async Task<bool> _TryCatchApiCalls(Func<Task> a)
         {
             try
@@ -300,7 +289,6 @@ namespace miniplayer.models
 
             _OnApiError(e);
         }
-
         private void _OnPropertyChanged(string propertyName)
             => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         private void _OnApiError(Exception e) =>
