@@ -35,17 +35,14 @@ namespace miniplayer
             _model = new PlayerModel(this.Dispatcher);
         }
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             IRefreshableToken? token;
             if (Config.TokenAvailable())
                 token = Config.LoadToken();
             else
-                token = null;                       
-
-            if (token != null)
-                _model.SetToken(token);
-
+                token = null;
+            
             this.DataContext = _model;
         }
 
