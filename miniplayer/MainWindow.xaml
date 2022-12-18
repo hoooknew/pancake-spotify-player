@@ -155,9 +155,9 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding Position, Converter={StaticResource MStoStringConverter}}"/>
-                    <ProgressBar Grid.Column="1" Height="4" Margin="2,0" BorderThickness="0" Foreground="{StaticResource spotify_green}" Background="LightGray" Value="{Binding Position}" Minimum="0" Maximum="{Binding Duration}" VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding Duration, Converter={StaticResource MStoStringConverter}}" Grid.Column="2"/>
+                    <TextBlock Text="{Binding Position, Mode=OneWay, Converter={StaticResource MStoStringConverter}}"/>
+                    <ProgressBar Grid.Column="1" Height="4" Margin="2,0" BorderThickness="0" Foreground="{StaticResource spotify_green}" Background="LightGray" Value="{Binding Position, Mode=OneWay}" Minimum="0" Maximum="{Binding Duration, Mode=OneWay}" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Duration, Mode=OneWay, Converter={StaticResource MStoStringConverter}}" Grid.Column="2"/>
                 </Grid>
             </Grid>
 

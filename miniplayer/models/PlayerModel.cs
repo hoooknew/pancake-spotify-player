@@ -42,7 +42,8 @@ namespace miniplayer.models
         private CancellationTokenSource? _updaterCancel = null;
         private SemaphoreSlim _refreshLock = new SemaphoreSlim(1);
         private readonly int REFRESH_DELAY = Config.RefreshDelayMS;
-        //private System.Threading.Timer
+        private readonly System.Threading.Timer _trackTimer;
+        private bool _disposed = false;
 
         private CurrentlyPlayingContext? _context;
         private int _positionMs = 0;
@@ -51,6 +52,7 @@ namespace miniplayer.models
         public PlayerModel(Dispatcher dispatcher)
         {
             this._dispatcher = dispatcher;
+            _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
         }
 
         public void SetToken(IRefreshableToken token)
@@ -101,7 +103,7 @@ namespace miniplayer.models
         public int Position
         {
             get => _positionMs;
-            set
+            private set
             {
                 _positionMs = Math.Max(Math.Min(value, Duration), 0);
                 _OnPropertyChanged(nameof(Position));
@@ -126,8 +128,18 @@ namespace miniplayer.models
         {
             return await _TryCatchApiCalls(async () =>
             {
+                _StopUpdates();
                 await this._client!.Player.SkipNext();
-                await _RefreshState();
+                await Task.Delay(250);
+                for (int i = 0; i < 3; i++)
+                    if (await _RefreshState())
+                        break;
+                    else
+                    {
+                        Debug.WriteLine("bad refresh");
+                        await Task.Delay(250);
+                    }
+                _StartUpdates();
             });
         }
         public async Task<bool> SkipPrevious()
@@ -236,38 +248,67 @@ namespace miniplayer.models
                 }
             });
         }
-        private async Task _RefreshState(CancellationToken cancelToken = default(CancellationToken))
+        
+        private async Task<bool> _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
-            if (await _refreshLock.WaitAsync(0))
-            {
+            //if (await _refreshLock.WaitAsync(0))
+            //{
                 try
                 {
+                    var sw = new Stopwatch();
+                    sw.Start();
                     var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
-                    var oldContext = this._dispatcher.Invoke(() => this._context);
-                    this._dispatcher.Invoke(() => this._SetContext(newContext));
+                    var diffSong = this._dispatcher.Invoke(() => this._SetContext(newContext));
 
-                    if (newContext?.Item != null && oldContext?.Item?.GetItemId() != newContext?.Item?.GetItemId())
+                    if (diffSong)
                     {
                         this._dispatcher.Invoke(() => this.IsFavorite = null);
                         var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { newContext!.Item!.GetItemId()! }));
                         this.IsFavorite = isFavs.All(r => r);
                     }
 
+                    sw.Stop();
+                    
+                    if (_context?.IsPlaying ?? false)
+                        _trackTimer.Change((_positionMs + sw.ElapsedMilliseconds) % 1000 + 1000, 1000);
+                    else
+                        _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
+
+                    return diffSong;
+
                 }
                 finally
                 {
-                    _refreshLock.Release();
+                    //_refreshLock.Release();
                 }
+            //}
+            //else
+            //    return false;
+        }
+        private static void _SongTick(object? state)
+        {
+            if (state is PlayerModel player)
+            {
+                if (player.Position + 1000 > player.Duration)
+                    player._RefreshState();
+                else
+                    player.Position += 1000;
+
             }
         }
-        #endregion
-                        
 
-        private void _SetContext(CurrentlyPlayingContext context)
+        #endregion
+
+
+        private bool _SetContext(CurrentlyPlayingContext context)
         {
+            var diffSong = context?.Item != null && _context?.Item?.GetItemId() != context?.Item?.GetItemId();
+
             _context = context;
             _positionMs = context?.ProgressMs ?? 0;
             _OnPropertyChanged("");
+
+            return diffSong;
         }
         private async Task<bool> _TryCatchApiCalls(Func<Task> a)
         {
@@ -296,7 +337,13 @@ namespace miniplayer.models
 
         public void Dispose()
         {
-            this._StopUpdates();
+            if (!_disposed)
+            {
+                this._StopUpdates();
+                this._trackTimer.Dispose();
+
+                _disposed = true;
+            }
         }
     }
 }
