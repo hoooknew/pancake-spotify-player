@@ -78,3 +78,11 @@ https://github.com/dotnet/wpf/blob/89d172db0b7a192de720c6cfba5e28a1e7d46123/src/
 https://developer.spotify.com/documentation/web-api/reference/#/operations/check-users-saved-tracks
 https://developer.spotify.com/documentation/web-api/reference/#/operations/save-tracks-user
 https://developer.spotify.com/documentation/web-api/reference/#/operations/remove-tracks-user
+
+## Source Generators
+https://learn.microsoft.com/en-us/dotnet/csharp/roslyn-sdk/source-generators-overview
+https://github.com/dotnet/roslyn-sdk/tree/main/samples/CSharp/SourceGenerators
+https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookbook.md
+
+### finding classes with an attribute in the source generator
+https://andrewlock.net/using-source-generators-with-a-custom-attribute--to-generate-a-nav-component-in-a-blazor-app/
