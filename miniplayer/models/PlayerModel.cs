@@ -270,7 +270,7 @@ namespace miniplayer.models
                     sw.Stop();
                     
                     if (_context?.IsPlaying ?? false)
-                        _trackTimer.Change((_positionMs + sw.ElapsedMilliseconds) % 1000 + 1000, 1000);
+                        _trackTimer.Change((_positionMs + sw.ElapsedMilliseconds * 2) % 1000 + 1000, 1000);
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
@@ -290,7 +290,9 @@ namespace miniplayer.models
             if (state is PlayerModel player)
             {
                 if (player.Position + 1000 > player.Duration)
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     player._RefreshState();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 else
                     player.Position += 1000;
 
