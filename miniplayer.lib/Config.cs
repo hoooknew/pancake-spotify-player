@@ -11,6 +11,8 @@ namespace miniplayer.lib
 {
     public static class Config
     {
+        private static readonly string _credentialsPath = Path.Combine(Constants.LOCAL_APP_DATA, @"credentials.json");
+
         private static IConfiguration? __instance = null;
         public static IConfiguration Instance
         {
@@ -21,6 +23,8 @@ namespace miniplayer.lib
                     {
                         if (__instance == null)
                         {
+                            CreateLocalAppFolder();
+
                             var builder = new ConfigurationBuilder()
                                 .AddJsonFile($"appsettings.json", true);
                             __instance = builder.Build();
@@ -29,30 +33,27 @@ namespace miniplayer.lib
 
                 return __instance;
             }
-        }
+        }        
 
+        #region app settings
         public static string? ClientId => Instance["clientId"];
         public static int RefreshDelayMS => int.Parse(Instance["refreshDelayMS"] ?? "1000");
+        #endregion
 
-
-
-
-        private static readonly string _credentialsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"miniplayer\credentials.json");
-
+        #region credentials
         public static bool TokenAvailable() => File.Exists(_credentialsPath);
-
         public static void SaveToken(IRefreshableToken? token)
         {
             if (token == null && File.Exists(_credentialsPath))
                 File.Delete(_credentialsPath);
             else
-            {
-                var directory = Path.GetDirectoryName(_credentialsPath);
-                if (!Directory.Exists(directory))
-                    Directory.CreateDirectory(directory!);
-
                 File.WriteAllText(_credentialsPath, JsonConvert.SerializeObject(token));
-            }
+        }
+
+        private static void CreateLocalAppFolder()
+        {            
+            if (!Directory.Exists(Constants.LOCAL_APP_DATA))
+                Directory.CreateDirectory(Constants.LOCAL_APP_DATA);
         }
 
         public static IRefreshableToken? LoadToken()
@@ -65,5 +66,6 @@ namespace miniplayer.lib
             else
                 return null;
         }
+        #endregion        
     }
 }
