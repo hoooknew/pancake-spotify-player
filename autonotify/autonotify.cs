@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace poco
+namespace AutoNotify
 {
     [Generator]
     public class AutoNotifyGenerator : ISourceGenerator
@@ -19,19 +19,16 @@ using System;
 namespace AutoNotify
 {
     [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
-    sealed class AutoNotifyAttribute : Attribute
-    {
-        public AutoNotifyAttribute()
-        {
-        }
-        public string PropertyName { get; set; }
+    sealed class AutoNotifyAttribute_ignore : Attribute
+    {        
+        public string? PropertyName { get; set; }
     }
 }
 ";
 
         public void Initialize(GeneratorInitializationContext context)
-        {
-            // Register a syntax receiver that will be created for each generation pass
+        {            
+            //Register a syntax receiver that will be created for each generation pass
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
         }
 
@@ -97,7 +94,7 @@ namespace {namespaceName}
             // if the class doesn't implement INotifyPropertyChanged already, add it
             if (!classSymbol.Interfaces.Contains(notifySymbol))
             {
-                source.Append("public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;");
+                source.Append("public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;");
             }
 
             // create properties for each field 
