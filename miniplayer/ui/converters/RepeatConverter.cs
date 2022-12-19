@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace miniplayer.converters
+namespace miniplayer.ui.converters
 {
     internal class RepeatConverter : IValueConverter
     {

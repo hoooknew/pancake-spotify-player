@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace miniplayer.converters
+namespace miniplayer.ui.converters
 {
     internal class MStoStringConverter : IValueConverter
     {

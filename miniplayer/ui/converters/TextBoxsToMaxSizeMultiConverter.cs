@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace miniplayer.converters
+namespace miniplayer.ui.converters
 {
     internal class TextBoxsToMaxSizeMultiConverter : IMultiValueConverter
     {

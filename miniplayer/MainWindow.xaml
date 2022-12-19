@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl="clr-namespace:miniplayer.controls"
-        xmlns:cvt="clr-namespace:miniplayer.converters"
+        xmlns:cvt="clr-namespace:miniplayer.ui.converters"
         xmlns:mdl="clr-namespace:miniplayer.models"
         xmlns:local="clr-namespace:miniplayer"        
         mc:Ignorable="d"
@@ -12,8 +12,7 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         Title="MainWindow" Height="80" Width="400"
-        MinWidth="250"
-        
+        MinWidth="250"        
         MouseDown="Window_MouseDown">
     <Window.Resources>
         <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>

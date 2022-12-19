@@ -4,26 +4,22 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace miniplayer.converters
+namespace miniplayer.ui.converters
 {
-    internal class BoolToGeometeryConverter : IValueConverter
+    internal class BoolToVisibilityConverter : IValueConverter
     {
-        public Geometry? TrueValue { get; set; } = null;
-        public Geometry? FalseValue { get; set; } = null;
-
-        public Geometry? NullValue { get; set; } = null;
+        public Visibility TrueVisibility { get; set; }
+        public Visibility FalseVisibility { get; set; }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is bool b)
-                return b ? this.TrueValue! : this.FalseValue!;
-            else if (this.NullValue != null)
-                return this.NullValue;
+                return b ? TrueVisibility : FalseVisibility;
             else
-                throw new ArgumentException("bound value should be a boolean");
+                throw new ArgumentException();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
