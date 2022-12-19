@@ -2,6 +2,7 @@
 //https://github.com/dotnet/roslyn-sdk/blob/0abb5881b483493b198315c83b4679b6a13a4545/samples/CSharp/SourceGenerators/SourceGeneratorSamples/AutoNotifyGenerator.cs
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -14,47 +15,38 @@ namespace AutoNotify
     [Generator]
     public class AutoNotifyGenerator : ISourceGenerator
     {
-        private const string attributeText = @"
-using System;
-namespace AutoNotify
-{
-    [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
-    sealed class AutoNotifyAttribute_ignore : Attribute
-    {        
-        public string? PropertyName { get; set; }
-    }
-}
-";
-
         public void Initialize(GeneratorInitializationContext context)
         {            
             //Register a syntax receiver that will be created for each generation pass
             context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
+
+//#if DEBUG
+//            if (!Debugger.IsAttached)
+//            {
+//                Debugger.Launch();
+//            }
+//#endif 
+            //Debug.WriteLine("Initalize code generator");
         }
 
         public void Execute(GeneratorExecutionContext context)
         {
             // add the attribute text
-            context.AddSource("AutoNotifyAttribute", SourceText.From(attributeText, Encoding.UTF8));
+            //context.AddSource("AutoNotifyAttribute", SourceText.From(attributeText, Encoding.UTF8));
 
             // retreive the populated receiver 
             if (!(context.SyntaxReceiver is SyntaxReceiver receiver))
                 return;
 
-            // we're going to create a new compilation that contains the attribute.
-            // TODO: we should allow source generators to provide source during initialize, so that this step isn't required.
-            CSharpParseOptions options = (context.Compilation as CSharpCompilation).SyntaxTrees[0].Options as CSharpParseOptions;
-            Compilation compilation = context.Compilation.AddSyntaxTrees(CSharpSyntaxTree.ParseText(SourceText.From(attributeText, Encoding.UTF8), options));
-
             // get the newly bound attribute, and INotifyPropertyChanged
-            INamedTypeSymbol attributeSymbol = compilation.GetTypeByMetadataName("AutoNotify.AutoNotifyAttribute");
-            INamedTypeSymbol notifySymbol = compilation.GetTypeByMetadataName("System.ComponentModel.INotifyPropertyChanged");
+            INamedTypeSymbol attributeSymbol = context.Compilation.GetTypeByMetadataName("AutoNotify.AutoNotifyAttribute");
+            INamedTypeSymbol notifySymbol = context.Compilation.GetTypeByMetadataName("System.ComponentModel.INotifyPropertyChanged");
 
             // loop over the candidate fields, and keep the ones that are actually annotated
             List<IFieldSymbol> fieldSymbols = new List<IFieldSymbol>();
             foreach (FieldDeclarationSyntax field in receiver.CandidateFields)
             {
-                SemanticModel model = compilation.GetSemanticModel(field.SyntaxTree);
+                SemanticModel model = context.Compilation.GetSemanticModel(field.SyntaxTree);
                 foreach (VariableDeclaratorSyntax variable in field.Declaration.Variables)
                 {
                     // Get the symbol being decleared by the field, and keep it if its annotated

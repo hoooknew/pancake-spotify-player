@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test", "test\test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "miniplayer.lib", "miniplayer.lib\miniplayer.lib.csproj", "{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify", "autonotify\autonotify.csproj", "{DAEEE4BF-01E7-4AC3-8D15-47FC61CBB625}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify.generator", "autonotify\autonotify.generator.csproj", "{DAEEE4BF-01E7-4AC3-8D15-47FC61CBB625}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
