@@ -1,5 +1,6 @@
 ﻿using miniplayer.lib;
 using miniplayer.models;
+using miniplayer.ui;
 using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
@@ -28,10 +29,11 @@ namespace miniplayer
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
+            this.Closing += MainWindow_Closing;
 
             _model = new PlayerModel(this.Dispatcher);
             _model.ApiError += _model_ApiError;
-        }
+        }        
 
         private void _model_ApiError(object? sender, ApiErrorEventArgs e)
         {
@@ -54,7 +56,15 @@ namespace miniplayer
                 token = null;
 
             this.DataContext = _model;
+
+            this.RestoreLocation();
         }
+
+        private void MainWindow_Closing(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            this.SaveLocation();
+        }
+
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)

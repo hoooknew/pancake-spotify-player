@@ -27,8 +27,8 @@
 
 
 - [ ] add a settings right click that creates a user settings json in the app data folder
-  - [ ] add a settings feature to remember the last app position
-    - [ ] remember to only restore the position if the window is in the current screen dimensions.
+  - [x] add a settings feature to remember the last app position
+    - [x] remember to only restore the position if the window is in the current screen dimensions.
   - [ ] add a settings feature to keep the app always on top
   - [ ] have the option of responding into the windows media?
   - [ ] add a setting to zoom the whole window.
@@ -86,3 +86,6 @@ https://github.com/dotnet/roslyn/blob/main/docs/features/source-generators.cookb
 
 ### finding classes with an attribute in the source generator
 https://andrewlock.net/using-source-generators-with-a-custom-attribute--to-generate-a-nav-component-in-a-blazor-app/
+
+The functionality I want as a sample
+https://github.com/dotnet/roslyn-sdk/blob/0abb5881b483493b198315c83b4679b6a13a4545/samples/CSharp/SourceGenerators/SourceGeneratorSamples/AutoNotifyGenerator.cs

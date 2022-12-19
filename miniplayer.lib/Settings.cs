@@ -27,7 +27,7 @@ namespace miniplayer.lib
                                 __instance = new Settings();
                         }
 
-                return __instance;
+                return __instance!;
             }
         }
 
@@ -36,21 +36,21 @@ namespace miniplayer.lib
         }
 
         [AutoNotify]
-        private double _windowLeft;
+        private double? _windowLeft;
         [AutoNotify]
-        private double _windowTop;
+        private double? _windowTop;
         [AutoNotify]
-        public double _windowWidth;
+        public double? _windowWidth;
         [AutoNotify]
-        public double _windowHeight;
+        public double? _windowHeight;
 
         private static void CreateLocalAppFolder()
         {
             if (!Directory.Exists(Constants.LOCAL_APP_DATA))
                 Directory.CreateDirectory(Constants.LOCAL_APP_DATA);
-        }
+        }        
 
-        partial void OnPropertyChanged(string propertyName)
+        public void Save()
         {
             CreateLocalAppFolder();
             File.WriteAllText(_userSettingsPath, JsonConvert.SerializeObject(this));
