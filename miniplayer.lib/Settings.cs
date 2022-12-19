@@ -5,15 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AutoNotify
-{
-    [AttributeUsage(AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
-    sealed class AutoNotifyAttribute : Attribute
-    {        
-        public string? PropertyName { get; set; }
-    }
-}
-
 namespace miniplayer.lib
 {
     public partial class Settings

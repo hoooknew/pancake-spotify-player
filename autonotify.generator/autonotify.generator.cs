@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace AutoNotify
+namespace AutoNotify.Generator
 {
     [Generator]
     public class AutoNotifyGenerator : ISourceGenerator
