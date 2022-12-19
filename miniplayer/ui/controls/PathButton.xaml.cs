@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace miniplayer.controls
+namespace miniplayer.ui.controls
 {
     /// <summary>
     /// Interaction logic for PathButton.xaml
