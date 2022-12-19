@@ -81,6 +81,7 @@ namespace {namespaceName}
 {{
     public partial class {classSymbol.Name} : {notifySymbol.ToDisplayString()}
     {{
+    partial void OnPropertyChanged(string propertyName);
 ");
 
             // if the class doesn't implement INotifyPropertyChanged already, add it
@@ -128,6 +129,7 @@ public {fieldType} {propertyName}
     {{
         this.{fieldName} = value;
         this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof({propertyName})));
+        OnPropertyChanged(nameof({propertyName}));
     }}
 }}
 
