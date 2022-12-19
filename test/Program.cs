@@ -36,12 +36,12 @@ namespace test_auth
             }
 
             IRefreshableToken? token;
-            if (Config.TokenAvailable())
-                token = Config.LoadToken();
+            if (Authentication.TokenAvailable())
+                token = Authentication.LoadToken();
             else
             {
                 token = await Authentication.Login();
-                Config.SaveToken(token);
+                Authentication.SaveToken(token);
             }
 
             if (token != null)

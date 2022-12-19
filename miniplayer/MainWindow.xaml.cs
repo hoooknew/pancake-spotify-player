@@ -35,7 +35,7 @@ namespace miniplayer
 
         private void _model_ApiError(object? sender, ApiErrorEventArgs e)
         {
-            Config.SaveToken(null);
+            Authentication.SaveToken(null);
             if (!(e.Exception is APIUnauthorizedException))
                 MessageBox.Show(e.Exception.Message);
         }
@@ -43,9 +43,9 @@ namespace miniplayer
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             IRefreshableToken? token;
-            if (Config.TokenAvailable())
+            if (Authentication.TokenAvailable())
             {
-                token = Config.LoadToken();
+                token = Authentication.LoadToken();
 
                 if (token != null)
                     _model.SetToken(token);
@@ -110,7 +110,7 @@ namespace miniplayer
         private async void _signin_Click(object sender, RoutedEventArgs e)
         {
             var token = await Authentication.Login();
-            Config.SaveToken(token);
+            Authentication.SaveToken(token);
             if (token != null)
                 _model.SetToken(token);
         }

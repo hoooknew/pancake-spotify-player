@@ -12,13 +12,8 @@ namespace miniplayer.lib
 {
     public static class Authentication
     {
-        public static IRefreshableToken? GetToken()
-        {
-            if (Config.TokenAvailable())
-                return Config.LoadToken();
-            else
-                return null;
-        }
+        private static readonly string _credentialsPath = Path.Combine(Constants.LOCAL_APP_DATA, @"credentials.json");
+        
         public static async Task<IRefreshableToken?> Login()
         {
             if (string.IsNullOrEmpty(Config.ClientId))
@@ -114,9 +109,38 @@ namespace miniplayer.lib
         public static IAuthenticator CreateAuthenticator(IRefreshableToken? token)
         {
             var authenticator = new PKCEAuthenticator(Config.ClientId!, (token as PKCETokenResponse)!);
-            authenticator.TokenRefreshed += (sender, token) => Config.SaveToken(token);
+            authenticator.TokenRefreshed += (sender, token) => SaveToken(token);
 
             return authenticator;
+        }
+
+
+        public static bool TokenAvailable() => File.Exists(_credentialsPath);
+        public static void SaveToken(IRefreshableToken? token)
+        {
+            CreateLocalAppFolder();
+
+            if (token == null && File.Exists(_credentialsPath))
+                File.Delete(_credentialsPath);
+            else
+                File.WriteAllText(_credentialsPath, JsonConvert.SerializeObject(token));
+        }        
+
+        public static IRefreshableToken? LoadToken()
+        {
+            if (TokenAvailable())
+            {
+                var json = File.ReadAllText(_credentialsPath);
+                return JsonConvert.DeserializeObject<PKCETokenResponse>(json);
+            }
+            else
+                return null;
+        }
+
+        private static void CreateLocalAppFolder()
+        {
+            if (!Directory.Exists(Constants.LOCAL_APP_DATA))
+                Directory.CreateDirectory(Constants.LOCAL_APP_DATA);
         }
     }
 }
