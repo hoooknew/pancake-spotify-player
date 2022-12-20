@@ -10,7 +10,8 @@
 - [x] refactor the main window into user controls to improve readability.
 
 - [x] use routed commands instead of click events
-  - [ ] disable the buttons while waiting on a state refresh from the server
+  - [x] disable the buttons while waiting on a state refresh from the server
+  - [ ] get each command to retry a status refresh if the expected state doesn't return
 
 
 - [ ] handle `APITooManyRequestsException`

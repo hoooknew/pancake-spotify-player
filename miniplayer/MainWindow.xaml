@@ -19,13 +19,13 @@
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.SignIn}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.Shuffle}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipPrev}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.PlayPause}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipNext}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SignIn}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Shuffle}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipPrev}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.PlayPause}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipNext}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" Executed="CommandBinding_Executed"/>
     </Window.CommandBindings>
     <Grid>
         <ctrl:SignIn Grid.Column="1" Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>

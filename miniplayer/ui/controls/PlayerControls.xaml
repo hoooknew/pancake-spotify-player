@@ -25,10 +25,26 @@
         <Style TargetType="ctrl:PathButton" BasedOn="{StaticResource buttonStyle}"/>
     </UserControl.Resources>
     <StackPanel Orientation="Horizontal">
-        <ctrl:PathButton x:Name="_shuffle_btn" PathData="{Binding IsShuffleOn, Converter={StaticResource ShuffleConverter}}" Command="{x:Static ui:PlayerCommands.Shuffle}" />
-        <ctrl:PathButton x:Name="_skip_prev_btn" PathData="{StaticResource geo_skip_previous}" Command="{x:Static ui:PlayerCommands.SkipPrev}"/>
-        <ctrl:PathButton x:Name="_play_pause_btn" PathData="{Binding IsPlaying, Converter={StaticResource PlayPauseConverter}}" Width="30" Height="30" Command="{x:Static ui:PlayerCommands.PlayPause}"/>
-        <ctrl:PathButton x:Name="_skip_next_btn" PathData="{StaticResource geo_skip_next}" Command="{x:Static ui:PlayerCommands.SkipNext}"/>
-        <ctrl:PathButton x:Name="_repeat_btn" PathData="{Binding RepeatState, Converter={StaticResource repeatConverter}}" Command="{x:Static ui:PlayerCommands.Repeat}"/>
+        <ctrl:PathButton x:Name="_shuffle_btn" 
+                         PathData="{Binding IsShuffleOn, Converter={StaticResource ShuffleConverter}}" 
+                         IsEnabled="{Binding EnableControls}"
+                         Command="{x:Static ui:PlayerCommands.Shuffle}" />
+        <ctrl:PathButton x:Name="_skip_prev_btn" 
+                         PathData="{StaticResource geo_skip_previous}" 
+                         IsEnabled="{Binding EnableControls}"
+                         Command="{x:Static ui:PlayerCommands.SkipPrev}"/>
+        <ctrl:PathButton x:Name="_play_pause_btn" 
+                         Width="30" Height="30" 
+                         PathData="{Binding IsPlaying, Converter={StaticResource PlayPauseConverter}}"                          
+                         IsEnabled="{Binding EnableControls}"
+                         Command="{x:Static ui:PlayerCommands.PlayPause}"/>
+        <ctrl:PathButton x:Name="_skip_next_btn" 
+                         PathData="{StaticResource geo_skip_next}" 
+                         IsEnabled="{Binding EnableControls}"
+                         Command="{x:Static ui:PlayerCommands.SkipNext}"/>
+        <ctrl:PathButton x:Name="_repeat_btn" 
+                         PathData="{Binding RepeatState, Converter={StaticResource repeatConverter}}" 
+                         IsEnabled="{Binding EnableControls}"
+                         Command="{x:Static ui:PlayerCommands.Repeat}"/>
     </StackPanel>
 </UserControl>

@@ -35,6 +35,7 @@ namespace miniplayer.models
         private CurrentlyPlayingContext? _context;
         private int _positionMs = 0;
         private bool? _isFavorite = null;
+        private bool _enableControls = true;
 
         public PlayerModel(Dispatcher dispatcher)
         {
@@ -92,6 +93,17 @@ namespace miniplayer.models
             }
         }
         public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
+
+        public bool EnableControls 
+        { 
+            get => _enableControls;
+            set
+            {
+                _enableControls = value;
+                _OnPropertyChanged(nameof(EnableControls));
+            }
+        }
+        
 
         public void SetToken(IRefreshableToken token)
         {
