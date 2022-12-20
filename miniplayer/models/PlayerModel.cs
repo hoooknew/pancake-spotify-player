@@ -12,14 +12,35 @@ namespace miniplayer.models
 {
     internal class PlayerModel : IDisposable, INotifyPropertyChanged
     {
-        private record ChangedState(bool Track = false, bool PlayPause = false, bool Shuffle = false, bool Repeat = false, bool Favorite = false);       
+        private record ChangedState(bool Track = false, bool PlayPause = false, bool Shuffle = false, bool Repeat = false, bool Position = false)
+        {
+            public static ChangedState AllChanged => new ChangedState(true, true, true, true, true);
+            public static ChangedState NothingChanged => new ChangedState();
+
+            public static ChangedState Compare(CurrentlyPlayingContext? oldContext, CurrentlyPlayingContext? newContext)
+            {
+                if ((oldContext == null || newContext == null) && oldContext != newContext)
+                    return ChangedState.AllChanged;
+                else if (oldContext == null && newContext == null)
+                    return ChangedState.NothingChanged;
+                else
+                {
+                    return new ChangedState(
+                        Track: oldContext!.Item?.GetItemId() != newContext!.Item?.GetItemId(),
+                        PlayPause: oldContext.IsPlaying != newContext.IsPlaying,
+                        Shuffle: oldContext.ShuffleState != newContext.ShuffleState,
+                        Repeat: oldContext.RepeatState != newContext.RepeatState,
+                        Position: oldContext.ProgressMs > newContext.ProgressMs || (!newContext.IsPlaying && oldContext.ProgressMs != newContext.ProgressMs));
+                }
+            }
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<ApiErrorEventArgs>? ApiError;
 
         private readonly Dispatcher _dispatcher;
 
-       
+
         private SpotifyClient? _client = null;
         private Task? _updaterTask = null;
         private CancellationTokenSource? _updaterCancel = null;
@@ -90,8 +111,8 @@ namespace miniplayer.models
         }
         public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
 
-        public bool EnableControls 
-        { 
+        public bool EnableControls
+        {
             get => _enableControls;
             set
             {
@@ -99,7 +120,7 @@ namespace miniplayer.models
                 _OnPropertyChanged(nameof(EnableControls));
             }
         }
-        
+
 
         public void SetToken(IRefreshableToken token)
         {
@@ -259,24 +280,23 @@ namespace miniplayer.models
             {
                 try
                 {
-                    var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
+                    var oldContext = _context;
+                    _context = await this._client!.Player.GetCurrentPlayback(cancelToken);
 
-                    var diffSong = newContext?.Item != null && _context?.Item?.GetItemId() != newContext?.Item?.GetItemId();
-                    _context = newContext;                    
+                    var changed = ChangedState.Compare(oldContext, _context);
 
-                    if (diffSong)
+                    if (changed.Track)
                     {
-                        this.IsFavorite = null;
-                        var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { newContext!.Item!.GetItemId()! }));
-                        this.IsFavorite = isFavs.All(r => r);
+                        IsFavorite = null;
+                        var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { _context!.Item!.GetItemId()! }));
+                        IsFavorite = isFavs.All(r => r);
                     }
-                                        
 
-                    if (newContext != null && REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
+                    if (_context != null && REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
                     {
-                        if (diffSong || Math.Abs(newContext.ProgressMs - _positionMs) > 500)
+                        if (changed.Track || Math.Abs(_context.ProgressMs - _positionMs) > 500)
                         {
-                            this.Position = newContext.ProgressMs;
+                            this.Position = _context.ProgressMs;
 
                             /*
                              * _positionMs % 1000 = time since the last even second
@@ -291,7 +311,8 @@ namespace miniplayer.models
 
                     _OnPropertyChanged("");
 
-                    return new ChangedState(Track:diffSong);
+                    Debug.WriteLine(changed);
+                    return changed;
 
                 }
                 finally
@@ -301,10 +322,11 @@ namespace miniplayer.models
             }
             else
             {
-                Debug.WriteLine("skiped refresh because of lock.");
-                return new ChangedState();
+                Debug.WriteLine("skipped refresh because of lock.");
+                return ChangedState.NothingChanged;
             }
         }
+
         private static void _SongTick(object? state)
         {
             if (state is PlayerModel player)
