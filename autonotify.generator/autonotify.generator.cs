@@ -81,13 +81,15 @@ namespace {namespaceName}
 {{
     public partial class {classSymbol.Name} : {notifySymbol.ToDisplayString()}
     {{
-    partial void OnPropertyChanged(string propertyName);
-");
+        partial void OnPropertyChanged(string propertyName);");
 
             // if the class doesn't implement INotifyPropertyChanged already, add it
             if (!classSymbol.Interfaces.Contains(notifySymbol))
             {
-                source.Append("public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;");
+                source.Append(@"
+        public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+
+");
             }
 
             // create properties for each field 
@@ -96,15 +98,110 @@ namespace {namespaceName}
                 ProcessField(source, fieldSymbol, attributeSymbol);
             }
 
-            source.Append("} }");
+            ProcessGetValue(source, fields, attributeSymbol);
+
+            ProcessSetValue(source, fields, attributeSymbol);
+
+            source.Append(@"
+    } 
+}");
             return source.ToString();
         }
 
-        private void ProcessField(StringBuilder source, IFieldSymbol fieldSymbol, ISymbol attributeSymbol)
+        private void ProcessGetValue(StringBuilder source, List<IFieldSymbol> fields, ISymbol attributeSymbol)
         {
-            // get the name and type of the field
+            source.Append(@"
+
+        public object? GetValue(string propertyName)
+        {
+            switch (propertyName)
+            {");
+            //create getter
+            foreach (IFieldSymbol fieldSymbol in fields)
+            {
+                string propertyName = GetPropertyName(fieldSymbol, attributeSymbol);
+
+                if (propertyName != null)
+                {
+                    source.Append(@$"
+                    case nameof({propertyName}):
+                        return {propertyName};");
+                }
+            }
+            source.Append(@"
+                default:
+                    throw new ArgumentException();
+            }
+        }");
+        }
+
+        private void ProcessSetValue(StringBuilder source, List<IFieldSymbol> fields, ISymbol attributeSymbol)
+        {
+            source.Append(@"
+
+    public void SetValue(string propertyName, object? value)
+    {
+        switch (propertyName)
+        {");
+            //create getter
+            foreach (IFieldSymbol fieldSymbol in fields)
+            {
+                string propertyName = GetPropertyName(fieldSymbol, attributeSymbol);
+
+                if (propertyName != null)
+                {
+                    source.Append(@$"
+                case nameof({propertyName}):
+                    if (value is {fieldSymbol.Type} v)
+                        {propertyName} = v;
+                    else
+                        throw new ArgumrntException(""{propertyName} only accepts values of type {fieldSymbol.Type}."");
+                    break;");
+                }
+            }
+            source.Append(@"
+            default:
+                throw new ArgumentException();
+        }
+    }");
+        }
+
+        private void ProcessField(StringBuilder source, IFieldSymbol fieldSymbol, ISymbol attributeSymbol)
+        {            
+            string propertyName = GetPropertyName(fieldSymbol, attributeSymbol);
+            if (propertyName != null)
+            {
+                // get the name and type of the field
+                string fieldName = fieldSymbol.Name;
+                ITypeSymbol fieldType = fieldSymbol.Type;
+
+                source.Append($@"
+    public {fieldType} {propertyName} 
+    {{
+        get 
+        {{
+            return this.{fieldName};
+        }}
+
+        set
+        {{
+            this.{fieldName} = value;
+            this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof({propertyName})));
+            OnPropertyChanged(nameof({propertyName}));
+        }}
+    }}
+
+");
+            }
+            else
+            {
+                //TODO: issue a diagnostic that we can't process this field
+            }
+        }
+
+        private string? GetPropertyName(IFieldSymbol fieldSymbol, ISymbol attributeSymbol)
+        {
             string fieldName = fieldSymbol.Name;
-            ITypeSymbol fieldType = fieldSymbol.Type;
 
             // get the AutoNotify attribute from the field, and any associated data
             AttributeData attributeData = fieldSymbol.GetAttributes().Single(ad => ad.AttributeClass.Equals(attributeSymbol, SymbolEqualityComparer.Default));
@@ -114,26 +211,10 @@ namespace {namespaceName}
             if (propertyName.Length == 0 || propertyName == fieldName)
             {
                 //TODO: issue a diagnostic that we can't process this field
-                return;
+                return null;
             }
-
-            source.Append($@"
-public {fieldType} {propertyName} 
-{{
-    get 
-    {{
-        return this.{fieldName};
-    }}
-
-    set
-    {{
-        this.{fieldName} = value;
-        this.PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(nameof({propertyName})));
-        OnPropertyChanged(nameof({propertyName}));
-    }}
-}}
-
-");            
+            else
+                return propertyName;
         }
 
         private string ChooseName(string fieldName, TypedConstant overridenNameOpt)
