@@ -23,16 +23,7 @@ namespace miniplayer.models
 
         private readonly Dispatcher _dispatcher;
 
-        private bool _needToken = true;
-        public bool NeedToken
-        {
-            get => _needToken;
-            private set
-            {
-                _needToken = value;
-                _OnPropertyChanged(nameof(NeedToken));
-            }
-        }
+       
         private SpotifyClient? _client = null;
         private Task? _updaterTask = null;
         private CancellationTokenSource? _updaterCancel = null;
@@ -51,21 +42,16 @@ namespace miniplayer.models
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
         }
 
-        public void SetToken(IRefreshableToken token)
+        private bool _needToken = true;
+        public bool NeedToken
         {
-            this._StopUpdates();
-
-            var authenticator = Authentication.CreateAuthenticator(token);
-
-            var config = SpotifyClientConfig.CreateDefault()
-                .WithAuthenticator(authenticator);
-
-            this._client = new SpotifyClient(config);
-            NeedToken = false;
-
-            this._StartUpdates();
+            get => _needToken;
+            private set
+            {
+                _needToken = value;
+                _OnPropertyChanged(nameof(NeedToken));
+            }
         }
-
         public string Title => _context.GetTrack()?.Name ?? _context.GetEpisode()?.Name ?? "";
         public string Artist
         {
@@ -107,6 +93,20 @@ namespace miniplayer.models
         }
         public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
 
+        public void SetToken(IRefreshableToken token)
+        {
+            this._StopUpdates();
+
+            var authenticator = Authentication.CreateAuthenticator(token);
+
+            var config = SpotifyClientConfig.CreateDefault()
+                .WithAuthenticator(authenticator);
+
+            this._client = new SpotifyClient(config);
+            NeedToken = false;
+
+            this._StartUpdates();
+        }
 
         public async Task<bool> PlayPause()
         {
