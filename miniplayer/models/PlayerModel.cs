@@ -1,15 +1,11 @@
 ﻿using miniplayer.lib;
 using SpotifyAPI.Web;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-//using System.Timers;
 using System.Windows.Threading;
 
 namespace miniplayer.models
@@ -47,6 +43,7 @@ namespace miniplayer.models
 
         private CurrentlyPlayingContext? _context;
         private int _positionMs = 0;
+        private int _networkLagMs = 0;
         private bool? _isFavorite = null;
 
         public PlayerModel(Dispatcher dispatcher)
@@ -102,12 +99,12 @@ namespace miniplayer.models
         public string RepeatState => _context?.RepeatState ?? "off";
         public int Position
         {
-            get => _positionMs;
-            private set
-            {
-                _positionMs = Math.Max(Math.Min(value, Duration), 0);
-                _OnPropertyChanged(nameof(Position));
-            }
+            get => _positionMs +_networkLagMs;
+        }
+        private void SetPosition(int value)
+        {
+            _positionMs = Math.Max(Math.Min(value, Duration), 0);
+            _OnPropertyChanged(nameof(Position));
         }
         public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
 
@@ -248,11 +245,11 @@ namespace miniplayer.models
                 }
             });
         }
-        
+
         private async Task<bool> _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
-            //if (await _refreshLock.WaitAsync(0))
-            //{
+            if (await _refreshLock.WaitAsync(0))
+            {
                 try
                 {
                     var sw = new Stopwatch();
@@ -269,8 +266,19 @@ namespace miniplayer.models
 
                     sw.Stop();
 
-                    if (_context?.IsPlaying ?? false)
-                        _trackTimer.Change(1000 - ((_positionMs % 1000) - sw.ElapsedMilliseconds * 2), 1000);
+                    _networkLagMs = (int)(sw.ElapsedMilliseconds * 2);
+
+                    if (REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
+                    {
+                        /*
+                         * _networkLagMs = a guess at the time it takes to send the status from the client and retrieve the status from the server                         
+                         * _positionMs + _networkLagMs a guess at the current position
+                         * (_positionMs + _networkLagMs) % 1000 = time since the last even second
+                         * (1000 - (_positionMs + _networkLagMs) % 1000) = time till the next even second
+                         * (1000 - (_positionMs + _networkLagMs) % 1000) + 1000 = a second after that
+                         */
+                        _trackTimer.Change((1000 - (_positionMs + _networkLagMs) % 1000) + 1000, 1000);
+                    }
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
@@ -279,11 +287,14 @@ namespace miniplayer.models
                 }
                 finally
                 {
-                    //_refreshLock.Release();
+                    _refreshLock.Release();
                 }
-            //}
-            //else
-            //    return false;
+            }
+            else
+            {
+                Debug.WriteLine("skiped refresh because of lock.");
+                return false;
+            }
         }
         private static void _SongTick(object? state)
         {
@@ -294,7 +305,7 @@ namespace miniplayer.models
                     player._RefreshState();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 else
-                    player.Position += 1000;
+                    player.SetPosition(player._positionMs + 1000);
 
             }
         }

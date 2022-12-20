@@ -3,8 +3,7 @@
 
 - [x] delete the tokens on auth or api error
 
-- [ ] add an *accurate* internal timer to update the track position so we can lengthen the time between status polls.
-- [ ] try to reduce bandwidth by using `GetCurrentlyPlaying` more often than `GetCurrentPlayback`.
+- [x] add an *accurate* internal timer to update the track position so we can lengthen the time between status polls.
 - [x] move the poll delay into the config
 
 
