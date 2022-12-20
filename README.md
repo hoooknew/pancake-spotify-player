@@ -90,3 +90,9 @@ https://andrewlock.net/using-source-generators-with-a-custom-attribute--to-gener
 
 The functionality I want as a sample
 https://github.com/dotnet/roslyn-sdk/blob/0abb5881b483493b198315c83b4679b6a13a4545/samples/CSharp/SourceGenerators/SourceGeneratorSamples/AutoNotifyGenerator.cs
+
+### Theming
+https://learn.microsoft.com/en-us/dotnet/desktop/wpf/controls/button-styles-and-templates?view=netframeworkdesktop-4.8
+https://medium.com/southworks/handling-dark-light-modes-in-wpf-3f89c8a4f2db
+https://www.pinvoke.net/default.aspx/uxtheme.getcurrentthemename
+https://engy.us/blog/2018/10/20/dark-theme-in-wpf/

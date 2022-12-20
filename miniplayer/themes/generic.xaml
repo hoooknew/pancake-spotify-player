@@ -45,8 +45,11 @@
         <Setter Property="WindowStyle" Value="None"/>
         <Setter Property="Foreground"
                 Value="{DynamicResource {x:Static SystemColors.WindowTextBrushKey}}"/>
-        <Setter Property="Background"
-                Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <SolidColorBrush Color="{DynamicResource WindowColor}"/>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Template" Value="{StaticResource BaseWindowTemplate}"/>
     </Style>
 </ResourceDictionary>
