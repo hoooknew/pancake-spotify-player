@@ -1,8 +1,9 @@
 ﻿<Application x:Class="miniplayer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:miniplayer"
-             StartupUri="MainWindow.xaml">
+             xmlns:ctrl="clr-namespace:miniplayer.ui.controls"
+             xmlns:local="clr-namespace:miniplayer"             
+             StartupUri="ui/controls/BaseWindow.xaml">
     <Application.Resources>
         <!--icons from https://fonts.google.com/icons?icon.set=Material+Icons-->
         <!--converted with https://github.com/BerndK/SvgToXaml-->
@@ -32,6 +33,20 @@
             <PathGeometry>F1 M567,171z M0,0z M554.049,72.089L551.677,72.089 551.677,75.114 554.049,75.114C555.233,75.114 555.94,74.535 555.94,73.601 555.94,72.617 555.233,72.089 554.049,72.089z M555.587,76.404L558.164,80.013 555.991,80.013 553.671,76.703 551.677,76.703 551.677,80.013 549.858,80.013 549.858,70.449 554.123,70.449C556.344,70.449 557.806,71.586 557.806,73.499 557.806,75.067 556.9,76.025 555.587,76.404z M553.567,67.266C548.9,67.266 545.368,70.976 545.368,75.519 545.368,80.06 548.875,83.72 553.519,83.72 558.185,83.72 561.72,80.013 561.72,75.467 561.72,70.927 558.211,67.266 553.567,67.266z M553.519,84.631C548.395,84.631 544.408,80.516 544.408,75.519 544.408,70.522 548.447,66.36 553.567,66.36 558.69,66.36 562.678,70.474 562.678,75.467 562.678,80.465 558.642,84.631 553.519,84.631z</PathGeometry>
         </GeometryGroup>
         <Geometry x:Key="geo_spotify_icon">F1 M171,171z M0,0z M134.562,76.472C107.568,60.441 63.041,58.967 37.272,66.789 33.134,68.044 28.758,65.708 27.504,61.57 26.25,57.43 28.584,53.057 32.725,51.799 62.306,42.819 111.481,44.554 142.557,63.001 146.279,65.21 147.5,70.017 145.294,73.733 143.086,77.455 138.275,78.682 134.562,76.472z M133.678,100.216C131.784,103.289 127.766,104.253 124.697,102.366 102.192,88.533 67.875,84.526 41.25,92.607 37.797,93.651 34.15,91.704 33.102,88.258 32.061,84.805 34.009,81.165 37.455,80.115 67.871,70.886 105.682,75.356 131.53,91.24 134.599,93.13 135.565,97.151 133.678,100.216z M123.431,123.019C121.926,125.487 118.713,126.26 116.254,124.756 96.588,112.737 71.836,110.023 42.686,116.681 39.877,117.325 37.078,115.565 36.437,112.756 35.794,109.948 37.547,107.148 40.363,106.507 72.262,99.215 99.626,102.353 121.699,115.841 124.16,117.344 124.935,120.559 123.431,123.019z M85.025,2.232C38.775,2.232 1.281,39.725 1.281,85.974 1.281,132.228 38.775,169.718 85.025,169.718 131.276,169.718 168.768,132.228 168.768,85.974 168.768,39.725 131.276,2.232 85.025,2.232z</Geometry>
+
+
+        <Style x:Key="buttonStyle" TargetType="ctrl:PathButton">
+            <Setter Property="PathFill" Value="Black"/>
+            <Setter Property="PathStroke" Value="Transparent"/>
+            <Setter Property="PathStrokeThickness" Value="0"/>
+            <Setter Property="Width" Value="20"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="-2"/>
+            <Setter Property="Margin" Value="1,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
         
     </Application.Resources>
 </Application>

@@ -50,19 +50,6 @@
             <EventSetter Event="MouseLeftButtonUp" Handler="Resize_End"/>
             <EventSetter Event="MouseMove" Handler="Resizing_Window"/>
         </Style>
-
-        <Style x:Key="buttonStyle" TargetType="ctrl:PathButton">
-            <Setter Property="PathFill" Value="Black"/>
-            <Setter Property="PathStroke" Value="Transparent"/>
-            <Setter Property="PathStrokeThickness" Value="0"/>
-            <Setter Property="Width" Value="20"/>
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="-2"/>
-            <Setter Property="Margin" Value="1,0"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
     </Window.Resources>
     <Border BorderThickness="1" BorderBrush="SlateGray">
         <Grid>
