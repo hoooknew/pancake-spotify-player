@@ -55,8 +55,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid Grid.Column="0" Margin="2">
@@ -93,7 +91,7 @@
                             Click="_favorite_btn_Click"/>
                 </Grid>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="2" HorizontalAlignment="Center" Margin="0,0,18,0">
+                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,18,0">
                     <StackPanel.Resources>
                         <Style TargetType="ctrl:PathButton" BasedOn="{StaticResource buttonStyle}"/>
                     </StackPanel.Resources>
