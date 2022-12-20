@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
-using static miniplayer.ui.ScreenExtensions.NativeMethods;
+using static miniplayer.ui.WindowPositionExtensions.NativeMethods;
 
 namespace miniplayer.ui
 {
-    public static class ScreenExtensions
+    public static class WindowPositionExtensions
     {        
         public static class NativeMethods
         {
