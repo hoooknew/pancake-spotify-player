@@ -1,4 +1,5 @@
 ﻿using miniplayer.lib;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using static miniplayer.lib.Settings;
+using System.Windows.Media.Media3D;
 using static miniplayer.ui.WindowPositionExtensions.NativeMethods;
 
 namespace miniplayer.ui
@@ -56,37 +59,26 @@ namespace miniplayer.ui
             }
         }
 
+        
+
         public static void SaveLocation(this Window w)
         {
-            Settings.Instance.WindowLeft = w.RestoreBounds.Left;
-            Settings.Instance.WindowTop = w.RestoreBounds.Top;
-            Settings.Instance.WindowWidth = w.RestoreBounds.Width;
-            Settings.Instance.WindowHeight = w.RestoreBounds.Height;
+            Settings.Instance.WindowPosition = w.GetWindowPosition();
             Settings.Instance.Save();
         }
 
         public static void RestoreLocation(this Window w) 
         {
-            var x = w.Left;
-            var y = w.Top;
-            var width = w.Width;
-            var height = w.Height;
+            var oldPos = w.GetWindowPosition();
+            var newPos = Settings.Instance.WindowPosition;
 
-            if (Settings.Instance.WindowLeft != null)
+            if (newPos != null)
             {
-                w.Left = Settings.Instance.WindowLeft!.Value;
-                w.Top = Settings.Instance.WindowTop!.Value;
-                w.Width = Settings.Instance.WindowWidth!.Value;
-                w.Height = Settings.Instance.WindowHeight!.Value;
+                w.SetWindowPosition(newPos);
                 w.WindowState = WindowState.Normal;
 
                 if (!IsOnScreen(w))
-                {
-                    w.Left = x;
-                    w.Top = y;
-                    w.Width = width;
-                    w.Height = height;
-                }
+                    w.SetWindowPosition(oldPos);
             }
         }
 
@@ -94,21 +86,21 @@ namespace miniplayer.ui
         {
             var hwnd = new WindowInteropHelper(w).EnsureHandle();
             var monitor = NativeMethods.MonitorFromWindow(hwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
-            Rect? monitor_rect = GetMonitorRect(monitor);
+            System.Windows.Rect? monitor_rect = GetMonitorRect(monitor);
 
             return 
                 monitor_rect != null && 
                 (monitor_rect?.Contains(w.RestoreBounds) ?? false);
         }
 
-        private static Rect? GetMonitorRect(IntPtr monitor)
+        private static System.Windows.Rect? GetMonitorRect(IntPtr monitor)
         {
             if (monitor != IntPtr.Zero)
             {
                 var monitorInfo = new NativeMonitorInfo();
                 NativeMethods.GetMonitorInfo(monitor, monitorInfo);
 
-                return new Rect(
+                return new System.Windows.Rect(
                     monitorInfo.Monitor.Left,
                     monitorInfo.Monitor.Top,
                     monitorInfo.Monitor.Right - monitorInfo.Monitor.Left,
@@ -116,6 +108,17 @@ namespace miniplayer.ui
             }
             else
                 return null;
+        }
+
+        public static Settings.Rect GetWindowPosition(this Window w)
+                => new Settings.Rect(w.RestoreBounds.Left, w.RestoreBounds.Top, w.RestoreBounds.Width, w.RestoreBounds.Height);
+
+        public static void SetWindowPosition(this Window w, Settings.Rect wp)
+        {
+            w.Left = wp.Left;
+            w.Top = wp.Top;
+            w.Width = wp.Width;
+            w.Height = wp.Height;
         }
     }
 }

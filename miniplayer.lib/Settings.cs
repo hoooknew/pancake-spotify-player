@@ -10,6 +10,15 @@ namespace miniplayer.lib
 {
     public partial class Settings
     {
+        public record Rect(double Left, double Top, double Width, double Height)
+        {
+            public string Serialize()
+                => JsonConvert.SerializeObject(this);
+
+            public static Rect? Deserialize(string text)
+                => JsonConvert.DeserializeObject<Rect>(text);            
+        }
+
         private static readonly string _userSettingsPath = Path.Combine(Constants.LOCAL_APP_DATA, @"settings.json");
 
         private static Settings? __instance;
@@ -31,18 +40,8 @@ namespace miniplayer.lib
             }
         }
 
-        public Settings()
-        {
-        }
-
         [AutoNotify]
-        private double? _windowLeft;
-        [AutoNotify]
-        private double? _windowTop;
-        [AutoNotify]
-        public double? _windowWidth;
-        [AutoNotify]
-        public double? _windowHeight;
+        public Rect? _windowPosition;
 
         private static void CreateLocalAppFolder()
         {
