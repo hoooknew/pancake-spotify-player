@@ -30,7 +30,7 @@ namespace miniplayer.models
                         PlayPause: oldContext.IsPlaying != newContext.IsPlaying,
                         Shuffle: oldContext.ShuffleState != newContext.ShuffleState,
                         Repeat: oldContext.RepeatState != newContext.RepeatState,
-                        Position: oldContext.ProgressMs > newContext.ProgressMs || (!newContext.IsPlaying && oldContext.ProgressMs != newContext.ProgressMs));
+                        Position: oldContext.ProgressMs > newContext.ProgressMs || (!oldContext.IsPlaying && !newContext.IsPlaying && oldContext.ProgressMs != newContext.ProgressMs));
                 }
             }
         }
@@ -124,17 +124,17 @@ namespace miniplayer.models
 
         public void SetToken(IRefreshableToken token)
         {
-            this._StopUpdates();
+            _StopUpdates();
 
             var authenticator = Authentication.CreateAuthenticator(token);
 
             var config = SpotifyClientConfig.CreateDefault()
                 .WithAuthenticator(authenticator);
 
-            this._client = new SpotifyClient(config);
+            _client = new SpotifyClient(config);
             NeedToken = false;
 
-            this._StartUpdates();
+            _StartUpdates();
         }
 
         public async Task<bool> PlayPause()
@@ -146,7 +146,7 @@ namespace miniplayer.models
                 else
                     await this._client!.Player.ResumePlayback();
 
-                await _RefreshState();
+                await RefreshStateUtil(r => r.PlayPause);
             });
         }
         public async Task<bool> SkipNext()
@@ -155,27 +155,29 @@ namespace miniplayer.models
             {
                 _StopUpdates();
                 await this._client!.Player.SkipNext();
-                await Task.Delay(250);
-                for (int i = 0; i < 3; i++)
-                    if ((await _RefreshState()).Track)
-                        break;
-                    else
-                    {
-                        Debug.WriteLine("bad refresh");
-                        await Task.Delay(250);
-                    }
+                await RefreshStateUtil(r => r.Track);
                 _StartUpdates();
             });
         }
+
+
+
         public async Task<bool> SkipPrevious()
         {
             return await _TryCatchApiCalls(async () =>
             {
                 if (Position < 3000)
+                {
                     await this._client!.Player.SkipPrevious();
+                    await RefreshStateUtil(r => r.Track);
+                }
                 else
+                {
+                    _StopUpdates();
                     await this._client!.Player.SeekTo(new PlayerSeekToRequest(0));
-                await _RefreshState();
+                    await RefreshStateUtil(r => r.Position);
+                    _StartUpdates();
+                }
             });
         }
         public async Task<bool> ToggleShuffle()
@@ -183,7 +185,7 @@ namespace miniplayer.models
             return await _TryCatchApiCalls(async () =>
             {
                 await this._client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
-                await _RefreshState();
+                await RefreshStateUtil(r => r.Shuffle);
             });
         }
         public async Task<bool> ToggleRepeat()
@@ -206,7 +208,7 @@ namespace miniplayer.models
                 }
 
                 await this._client!.Player.SetRepeat(new PlayerSetRepeatRequest(nextState));
-                await _RefreshState();
+                await RefreshStateUtil(r => r.Repeat);
             });
         }
         public async Task<bool> ToggleFavorite()
@@ -274,6 +276,20 @@ namespace miniplayer.models
             });
         }
 
+        private async Task<bool> RefreshStateUtil(Func<ChangedState, bool> stateChanged)
+        {
+            await Task.Delay(250);
+            for (int i = 0; i < 3; i++)
+                if (stateChanged(await _RefreshState()))
+                    return true;
+                else
+                {
+                    Debug.WriteLine("bad refresh");
+                    await Task.Delay(250);
+                }
+
+            return false;
+        }
         private async Task<ChangedState> _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
             if (await _refreshLock.WaitAsync(0))

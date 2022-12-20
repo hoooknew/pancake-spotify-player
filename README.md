@@ -11,7 +11,7 @@
 
 - [x] use routed commands instead of click events
   - [x] disable the buttons while waiting on a state refresh from the server
-  - [ ] get each command to retry a status refresh if the expected state doesn't return
+  - [x] get each command to retry a status refresh if the expected state doesn't return
 
 
 - [ ] handle `APITooManyRequestsException`
