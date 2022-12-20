@@ -51,31 +51,7 @@ namespace miniplayer
         {
             this.SaveLocation();
         }
-
-        private async void _play_pause_btn_Click(object sender, RoutedEventArgs e)
-        {
-            await _model.PlayPause();
-        }
-
-        private async void _repeat_btn_Click(object sender, RoutedEventArgs e)
-        {
-            await _model.ToggleRepeat();
-        }
-
-        private async void _skip_next_btn_Click(object sender, RoutedEventArgs e)
-        {
-            await _model.SkipNext();
-        }
-
-        private async void _skip_prev_btn_Click(object sender, RoutedEventArgs e)
-        {
-            await _model.SkipPrevious();
-        }
-
-        private async void _shuffle_btn_Click(object sender, RoutedEventArgs e)
-        {
-            await _model.ToggleShuffle();
-        }
+         
 
         private async void _favorite_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -91,6 +67,16 @@ namespace miniplayer
         {
             if (e.Command == PlayerCommands.SignIn)
                 await SignIn();
+            else if (e.Command == PlayerCommands.Shuffle)
+                await _model.ToggleShuffle();
+            else if (e.Command == PlayerCommands.SkipPrev)
+                await _model.SkipPrevious();
+            else if (e.Command == PlayerCommands.PlayPause)
+                await _model.PlayPause();
+            else if (e.Command == PlayerCommands.SkipNext)
+                await _model.SkipNext();
+            else if (e.Command == PlayerCommands.Repeat)
+                await _model.ToggleRepeat();
         }
 
         private async Task SignIn()

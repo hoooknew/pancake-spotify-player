@@ -15,24 +15,13 @@
         MinWidth="250">
     <Window.Resources>
         <cvt:TextBoxsToMaxSizeMultiConverter Padding="8" x:Key="TextBoxsToMaxSizeMultiConverter"/>
-        <cvt:BoolToGeometeryConverter x:Key="PlayPauseConverter" 
-                                      TrueValue="{StaticResource geo_pause_circle_filled}" 
-                                      FalseValue="{StaticResource geo_play_circle_filled}"/>
-
-        <cvt:BoolToGeometeryConverter x:Key="ShuffleConverter" 
-                                      TrueValue="{StaticResource geo_shuffle_on}" 
-                                      FalseValue="{StaticResource geo_shuffle}"/>
+        
 
         <cvt:BoolToGeometeryConverter x:Key="FavoriteConverter" 
                                       TrueValue="{StaticResource geo_favorite}" 
                                       FalseValue="{StaticResource geo_favorite_border}"
                                       NullValue="{StaticResource geo_favorite_border}"/>
 
-        <cvt:RepeatConverter x:Key="repeatConverter" 
-                             Off="{StaticResource geo_repeat}"
-                             Track="{StaticResource geo_repeat_one_on}"
-                             Context="{StaticResource geo_repeat_on}"/>
-        
 
         <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
@@ -40,6 +29,11 @@
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static ui:PlayerCommands.SignIn}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Shuffle}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipPrev}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.PlayPause}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipNext}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
     </Window.CommandBindings>
     <Grid>
         <ctrl:SignIn Grid.Column="1" Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
@@ -91,16 +85,7 @@
                             Click="_favorite_btn_Click"/>
                 </Grid>
 
-                <StackPanel Orientation="Horizontal" Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,18,0">
-                    <StackPanel.Resources>
-                        <Style TargetType="ctrl:PathButton" BasedOn="{StaticResource buttonStyle}"/>
-                    </StackPanel.Resources>
-                    <ctrl:PathButton x:Name="_shuffle_btn" PathData="{Binding IsShuffleOn, Converter={StaticResource ShuffleConverter}}" Click="_shuffle_btn_Click"/>
-                    <ctrl:PathButton x:Name="_skip_prev_btn" PathData="{StaticResource geo_skip_previous}" Click="_skip_prev_btn_Click"/>
-                    <ctrl:PathButton x:Name="_play_pause_btn" PathData="{Binding IsPlaying, Converter={StaticResource PlayPauseConverter}}" Width="30" Height="30" Click="_play_pause_btn_Click"/>
-                    <ctrl:PathButton x:Name="_skip_next_btn" PathData="{StaticResource geo_skip_next}" Click="_skip_next_btn_Click"/>
-                    <ctrl:PathButton x:Name="_repeat_btn" PathData="{Binding RepeatState, Converter={StaticResource repeatConverter}}" Click="_repeat_btn_Click"/>
-                </StackPanel>
+                <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,18,0"/>
 
             </Grid>
             <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"/>
