@@ -7,9 +7,9 @@
 - [x] move the poll delay into the config
 
 
-- [ ] refactor the main window into user controls to improve readability.
+- [x] refactor the main window into user controls to improve readability.
 
-- [ ] use routed commands instead of click events
+- [x] use routed commands instead of click events
   - [ ] disable the buttons while waiting on a state refresh from the server
 
 

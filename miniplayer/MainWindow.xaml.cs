@@ -52,12 +52,6 @@ namespace miniplayer
             this.SaveLocation();
         }
          
-
-        private async void _favorite_btn_Click(object sender, RoutedEventArgs e)
-        {
-            await _model.ToggleFavorite();
-        }
-
         private void CommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -77,6 +71,8 @@ namespace miniplayer
                 await _model.SkipNext();
             else if (e.Command == PlayerCommands.Repeat)
                 await _model.ToggleRepeat();
+            else if (e.Command == PlayerCommands.Favorite)
+                await _model.ToggleFavorite();
         }
 
         private async Task SignIn()

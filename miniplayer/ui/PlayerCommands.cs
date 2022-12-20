@@ -15,5 +15,6 @@ namespace miniplayer.ui
         public static readonly RoutedCommand PlayPause = new RoutedCommand("player_play_pause", typeof(PlayerCommands));
         public static readonly RoutedCommand SkipNext = new RoutedCommand("player_skip_next", typeof(PlayerCommands));
         public static readonly RoutedCommand Repeat = new RoutedCommand("player_repeat", typeof(PlayerCommands));
+        public static readonly RoutedCommand Favorite = new RoutedCommand("player_favorite", typeof(PlayerCommands));
     }
 }
