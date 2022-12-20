@@ -10,12 +10,69 @@ using System.Windows;
 using System.Windows.Interop;
 using static miniplayer.lib.Settings;
 using System.Windows.Media.Media3D;
-using static miniplayer.ui.WindowPositionExtensions.NativeMethods;
+using static miniplayer.ui.WindowPosition.NativeMethods;
 
 namespace miniplayer.ui
 {
-    public static class WindowPositionExtensions
-    {        
+    public static class WindowPosition
+    {
+        public static string GetSave(DependencyObject obj)
+            => (string)obj.GetValue(SaveProperty);
+
+        public static void SetSave(DependencyObject obj, string value)
+            => obj.SetValue(SaveProperty, value);
+        
+        public static readonly DependencyProperty SaveProperty =
+            DependencyProperty.RegisterAttached("Save", typeof(string), typeof(Window), new PropertyMetadata("", new PropertyChangedCallback(SaveChangedCallback)));
+
+        private static void SaveChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Window w)
+            {
+                var newValue = e.NewValue as string;
+                if (string.IsNullOrEmpty(newValue))
+                {
+                    w.Loaded -= LoadPosition;
+                    w.Closing -= SavePosition;
+                }
+                else
+                {
+                    w.Loaded += LoadPosition;
+                    w.Closing += SavePosition;                    
+                }
+            }
+        }
+
+        private static void SavePosition(object? sender, EventArgs e)
+        {
+            if (sender is Window w && GetSave(w) is string settingName)
+            {
+                Settings.Instance.SetValue(settingName, w.GetWindowPosition());
+                Settings.Instance.Save();
+            }
+        }
+
+        private static void LoadPosition(object sender, RoutedEventArgs e)
+        {
+            if (sender is Window w && GetSave(w) is string settingName)
+            {
+                var newPos = Settings.Instance.GetValue(settingName) as Settings.Rect;
+                if (newPos!= null)
+                {
+                    var oldPos = w.GetWindowPosition();                    
+
+                    if (newPos != null)
+                    {
+                        w.SetWindowPosition(newPos);
+                        w.WindowState = WindowState.Normal;
+
+                        if (!IsOnScreen(w))
+                            w.SetWindowPosition(oldPos);
+                    }
+                }
+            }
+        }
+
         public static class NativeMethods
         {
             public const Int32 MONITOR_DEFAULTTOPRIMERTY = 0x00000001;
@@ -57,32 +114,9 @@ namespace miniplayer.ui
                 public NativeRectangle Work;
                 public Int32 Flags;
             }
-        }
+        }      
 
-        
-
-        public static void SaveLocation(this Window w)
-        {
-            Settings.Instance.WindowPosition = w.GetWindowPosition();
-            Settings.Instance.Save();
-        }
-
-        public static void RestoreLocation(this Window w) 
-        {
-            var oldPos = w.GetWindowPosition();
-            var newPos = Settings.Instance.WindowPosition;
-
-            if (newPos != null)
-            {
-                w.SetWindowPosition(newPos);
-                w.WindowState = WindowState.Normal;
-
-                if (!IsOnScreen(w))
-                    w.SetWindowPosition(oldPos);
-            }
-        }
-
-        public static bool IsOnScreen(this Window w)
+        private static bool IsOnScreen(this Window w)
         {
             var hwnd = new WindowInteropHelper(w).EnsureHandle();
             var monitor = NativeMethods.MonitorFromWindow(hwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
@@ -110,10 +144,10 @@ namespace miniplayer.ui
                 return null;
         }
 
-        public static Settings.Rect GetWindowPosition(this Window w)
+        private static Settings.Rect GetWindowPosition(this Window w)
                 => new Settings.Rect(w.RestoreBounds.Left, w.RestoreBounds.Top, w.RestoreBounds.Width, w.RestoreBounds.Height);
 
-        public static void SetWindowPosition(this Window w, Settings.Rect wp)
+        private static void SetWindowPosition(this Window w, Settings.Rect wp)
         {
             w.Left = wp.Left;
             w.Top = wp.Top;

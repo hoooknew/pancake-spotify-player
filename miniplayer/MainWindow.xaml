@@ -12,7 +12,8 @@
         SizeToContent="Height"
         Title="MainWindow" Height="80" Width="400"
         BorderThickness="1" BorderBrush="SlateGray"
-        MinWidth="250">
+        MinWidth="250"
+        ui:WindowPosition.Save="WindowPosition">
     <Window.Resources>
         <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
