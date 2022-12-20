@@ -52,12 +52,6 @@ namespace miniplayer
             this.SaveLocation();
         }
 
-
-        private void _closeBtn_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private async void _play_pause_btn_Click(object sender, RoutedEventArgs e)
         {
             await _model.PlayPause();
