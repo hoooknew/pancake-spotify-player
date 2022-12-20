@@ -43,7 +43,6 @@ namespace miniplayer.models
 
         private CurrentlyPlayingContext? _context;
         private int _positionMs = 0;
-        private int _networkLagMs = 0;
         private bool? _isFavorite = null;
 
         public PlayerModel(Dispatcher dispatcher)
@@ -99,12 +98,12 @@ namespace miniplayer.models
         public string RepeatState => _context?.RepeatState ?? "off";
         public int Position
         {
-            get => _positionMs +_networkLagMs;
-        }
-        private void SetPosition(int value)
-        {
-            _positionMs = Math.Max(Math.Min(value, Duration), 0);
-            _OnPropertyChanged(nameof(Position));
+            get => _positionMs;
+            private set
+            {
+                _positionMs = Math.Max(Math.Min(value, Duration), 0);
+                _OnPropertyChanged(nameof(Position));
+            }
         }
         public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
 
@@ -252,35 +251,37 @@ namespace miniplayer.models
             {
                 try
                 {
-                    var sw = new Stopwatch();
-                    sw.Start();
                     var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
-                    var diffSong = this._dispatcher.Invoke(() => this._SetContext(newContext));
+
+                    var diffSong = newContext?.Item != null && _context?.Item?.GetItemId() != newContext?.Item?.GetItemId();
+                    _context = newContext;                    
 
                     if (diffSong)
                     {
-                        this._dispatcher.Invoke(() => this.IsFavorite = null);
+                        this.IsFavorite = null;
                         var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { newContext!.Item!.GetItemId()! }));
                         this.IsFavorite = isFavs.All(r => r);
                     }
+                                        
 
-                    sw.Stop();
-
-                    _networkLagMs = (int)(sw.ElapsedMilliseconds * 2);
-
-                    if (REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
+                    if (newContext != null && REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
                     {
-                        /*
-                         * _networkLagMs = a guess at the time it takes to send the status from the client and retrieve the status from the server                         
-                         * _positionMs + _networkLagMs a guess at the current position
-                         * (_positionMs + _networkLagMs) % 1000 = time since the last even second
-                         * (1000 - (_positionMs + _networkLagMs) % 1000) = time till the next even second
-                         * (1000 - (_positionMs + _networkLagMs) % 1000) + 1000 = a second after that
-                         */
-                        _trackTimer.Change((1000 - (_positionMs + _networkLagMs) % 1000) + 1000, 1000);
+                        if (diffSong || Math.Abs(newContext.ProgressMs - _positionMs) > 500)
+                        {
+                            this.Position = newContext.ProgressMs;
+
+                            /*
+                             * _positionMs % 1000 = time since the last even second
+                             * (1000 - _positionMs % 1000) = time till the next even second
+                             * (1000 - _positionMs % 1000) + 1000 = a second after that
+                             */
+                            _trackTimer.Change((1000 - _positionMs % 1000) + 1000, 1000);
+                        }
                     }
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
+
+                    _OnPropertyChanged("");
 
                     return diffSong;
 
@@ -305,24 +306,13 @@ namespace miniplayer.models
                     player._RefreshState();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 else
-                    player.SetPosition(player._positionMs + 1000);
+                    player.Position = player.Position + 1000;
 
             }
         }
 
         #endregion
 
-
-        private bool _SetContext(CurrentlyPlayingContext context)
-        {
-            var diffSong = context?.Item != null && _context?.Item?.GetItemId() != context?.Item?.GetItemId();
-
-            _context = context;
-            _positionMs = context?.ProgressMs ?? 0;
-            _OnPropertyChanged("");
-
-            return diffSong;
-        }
         private async Task<bool> _TryCatchApiCalls(Func<Task> a)
         {
             try
