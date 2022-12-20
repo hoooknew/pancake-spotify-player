@@ -3,6 +3,7 @@ using miniplayer.models;
 using miniplayer.ui;
 using miniplayer.ui.controls;
 using SpotifyAPI.Web;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace miniplayer
@@ -15,7 +16,7 @@ namespace miniplayer
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
-            this.Closing += MainWindow_Closing;
+            this.Closing += MainWindow_Closing;            
 
             _model = new PlayerModel(this.Dispatcher);
             _model.ApiError += _model_ApiError;
@@ -56,13 +57,6 @@ namespace miniplayer
         {
             this.Close();
         }
-        private async void _signin_Click(object sender, RoutedEventArgs e)
-        {
-            var token = await Authentication.Login();
-            Authentication.SaveToken(token);
-            if (token != null)
-                _model.SetToken(token);
-        }
 
         private async void _play_pause_btn_Click(object sender, RoutedEventArgs e)
         {
@@ -93,7 +87,24 @@ namespace miniplayer
         {
             await _model.ToggleFavorite();
         }
+
+        private void CommandBinding_CanExecute(object sender, System.Windows.Input.CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private async void CommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == PlayerCommands.SignIn)
+                await SignIn();
+        }
+
+        private async Task SignIn()
+        {
+            var token = await Authentication.Login();
+            Authentication.SaveToken(token);
+            if (token != null)
+                _model.SetToken(token);
+        }
     }
 }
-//Severity	Code	Description	Project	File	Line	Suppression State
-//Error MC6017	'miniplayer.ui.controls.BaseWindow' cannot be the root of a XAML file because it was defined using XAML. Line 1 Position 18.miniplayer  C:\code\miniplayer\miniplayer\MainWindow.xaml   1
