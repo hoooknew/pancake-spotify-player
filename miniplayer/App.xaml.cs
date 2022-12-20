@@ -1,4 +1,5 @@
-﻿using System;
+﻿using miniplayer.ui.controls;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,11 @@ namespace miniplayer
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            var w = new MainWindow();
+
+            w.Show();
+        }
     }
 }
