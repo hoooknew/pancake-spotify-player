@@ -150,12 +150,13 @@ namespace {namespaceName}
 
                 if (propertyName != null)
                 {
+                    var nullable = fieldSymbol.NullableAnnotation == NullableAnnotation.Annotated;
                     source.Append(@$"
                 case nameof({propertyName}):
-                    if (value is {fieldSymbol.Type} v)
-                        {propertyName} = v;
+                    if ({(nullable ? "value == null || ":"")}value is {(nullable ? fieldSymbol.Type.OriginalDefinition : fieldSymbol.Type)})
+                        {propertyName} = ({fieldSymbol.Type})value;
                     else
-                        throw new ArgumrntException(""{propertyName} only accepts values of type {fieldSymbol.Type}."");
+                        throw new ArgumentException(""\""{propertyName}\"" only accepts values of type {fieldSymbol.Type}."");
                     break;");
                 }
             }
@@ -199,7 +200,7 @@ namespace {namespaceName}
             }
         }
 
-        private string? GetPropertyName(IFieldSymbol fieldSymbol, ISymbol attributeSymbol)
+        private string GetPropertyName(IFieldSymbol fieldSymbol, ISymbol attributeSymbol)
         {
             string fieldName = fieldSymbol.Name;
 
