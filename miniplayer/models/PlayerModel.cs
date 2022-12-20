@@ -10,14 +10,10 @@ using System.Windows.Threading;
 
 namespace miniplayer.models
 {
-    //internal enum RepeatState
-    //{
-    //    off,
-    //    track,
-    //    context
-    //}
     internal class PlayerModel : IDisposable, INotifyPropertyChanged
     {
+        private record ChangedState(bool Track = false, bool PlayPause = false, bool Shuffle = false, bool Repeat = false, bool Favorite = false);       
+
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<ApiErrorEventArgs>? ApiError;
 
@@ -140,7 +136,7 @@ namespace miniplayer.models
                 await this._client!.Player.SkipNext();
                 await Task.Delay(250);
                 for (int i = 0; i < 3; i++)
-                    if (await _RefreshState())
+                    if ((await _RefreshState()).Track)
                         break;
                     else
                     {
@@ -257,7 +253,7 @@ namespace miniplayer.models
             });
         }
 
-        private async Task<bool> _RefreshState(CancellationToken cancelToken = default(CancellationToken))
+        private async Task<ChangedState> _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
             if (await _refreshLock.WaitAsync(0))
             {
@@ -295,7 +291,7 @@ namespace miniplayer.models
 
                     _OnPropertyChanged("");
 
-                    return diffSong;
+                    return new ChangedState(Track:diffSong);
 
                 }
                 finally
@@ -306,7 +302,7 @@ namespace miniplayer.models
             else
             {
                 Debug.WriteLine("skiped refresh because of lock.");
-                return false;
+                return new ChangedState();
             }
         }
         private static void _SongTick(object? state)
