@@ -268,9 +268,9 @@ namespace miniplayer.models
                     }
 
                     sw.Stop();
-                    
+
                     if (_context?.IsPlaying ?? false)
-                        _trackTimer.Change((_positionMs + sw.ElapsedMilliseconds * 2) % 1000 + 1000, 1000);
+                        _trackTimer.Change(1000 - ((_positionMs % 1000) - sw.ElapsedMilliseconds * 2), 1000);
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
