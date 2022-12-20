@@ -14,7 +14,7 @@
   - [x] get each command to retry a status refresh if the expected state doesn't return
 
 
-- [ ] handle `APITooManyRequestsException`
+- [x] handle `APITooManyRequestsException`
 - [ ] add theming and a dark theme
   - [ ] sync theme to the windows default
 - [x] reduce requested permission scope to a minimum.

@@ -139,7 +139,7 @@ namespace miniplayer.models
 
         public async Task<bool> PlayPause()
         {
-            return await _TryCatchApiCalls(async () =>
+            return await _TryApiCall(async () =>
             {
                 if (this.IsPlaying)
                     await this._client!.Player.PausePlayback();
@@ -151,7 +151,7 @@ namespace miniplayer.models
         }
         public async Task<bool> SkipNext()
         {
-            return await _TryCatchApiCalls(async () =>
+            return await _TryApiCall(async () =>
             {
                 _StopUpdates();
                 await this._client!.Player.SkipNext();
@@ -159,12 +159,9 @@ namespace miniplayer.models
                 _StartUpdates();
             });
         }
-
-
-
         public async Task<bool> SkipPrevious()
         {
-            return await _TryCatchApiCalls(async () =>
+            return await _TryApiCall(async () =>
             {
                 if (Position < 3000)
                 {
@@ -182,7 +179,7 @@ namespace miniplayer.models
         }
         public async Task<bool> ToggleShuffle()
         {
-            return await _TryCatchApiCalls(async () =>
+            return await _TryApiCall(async () =>
             {
                 await this._client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
                 await RefreshStateUtil(r => r.Shuffle);
@@ -190,7 +187,7 @@ namespace miniplayer.models
         }
         public async Task<bool> ToggleRepeat()
         {
-            return await _TryCatchApiCalls(async () =>
+            return await _TryApiCall(async () =>
             {
                 PlayerSetRepeatRequest.State nextState;
                 switch (RepeatState)
@@ -213,7 +210,7 @@ namespace miniplayer.models
         }
         public async Task<bool> ToggleFavorite()
         {
-            return await _TryCatchApiCalls(async () =>
+            return await _TryApiCall(async () =>
             {
                 string? id = _context?.Item?.GetItemId();
 
@@ -263,7 +260,7 @@ namespace miniplayer.models
         }
         private async Task _Updater()
         {
-            await _TryCatchApiCalls(async () =>
+            await _TryApiCall(async () =>
             {
                 var cancelToken = this._updaterCancel!.Token;
                 var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, REFRESH_DELAY));
@@ -359,12 +356,37 @@ namespace miniplayer.models
 
         #endregion
 
-        private async Task<bool> _TryCatchApiCalls(Func<Task> a)
+        private async Task<bool> _TryApiCall(Func<Task> a)
         {
             try
             {
-                await a();
-                return true;
+                int retriesLeft = 3;
+                while (retriesLeft > 0)
+                {
+                    try
+                    {
+                        await a();
+                        return true;
+                    }
+                    catch (APITooManyRequestsException e)
+                    {
+                        await Task.Delay(e.RetryAfter);
+                    }
+                    catch(APIException e) when (e.Message == "Player command failed: Restriction violated")
+                    { 
+                    }
+                    /* the client blew up on some ssl exception at some point, 
+                     * but I didn't record the exception type. This is where it
+                     * should be handled. */
+                    //catch(HttpException) 
+                    //{
+
+                    //}
+
+                    retriesLeft--;
+                }
+
+                return false;
             }
             catch (APIException e) when (e is not APITooManyRequestsException)
             {
