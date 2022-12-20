@@ -58,10 +58,10 @@ namespace miniplayer.ui
 
         public static void SaveLocation(this Window w)
         {
-            Settings.Instance.WindowLeft = w.Left;
-            Settings.Instance.WindowTop = w.Top;
-            Settings.Instance.WindowWidth = w.Width;
-            Settings.Instance.WindowHeight = w.Height;
+            Settings.Instance.WindowLeft = w.RestoreBounds.Left;
+            Settings.Instance.WindowTop = w.RestoreBounds.Top;
+            Settings.Instance.WindowWidth = w.RestoreBounds.Width;
+            Settings.Instance.WindowHeight = w.RestoreBounds.Height;
             Settings.Instance.Save();
         }
 
@@ -78,6 +78,7 @@ namespace miniplayer.ui
                 w.Top = Settings.Instance.WindowTop!.Value;
                 w.Width = Settings.Instance.WindowWidth!.Value;
                 w.Height = Settings.Instance.WindowHeight!.Value;
+                w.WindowState = WindowState.Normal;
 
                 if (!IsOnScreen(w))
                 {
