@@ -8,13 +8,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="/themes/dark.xaml"/>-->
+                <ResourceDictionary x:Name="_theme" Source="/themes/dark.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <Color x:Key="WindowColor">#FFFFFF</Color>
-            <Color x:Key="PathButtonFillColor">Black</Color>
-            <Color x:Key="AccentColor">#FF1ED760</Color>
-
+            
             <!--icons from https://fonts.google.com/icons?icon.set=Material+Icons-->
             <!--converted with https://github.com/BerndK/SvgToXaml-->
             <Geometry x:Key="geo_play_circle_filled">F1 M24,24z M0,0z M12,2C6.48,2 2,6.48 2,12 2,17.52 6.48,22 12,22 17.52,22 22,17.52 22,12 22,6.48 17.52,2 12,2z M10,16.5L10,7.5 16,12 10,16.5z</Geometry>
@@ -47,11 +44,7 @@
 
 
             <Style x:Key="buttonStyle" TargetType="ctrl:PathButton">
-                <Setter Property="PathFill">
-                    <Setter.Value>
-                        <SolidColorBrush Color="{DynamicResource PathButtonFillColor}"/>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="PathFill" Value="{DynamicResource PathButtonFillBrush}"/>
                 <Setter Property="PathStroke" Value="Transparent"/>
                 <Setter Property="PathStrokeThickness" Value="0"/>
                 <Setter Property="Width" Value="20"/>
@@ -61,6 +54,10 @@
                 <Setter Property="Margin" Value="1,0"/>
                 <Setter Property="BorderThickness" Value="0"/>
                 <Setter Property="Background" Value="Transparent"/>
+            </Style>
+
+            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

@@ -301,8 +301,11 @@ namespace miniplayer.models
                     if (changed.Track)
                     {
                         IsFavorite = null;
-                        var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { _context!.Item!.GetItemId()! }));
-                        IsFavorite = isFavs.All(r => r);
+                        if (_context.Item != null)
+                        {
+                            var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { _context!.Item!.GetItemId()! }));
+                            IsFavorite = isFavs.All(r => r);
+                        }
                     }
 
                     if (_context != null && REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
@@ -372,8 +375,8 @@ namespace miniplayer.models
                     {
                         await Task.Delay(e.RetryAfter);
                     }
-                    catch(APIException e) when (e.Message == "Player command failed: Restriction violated")
-                    { 
+                    catch (APIException e) when (e.Message == "Player command failed: Restriction violated")
+                    {
                     }
                     /* the client blew up on some ssl exception at some point, 
                      * but I didn't record the exception type. This is where it

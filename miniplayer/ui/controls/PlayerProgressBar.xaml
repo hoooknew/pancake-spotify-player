@@ -14,7 +14,7 @@
             <Style TargetType="TextBlock">
                 <Setter Property="FontSize" Value="11"/>
                 <Setter Property="Margin" Value="0,0,0,2"/>
-                <Setter Property="Foreground" Value="SlateGray"/>
+                <Setter Property="Foreground" Value="{DynamicResource AltTextForegroundBrush}"/>
             </Style>
         </Grid.Resources>
         <Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
             VerticalAlignment="Center"
             Height="4" Margin="2,0" BorderThickness="0" 
             Foreground="{StaticResource AccentBrush}" 
-            Background="LightGray" 
+            Background="{DynamicResource LightBackgroundBrush}" 
             Value="{Binding Position, Mode=OneWay}" 
             Minimum="0" 
             Maximum="{Binding Duration, Mode=OneWay}"/>

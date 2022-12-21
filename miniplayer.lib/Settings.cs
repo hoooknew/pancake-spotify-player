@@ -41,7 +41,10 @@ namespace miniplayer.lib
         }
 
         [AutoNotify]
-        public Rect? _windowPosition;
+        private Rect? _windowPosition = null;
+
+        [AutoNotify]
+        private string? _theme = "dark";
 
         private static void CreateLocalAppFolder()
         {

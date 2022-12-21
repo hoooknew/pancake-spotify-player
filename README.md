@@ -15,7 +15,7 @@
 
 
 - [x] handle `APITooManyRequestsException`
-- [ ] add theming and a dark theme
+- [x] add theming and a dark theme
   - [ ] sync theme to the windows default
 - [x] reduce requested permission scope to a minimum.
 
@@ -46,6 +46,8 @@
 - [ ] style the auth callback page?
 
 - [ ] expose errors in the login to the user.
+
+- [ ] add the ability to skip to a new position in the track by clicking on the progress bar.
 
 # Bugs
 - [ ] there is a meaningful delay between when a state change in requested and when the changed state is available in the server. It tends to be less than 250ms. I think I need to verify the expected state change took place and retry otherwise.
