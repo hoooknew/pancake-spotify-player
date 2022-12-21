@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         SizeToContent="Height"
         Title="MainWindow" Height="80" Width="400"
-        BorderThickness="1" BorderBrush="SlateGray"
+        BorderThickness="1"
         MinWidth="250"
         ui:WindowPosition.Save="WindowPosition">
     <Window.Resources>

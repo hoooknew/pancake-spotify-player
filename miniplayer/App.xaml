@@ -3,13 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ctrl="clr-namespace:miniplayer.ui.controls"
              xmlns:local="clr-namespace:miniplayer"
-             Startup="Application_Startup">
+             Startup="Application_Startup"
+             >
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/themes/dark.xaml"/>
+                <!--<ResourceDictionary Source="/themes/dark.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
-            
+
+            <Color x:Key="WindowColor">#FFFFFF</Color>
+            <Color x:Key="PathButtonFillColor">Black</Color>
+            <Color x:Key="AccentColor">#FF1ED760</Color>
+
             <!--icons from https://fonts.google.com/icons?icon.set=Material+Icons-->
             <!--converted with https://github.com/BerndK/SvgToXaml-->
             <Geometry x:Key="geo_play_circle_filled">F1 M24,24z M0,0z M12,2C6.48,2 2,6.48 2,12 2,17.52 6.48,22 12,22 17.52,22 22,17.52 22,12 22,6.48 17.52,2 12,2z M10,16.5L10,7.5 16,12 10,16.5z</Geometry>

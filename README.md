@@ -96,3 +96,6 @@ https://learn.microsoft.com/en-us/dotnet/desktop/wpf/controls/button-styles-and-
 https://medium.com/southworks/handling-dark-light-modes-in-wpf-3f89c8a4f2db
 https://www.pinvoke.net/default.aspx/uxtheme.getcurrentthemename
 https://engy.us/blog/2018/10/20/dark-theme-in-wpf/
+
+https://github.com/AaronAmberman/WPF.Themes
+https://github.com/vb2ae/WPFLightDarkMode

@@ -45,7 +45,7 @@
                             Background="Transparent"
                             BorderThickness="0"
                             PathData="{Binding IsFavorite, Converter={StaticResource FavoriteConverter}}" 
-                            PathFill="{StaticResource spotify_green}"
+                            PathFill="{StaticResource AccentBrush}"
                             Command="{x:Static ui:PlayerCommands.Favorite}"/>
     </Grid>
 </UserControl>

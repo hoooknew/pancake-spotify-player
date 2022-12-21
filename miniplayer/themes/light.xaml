@@ -4,7 +4,7 @@
     <Color x:Key="PathButtonFill">Black</Color>
     
     <!--Control colors.-->
-    <Color x:Key="WindowColor">#FFFFFF</Color>
+    <!--<Color x:Key="WindowColor">#FFFFFF</Color>
 
     <Color x:Key="DisabledControlLightColor">#FFE8EDF9</Color>
     <Color x:Key="DisabledControlDarkColor">#FFC5CBF9</Color>
@@ -14,10 +14,10 @@
     <Color x:Key="ControlMediumColor">#FF7381F9</Color>
 
     <Color x:Key="ControlMouseOverColor">#FF3843C4</Color>
-    <Color x:Key="ControlPressedColor">#FF211AA9</Color>
+    <Color x:Key="ControlPressedColor">#FF211AA9</Color>-->
 
     <!--Border colors-->
-    <Color x:Key="BorderLightColor">#FFCCCCCC</Color>
+    <!--<Color x:Key="BorderLightColor">#FFCCCCCC</Color>
     <Color x:Key="BorderMediumColor">#FF888888</Color>
     <Color x:Key="BorderDarkColor">#FF444444</Color>
 
@@ -27,10 +27,10 @@
     <Color x:Key="DisabledBorderDarkColor">#FF888888</Color>
 
     <Color x:Key="DefaultBorderBrushLightColor">Black</Color>
-    <Color x:Key="DefaultBorderBrushDarkColor">Black</Color>
+    <Color x:Key="DefaultBorderBrushDarkColor">Black</Color>-->
 
     <!--### Control Specific ###-->
-    <Color x:Key="HeaderTopColor">#FFC5CBF9</Color>
+    <!--<Color x:Key="HeaderTopColor">#FFC5CBF9</Color>
 
 
     <LinearGradientBrush x:Key="MenuPopupBrush"
@@ -59,5 +59,5 @@
                     Offset="1" />
             </GradientStopCollection>
         </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>
+    </LinearGradientBrush>-->
 </ResourceDictionary>
