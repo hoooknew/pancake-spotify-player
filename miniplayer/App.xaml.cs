@@ -1,11 +1,7 @@
 ﻿using miniplayer.lib;
-using miniplayer.ui.controls;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Data;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace miniplayer
@@ -43,5 +39,15 @@ namespace miniplayer
                 }
             }
         }
+
+#if DEBUG
+        public static void SaveDefaultTemplate()
+        {
+            var control = Application.Current.FindResource(typeof(System.Windows.Controls.ContextMenu));
+            var sw = new System.IO.StringWriter();
+            System.Windows.Markup.XamlWriter.Save(control, sw);
+            Clipboard.SetText(sw.ToString());
+        }
     }
+#endif
 }
