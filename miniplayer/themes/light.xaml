@@ -5,10 +5,13 @@
                     mc:Ignorable="options">
 
     <!--App Specific-->
-    <SolidColorBrush x:Key="PathButtonFillBrush" Color="#4d4d4d" options:Freeze="True"/>
-    <SolidColorBrush x:Key="PathButtonFillBrush.MouseOver" Color="Black" options:Freeze="True"/>
+    <SolidColorBrush x:Key="PathButtonFillBrush" Color="#656565" options:Freeze="True"/>
+    <SolidColorBrush x:Key="PathButtonFillBrush_MouseOver" Color="#464646" options:Freeze="True"/>
+    <SolidColorBrush x:Key="PathButtonFillBrush_Pressed" Color="#313131" options:Freeze="True"/>
+    <SolidColorBrush x:Key="PathButtonFillBrush_Disabled" Color="#999999" options:Freeze="True"/>
     <!--Spotify Green-->
     <Color x:Key="AccentColor">#FF1ED760</Color>
+    
     <SolidColorBrush x:Key="TextForegroundBrush" Color="#4d4d4d" options:Freeze="True"/>
     <SolidColorBrush x:Key="AltTextForegroundBrush" Color="#999999" options:Freeze="True"/>
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#CCCCCC" options:Freeze="True"/>
