@@ -20,7 +20,7 @@
 - [x] reduce requested permission scope to a minimum.
 
 
-- [ ] customize the path button so it changes the button path color instead of using the default button behavior.
+- [x] customize the path button so it changes the button path color instead of using the default button behavior.
 - [ ] add a popover with extra track details, and album art.
 - [ ] add links to the popover that open the artist, song, or album in the desktop client
 - [ ] include at least part of the current playlist in the popover
