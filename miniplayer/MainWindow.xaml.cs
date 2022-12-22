@@ -4,8 +4,10 @@ using miniplayer.ui;
 using miniplayer.ui.controls;
 using SpotifyAPI.Web;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace miniplayer
 {

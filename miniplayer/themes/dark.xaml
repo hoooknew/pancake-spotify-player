@@ -16,4 +16,17 @@
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#444444" options:Freeze="True"/>
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="#888888" options:Freeze="True"/>
     <SolidColorBrush x:Key="WindowBrush" Color="#1e1e1e" options:Freeze="True"/>
+
+
+    <!--Context Menu-->
+    <SolidColorBrush x:Key="MenuPopupBrush" Color="Lime"/>
+
+    <Color x:Key="ControlLightColor">orange</Color>
+    <Color x:Key="ControlMediumColor">red</Color>
+    <Color x:Key="ControlDarkColor">green</Color>
+    
+    <Color x:Key="BorderLightColor">dodgerblue</Color>
+    <Color x:Key="BorderMediumColor">violet</Color>
+    <Color x:Key="BorderDarkColor">yellow</Color>
+    
 </ResourceDictionary>
