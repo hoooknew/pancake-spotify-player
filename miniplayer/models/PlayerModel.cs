@@ -378,6 +378,10 @@ namespace miniplayer.models
                     catch (APIException e) when (e.Message == "Player command failed: Restriction violated")
                     {
                     }
+                    catch(APIException e) when (e.Message == "Player command failed: No active device found")
+                    {
+                        break;
+                    }
                     /* the client blew up on some ssl exception at some point, 
                      * but I didn't record the exception type. This is where it
                      * should be handled. */
