@@ -266,9 +266,16 @@ namespace miniplayer.models
                 var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, REFRESH_DELAY));
                 while (!cancelToken.IsCancellationRequested)
                 {
-                    await _RefreshState(cancelToken);
+                    try
+                    {
+                        await _RefreshState(cancelToken);
 
-                    await timer.WaitForNextTickAsync(cancelToken);
+                        await timer.WaitForNextTickAsync(cancelToken);
+                    }
+                    catch (APIException e) when (e.Message == "Service unavailable")
+                    {
+                        await Task.Delay(60_000);
+                    }
                 }
             });
         }
@@ -377,9 +384,13 @@ namespace miniplayer.models
                     }
                     catch (APIException e) when (e.Message == "Player command failed: Restriction violated")
                     {
+                        //retry
                     }
-                    catch(APIException e) when (e.Message == "Player command failed: No active device found")
+                    catch(APIException e) when 
+                        (e.Message == "Player command failed: No active device found" ||
+                         e.Message == "Service unavailable")
                     {
+                        //fail silently
                         break;
                     }
                     /* the client blew up on some ssl exception at some point, 
