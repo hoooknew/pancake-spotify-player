@@ -17,6 +17,11 @@
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="#888888" options:Freeze="True"/>
     <SolidColorBrush x:Key="WindowBrush" Color="#1e1e1e" options:Freeze="True"/>
 
+    
+    <SolidColorBrush x:Key="SubMenu.Background" Color="#444444" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Menu.Divider.Left" Color="Transparent"/>
+    <SolidColorBrush x:Key="Menu.Divider.Right" Color="Transparent"/>
+
 
     <!--Context Menu-->
     <SolidColorBrush x:Key="MenuPopupBrush" Color="Lime"/>
