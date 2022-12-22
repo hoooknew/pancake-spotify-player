@@ -35,6 +35,7 @@
   - [ ] option to show/hide progress bar
   - [ ] option to show/hide controls
   - [ ] option to sign out
+  - [ ] add a setting top hide the window in the task bar
 
 
 - [ ] if there isn't a spotify client open, show a UI that indicates the issue
@@ -51,6 +52,8 @@
 - [ ] expose errors in the login to the user.
 
 - [ ] add the ability to skip to a new position in the track by clicking on the progress bar.
+
+- [ ] Put an icon on the window.
 
 # Bugs
 - [ ] there is a meaningful delay between when a state change in requested and when the changed state is available in the server. It tends to be less than 250ms. I think I need to verify the expected state change took place and retry otherwise.
