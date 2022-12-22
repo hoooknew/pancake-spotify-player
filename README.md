@@ -77,6 +77,11 @@ https://github.com/JohnnyCrazy/SpotifyAPI-NET/blob/master/SpotifyAPI.Web/Models/
 
 https://github.com/dotnet/wpf/blob/89d172db0b7a192de720c6cfba5e28a1e7d46123/src/Microsoft.DotNet.Wpf/src/Themes/XAML/Window.xaml
 
+### theme xaml (the xaml in the docs is wrong)
+https://github.com/dotnet/wpf/blob/89d172db0b7a192de720c6cfba5e28a1e7d46123/src/Microsoft.DotNet.Wpf/src/Themes/XAML/ContextMenu.xaml
+https://www.manuelmeyer.net/2014/08/wpf-the-simplest-way-to-get-the-default-template-of-a-control-as-xaml/
+
+
 ### checking and changing favorites
 https://developer.spotify.com/documentation/web-api/reference/#/operations/check-users-saved-tracks
 https://developer.spotify.com/documentation/web-api/reference/#/operations/save-tracks-user
