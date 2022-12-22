@@ -35,7 +35,7 @@
 
         <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
             <TextBlock x:Name="_title_text" FontWeight="DemiBold" TextTrimming="CharacterEllipsis" Text="{Binding Title}"/>
-            <TextBlock x:Name="_artist_text" Grid.Row="1" Foreground="{DynamicResource AltTextForegroundBrush}" FontWeight="Bold" FontSize="10" Text="{Binding Artist}"/>
+            <TextBlock x:Name="_artist_text" Grid.Row="1" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource AltTextForegroundBrush}" FontWeight="Bold" FontSize="10" Text="{Binding Artist}"/>
         </StackPanel>
 
         <ctrl:PathButton 
