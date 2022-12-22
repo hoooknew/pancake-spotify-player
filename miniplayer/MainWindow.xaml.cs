@@ -53,7 +53,6 @@ namespace miniplayer
                 try
                 {
                     _commandExecuting = true;
-                    _model.EnableControls = false;
 
                     if (e.Command == PlayerCommands.SignIn)
                         await SignIn();
@@ -73,7 +72,6 @@ namespace miniplayer
                 finally
                 {
                     _commandExecuting = false;
-                    _model.EnableControls = true;
                 }
             }
             else
