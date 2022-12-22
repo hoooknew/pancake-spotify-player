@@ -301,7 +301,7 @@ namespace miniplayer.models
                     if (changed.Track)
                     {
                         IsFavorite = null;
-                        if (_context.Item != null)
+                        if (_context?.Item != null)
                         {
                             var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { _context!.Item!.GetItemId()! }));
                             IsFavorite = isFavs.All(r => r);
