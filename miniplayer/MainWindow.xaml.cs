@@ -102,6 +102,11 @@ namespace miniplayer
                     }
                 }
             }
+            else if (e.Command == SettingsCommands.ToggleAlwaysOnTop)
+            {
+                Settings.Instance.AlwaysOnTop = !Settings.Instance.AlwaysOnTop;
+                Settings.Instance.Save();
+            }
         }
     }
 }

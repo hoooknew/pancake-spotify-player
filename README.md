@@ -16,7 +16,7 @@
 
 - [x] handle `APITooManyRequestsException`
 - [x] add theming and a dark theme
-  - [ ] sync theme to the windows default
+  - [ ] add option to sync theme to the windows default
 - [x] reduce requested permission scope to a minimum.
 
 
@@ -29,8 +29,8 @@
 - [x] add a settings right click that creates a user settings json in the app data folder
   - [x] add a settings feature to remember the last app position
     - [x] remember to only restore the position if the window is in the current screen dimensions.
-  - [ ] add a settings feature to keep the app always on top
-  - [ ] have the option of responding into the windows media?
+  - [x] add a settings feature to keep the app always on top
+  - [ ] have the option of responding into the windows media keys?
   - [ ] add a setting to zoom the whole window.
   - [ ] option to show/hide progress bar
   - [ ] option to show/hide controls

@@ -15,7 +15,8 @@
         BorderThickness="1"
         MinWidth="250"
         ui:WindowPosition.Save="WindowPosition"
-        TextBlock.Foreground="{DynamicResource TextForegroundBrush}">
+        TextBlock.Foreground="{DynamicResource TextForegroundBrush}"
+        Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}">
     <Window.Resources>
         <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
@@ -34,18 +35,21 @@
         <ContextMenu x:Name="_menu" Style="{StaticResource MP_ContextMenuStyle}">
             <ContextMenu.CommandBindings>
                 <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeTheme}" Executed="SettingsCommand_Executed"/>
+                <CommandBinding Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" Executed="SettingsCommand_Executed"/>
             </ContextMenu.CommandBindings>
             <MenuItem Header="Settings">
                 <MenuItem Header="Themes">
                     <MenuItem Header="Light" 
                               Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
                               CommandParameter="light"
-                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Converter={StaticResource IsEqualConverter}, ConverterParameter=light}"/>
+                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=light}"/>
                     <MenuItem Header="Dark" 
-                              Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
-                              CommandParameter="dark" 
-                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Converter={StaticResource IsEqualConverter}, ConverterParameter=dark}"/>
+                              Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
+                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=dark}"/>
                 </MenuItem>
+                <MenuItem Header="Always On Top" 
+                          Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
+                          IsChecked="{Binding AlwaysOnTop, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
             </MenuItem>
         </ContextMenu>
     </Window.ContextMenu>

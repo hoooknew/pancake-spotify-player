@@ -46,6 +46,9 @@ namespace miniplayer.lib
         [AutoNotify]
         private string? _theme = "dark";
 
+        [AutoNotify]
+        private bool _alwaysOnTop = false;
+
         private static void CreateLocalAppFolder()
         {
             if (!Directory.Exists(Constants.LOCAL_APP_DATA))
