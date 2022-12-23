@@ -13,7 +13,8 @@
         Title="MainWindow" Height="80" Width="400"
         BorderThickness="1"
         MinWidth="250"
-        ui:WindowPosition.Save="WindowPosition">
+        ui:WindowPosition.Save="WindowPosition"
+        TextBlock.Foreground="{DynamicResource TextForegroundBrush}">
     <Window.Resources>
         <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
@@ -39,11 +40,11 @@
                     <MenuItem Header="Light"/>
                     <MenuItem Header="Dark" IsChecked="True"/>
                 </MenuItem>
-                <MenuItem Header="Zoom">
+                <MenuItem Header="Zoom" IsEnabled="False">
                     <MenuItem Header="100%" IsChecked="True"/>
                     <MenuItem Header="125%" />
                 </MenuItem>
-                <MenuItem Header="Always on Top" IsCheckable="True"/>
+                <MenuItem Header="Always on Top" IsCheckable="True" IsEnabled="False"/>
             </MenuItem>
         </ContextMenu>
     </Window.ContextMenu>

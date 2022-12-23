@@ -23,12 +23,14 @@
 
     <Geometry x:Key="Checkmark">F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z</Geometry>
 
-    <SolidColorBrush x:Key="SubMenu.Background" Color="HotPink" />
+    <SolidColorBrush x:Key="SubMenu.Background" Color="#444444" />
     <SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="Gainsboro"/>
-    <SolidColorBrush x:Key="MenuItem.Selected.Glyph" Color="MediumOrchid"/>
-    <SolidColorBrush x:Key="Menu.Divider.Left" Color="MediumOrchid"/>
-    <SolidColorBrush x:Key="Menu.Divider.Right" Color="MediumOrchid"/>
+    <SolidColorBrush x:Key="MenuItem.Selected.Glyph" Color="White"/>
+    <SolidColorBrush x:Key="MenuItem.Disabled.Foreground" Color="#6a6a6a"/>
+    <SolidColorBrush x:Key="Menu.Divider.Left" Color="Transparent"/>
+    <SolidColorBrush x:Key="Menu.Divider.Right" Color="Transparent"/>
     <SolidColorBrush x:Key="Menu.Glyph.Background" Color="#6a6a6a"/>
+    <SolidColorBrush x:Key="Menu.Glyph.Foreground" Color="white"/>
     <SolidColorBrush x:Key="Menu.Border" Color="#373737"/>
     <SolidColorBrush x:Key="SubMenu.Border" Color="#373737"/>
 
@@ -95,7 +97,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="MP_MenuScrollViewer"
            TargetType="{x:Type ScrollViewer}"
            BasedOn="{x:Null}">
@@ -140,7 +142,7 @@
                                              Path="ViewportHeight"/>
                                 </MultiBinding>
                             </RepeatButton.Visibility>
-                            <Path Fill="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"
+                            <Path Fill="{DynamicResource StaticResource RightArrow}"
                                   Data="{StaticResource UpArrow}"/>
                         </RepeatButton>
                         <RepeatButton
@@ -164,7 +166,7 @@
                                              Path="ViewportHeight"/>
                                 </MultiBinding>
                             </RepeatButton.Visibility>
-                            <Path Fill="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"
+                            <Path Fill="{DynamicResource StaticResource RightArrow}"
                                   Data="{StaticResource DownArrow}"/>
                         </RepeatButton>
                     </Grid>
@@ -208,7 +210,7 @@
                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
             </DockPanel>
         </Grid>
-        <!--<ControlTemplate.Triggers>
+        <ControlTemplate.Triggers>
             <Trigger Property="Icon"
                      Value="{x:Null}">
                 <Setter TargetName="Icon"
@@ -224,7 +226,7 @@
                         Property="Visibility"
                         Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsHighlighted"
+            <!--<Trigger Property="IsHighlighted"
                      Value="true">
                 <Setter TargetName="Bg"
                         Property="Stroke"
@@ -236,8 +238,8 @@
                         Property="Stroke"
                         Value="#50FFFFFF"/>
 
-            </Trigger>
-            <Trigger Property="IsKeyboardFocused"
+            </Trigger>-->
+            <!--<Trigger Property="IsKeyboardFocused"
                      Value="true">
                 <Setter TargetName="Bg"
                         Property="Stroke"
@@ -248,16 +250,17 @@
                 <Setter TargetName="InnerBorder"
                         Property="Stroke"
                         Value="#50747272"/>
-            </Trigger>
+            </Trigger>-->
             <Trigger Property="IsEnabled"
                      Value="false">
                 <Setter Property="Foreground"
-                        Value="#FF9A9A9A"/>
+                        Value="{DynamicResource MenuItem.Disabled.Foreground}"/>
                 <Setter TargetName="GlyphPanel"
                         Property="Fill"
-                        Value="#848589"/>
+                        Value="{DynamicResource MenuItem.Disabled.Foreground}"/>
+                <Setter Property="TextBlock.Foreground" Value="{StaticResource MenuItem.Disabled.Foreground}" />
             </Trigger>
-        </ControlTemplate.Triggers>-->
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="MP_SubmenuItemTemplateKey" TargetType="{x:Type MenuItem}">
@@ -289,9 +292,8 @@
                     Width="22"
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center"
-                    Background="Blue"
-                    BorderBrush="{StaticResource MenuItem.Highlight.Border}"
-                    BorderThickness="1"
+                    Background="Transparent"                    
+                    BorderThickness="0"
                     Margin="-1,0,0,0">
                     <Path x:Name="Glyph"
                         Data="{StaticResource Checkmark}"
@@ -316,7 +318,7 @@
                     Opacity="0.7" />
             </Grid>
         </Border>
-        <!--<ControlTemplate.Triggers>
+        <ControlTemplate.Triggers>
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
             </Trigger>
@@ -324,16 +326,17 @@
                 <Setter TargetName="GlyphPanel" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="Icon" Property="Visibility" Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsHighlighted" Value="True">
+            <!--<Trigger Property="IsHighlighted" Value="True">
                 <Setter TargetName="templateRoot" Property="Background" Value="Transparent" />
                 <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource MenuItem.Highlight.Border}" />
                 <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource MenuItem.Highlight.Foreground}" />
-            </Trigger>
+            </Trigger>-->
             <Trigger Property="IsEnabled" Value="False">
                 <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource MenuItem.Disabled.Foreground}" />
                 <Setter TargetName="Glyph" Property="Fill" Value="{StaticResource MenuItem.Disabled.Foreground}" />
+                <Setter Property="TextBlock.Foreground" Value="{StaticResource MenuItem.Disabled.Foreground}" />
             </Trigger>
-        </ControlTemplate.Triggers>-->
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="MP_TopLevelHeaderTemplateKey" TargetType="{x:Type MenuItem}">
@@ -405,7 +408,7 @@
                 </Popup>
             </Grid>
         </Border>
-        <!--<ControlTemplate.Triggers>
+        <ControlTemplate.Triggers>
             <Trigger Property="IsSuspendingPopupAnimation" Value="true">
                 <Setter TargetName="PART_Popup" Property="PopupAnimation" Value="None"/>
             </Trigger>
@@ -416,26 +419,27 @@
                 <Setter TargetName="GlyphPanel" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="Icon" Property="Visibility" Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsHighlighted" Value="True">
+            <!--<Trigger Property="IsHighlighted" Value="True">
                 <Setter TargetName="templateRoot" Property="Background" Value="Transparent" />
                 <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource MenuItem.Highlight.Border}" />
                 <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource MenuItem.Highlight.Foreground}" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
+            </Trigger>-->
+            <!--<Trigger Property="IsPressed" Value="True">
                 <Setter TargetName="templateRoot" Property="Background" Value="{StaticResource MenuItem.Pressed.Background}" />
                 <Setter TargetName="templateRoot" Property="BorderBrush" Value="{StaticResource MenuItem.Pressed.Border}" />
                 <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource MenuItem.Pressed.Foreground}" />
                 <Setter TargetName="GlyphPanel" Property="Fill" Value="{StaticResource MenuItem.Pressed.Foreground}" />
-            </Trigger>
+            </Trigger>-->
             <Trigger Property="IsEnabled" Value="False">
                 <Setter TargetName="templateRoot" Property="TextElement.Foreground" Value="{StaticResource MenuItem.Disabled.Foreground}" />
                 <Setter TargetName="GlyphPanel" Property="Fill" Value="{StaticResource MenuItem.Disabled.Foreground}" />
+                <Setter Property="TextBlock.Foreground" Value="{StaticResource MenuItem.Disabled.Foreground}" />
             </Trigger>
             <Trigger SourceName="SubMenuScrollViewer" Property="ScrollViewer.CanContentScroll" Value="false" >
                 <Setter TargetName="OpaqueRect"  Property="Canvas.Top"  Value="{Binding ElementName=SubMenuScrollViewer, Path=VerticalOffset}" />
                 <Setter TargetName="OpaqueRect" Property="Canvas.Left" Value="{Binding ElementName=SubMenuScrollViewer, Path=HorizontalOffset}" />
             </Trigger>
-        </ControlTemplate.Triggers>-->
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <ControlTemplate x:Key="MP_SubmenuHeaderTemplateKey"
@@ -549,19 +553,19 @@
                 </Border>
             </Popup>
         </Grid>
-        <!--<ControlTemplate.Triggers>
+        <ControlTemplate.Triggers>
             <Trigger Property="IsSuspendingPopupAnimation"
                      Value="true">
                 <Setter TargetName="PART_Popup"
                         Property="PopupAnimation"
                         Value="None"/>
             </Trigger>
-            <Trigger Property="IsHighlighted"
+            <!--<Trigger Property="IsHighlighted"
                      Value="true">
                 <Setter TargetName="InnerBorder"
                         Property="Stroke"
                         Value="#D1DBF4FF"/>
-            </Trigger>
+            </Trigger>-->
             <Trigger Property="Icon"
                      Value="{x:Null}">
                 <Setter TargetName="Icon"
@@ -577,7 +581,7 @@
                         Property="Visibility"
                         Value="Collapsed"/>
             </Trigger>
-            <Trigger Property="IsHighlighted"
+            <!--<Trigger Property="IsHighlighted"
                      Value="true">
                 <Setter TargetName="Bg"
                         Property="Fill"
@@ -585,20 +589,15 @@
                 <Setter TargetName="Bg"
                         Property="Stroke"
                         Value="#8571CBF1"/>
-            </Trigger>
+            </Trigger>-->
             <Trigger Property="IsEnabled"
                      Value="false">
                 <Setter Property="Foreground"
-                        Value="#FF9A9A9A"/>
-                <Setter TargetName="GlyphPanel"
-                        Property="Background"
-                        Value="#EEE9E9"/>
-                <Setter TargetName="GlyphPanel"
-                        Property="BorderBrush"
-                        Value="#DBD6D6"/>
+                        Value="{DynamicResource MenuItem.Disabled.Foreground}"/>
                 <Setter TargetName="Glyph"
                         Property="Fill"
-                        Value="#848589"/>
+                        Value="{DynamicResource MenuItem.Disabled.Foreground}"/>
+                <Setter Property="TextBlock.Foreground" Value="{StaticResource MenuItem.Disabled.Foreground}" />
             </Trigger>
             <Trigger SourceName="SubMenuScrollViewer"
                      Property="ScrollViewer.CanContentScroll"
@@ -610,7 +609,7 @@
                         Property="Canvas.Left"
                         Value="{Binding ElementName=SubMenuScrollViewer, Path=HorizontalOffset}" />
             </Trigger>
-        </ControlTemplate.Triggers>-->
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <Style x:Key="MP_MenuItemStyle" TargetType="{x:Type MenuItem}">
@@ -621,7 +620,7 @@
         <Setter Property="Background"
                 Value="Transparent"/>
         <Setter Property="Foreground"
-                Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+                Value="{DynamicResource Menu.Glyph.Foreground}"/>
         <Setter Property="ScrollViewer.PanningMode"
                 Value="Both"/>
         <Setter Property="Stylus.IsFlicksEnabled"
@@ -679,7 +678,7 @@
         <Setter Property="FontWeight"
                 Value="{DynamicResource {x:Static SystemFonts.MenuFontWeightKey}}"/>
         <Setter Property="Foreground"
-                Value="{DynamicResource {x:Static SystemColors.MenuTextBrushKey}}"/>
+                Value="{DynamicResource Menu.Glyph.Foreground}"/>
         <Setter Property="VerticalContentAlignment"
                 Value="Center"/>
         <Setter Property="BorderThickness"
@@ -754,6 +753,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 
 </ResourceDictionary>

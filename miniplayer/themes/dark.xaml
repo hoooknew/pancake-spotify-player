@@ -18,9 +18,15 @@
     <SolidColorBrush x:Key="WindowBrush" Color="#1e1e1e" options:Freeze="True"/>
 
     
+    <SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="Gainsboro"/>
+    <SolidColorBrush x:Key="MenuItem.Selected.Glyph" Color="White"/>
     <SolidColorBrush x:Key="SubMenu.Background" Color="#444444" options:Freeze="True"/>
     <SolidColorBrush x:Key="Menu.Divider.Left" Color="Transparent"/>
     <SolidColorBrush x:Key="Menu.Divider.Right" Color="Transparent"/>
+    <SolidColorBrush x:Key="Menu.Glyph.Background" Color="#6a6a6a"/>
+    <SolidColorBrush x:Key="Menu.Glyph.Foreground" Color="white"/>
+    <SolidColorBrush x:Key="Menu.Border" Color="#373737"/>
+    <SolidColorBrush x:Key="SubMenu.Border" Color="#373737"/>
 
 
     <!--Context Menu-->
