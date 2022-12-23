@@ -32,12 +32,12 @@ namespace miniplayer.ui
                 var newValue = e.NewValue as string;
                 if (string.IsNullOrEmpty(newValue))
                 {
-                    w.Loaded -= LoadPosition;
+                    w.Initialized -= LoadPosition;
                     w.Closing -= SavePosition;
                 }
                 else
                 {
-                    w.Loaded += LoadPosition;
+                    w.Initialized += LoadPosition;
                     w.Closing += SavePosition;                    
                 }
             }
@@ -52,7 +52,7 @@ namespace miniplayer.ui
             }
         }
 
-        private static void LoadPosition(object sender, RoutedEventArgs e)
+        private static void LoadPosition(object? sender, EventArgs e)
         {
             if (sender is Window w && GetSave(w) is string settingName)
             {
@@ -63,8 +63,8 @@ namespace miniplayer.ui
 
                     if (newPos != null)
                     {
-                        w.SetWindowPosition(newPos);
                         w.WindowState = WindowState.Normal;
+                        w.SetWindowPosition(newPos);                        
 
                         if (!IsOnScreen(w))
                             w.SetWindowPosition(oldPos);
