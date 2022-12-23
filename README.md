@@ -34,7 +34,7 @@
   - [ ] add a setting to zoom the whole window.
   - [x] option to show/hide progress bar
   - [x] option to show/hide controls
-  - [ ] option to sign out
+  - [x] option to sign out
   - [x] add a setting top hide the window in the task bar
 
 

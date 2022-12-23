@@ -122,6 +122,11 @@ namespace miniplayer
                 Settings.Instance.TaskbarVisible = !Settings.Instance.TaskbarVisible;
                 Settings.Instance.Save();
             }
+            else if (e.Command == SettingsCommands.SignOut)
+            {
+                Authentication.SaveToken(null);
+                _model.SignOut();
+            }
         }
     }
 }

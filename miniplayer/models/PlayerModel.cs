@@ -231,6 +231,11 @@ namespace miniplayer.models
                 }
             });
         }
+        public void SignOut()
+        {
+            _StopUpdates();
+            _dispatcher.Invoke(() => this.NeedToken = true);
+        }
 
 
         #region Status Updater
@@ -414,11 +419,10 @@ namespace miniplayer.models
         }
         private void _HandleAPIError(Exception e)
         {
-            _StopUpdates();
-            _dispatcher.Invoke(() => this.NeedToken = true);
-
+            SignOut();
             _OnApiError(e);
-        }
+        }        
+
         private void _OnPropertyChanged(string propertyName)
             => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         private void _OnApiError(Exception e) =>
