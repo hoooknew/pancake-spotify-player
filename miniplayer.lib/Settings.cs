@@ -58,6 +58,9 @@ namespace miniplayer.lib
         [AutoNotify]
         private bool _taskbarVisible = true;
 
+        [AutoNotify]
+        private double _uiScale = 1.0;
+
         private static void CreateLocalAppFolder()
         {
             if (!Directory.Exists(Constants.LOCAL_APP_DATA))

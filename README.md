@@ -31,7 +31,7 @@
     - [x] remember to only restore the position if the window is in the current screen dimensions.
   - [x] add a settings feature to keep the app always on top
   - [ ] have the option of responding into the windows media keys?
-  - [ ] add a setting to zoom the whole window.
+  - [x] add a setting to zoom the whole window.
   - [x] option to show/hide progress bar
   - [x] option to show/hide controls
   - [x] option to sign out

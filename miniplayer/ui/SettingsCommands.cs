@@ -15,5 +15,6 @@ namespace miniplayer.ui
         public static readonly RoutedCommand HideShowProgress = new RoutedCommand("settings_hide_show_progress", typeof(SettingsCommands));
         public static readonly RoutedCommand HideShowTaskbar = new RoutedCommand("settings_hide_show_taskbar", typeof(SettingsCommands));
         public static readonly RoutedCommand SignOut = new RoutedCommand("settings_sign_out", typeof(SettingsCommands));
+        public static readonly RoutedCommand ChangeZoom = new RoutedCommand("settings_change_zoom", typeof(SettingsCommands));
     }
 }

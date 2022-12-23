@@ -127,6 +127,17 @@ namespace miniplayer
                 Authentication.SaveToken(null);
                 _model.SignOut();
             }
+            else if (e.Command == SettingsCommands.ChangeZoom)
+            {
+                if (e.Parameter is double uiScale)
+                {
+                    if (Settings.Instance.UiScale != uiScale)
+                    {
+                        Settings.Instance.UiScale = uiScale;
+                        Settings.Instance.Save();
+                    }
+                }                
+            }
         }
     }
 }

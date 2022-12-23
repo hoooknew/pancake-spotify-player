@@ -12,7 +12,7 @@
         SizeToContent="Height"
         Title="MainWindow" Height="80" Width="400"
         BorderThickness="1"
-        MinWidth="250"
+        MinWidth="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance},Converter={StaticResource MultiplyDoublesConverter}, ConverterParameter={StaticResource 1xMinWidth}}"
         ui:WindowPosition.Save="WindowPosition"
         TextBlock.Foreground="{DynamicResource TextForegroundBrush}"
         Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"
@@ -36,6 +36,10 @@
             <ContextMenu.Resources>
                 <cvt:IsEqualConverter x:Key="IsEqualConverter"/>
                 <s:Boolean x:Key="False">False</s:Boolean>
+                <s:Double x:Key="scale100">1.0</s:Double>
+                <s:Double x:Key="scale125">1.25</s:Double>
+                <s:Double x:Key="scale150">1.5</s:Double>
+                <s:Double x:Key="scale200">2.0</s:Double>
             </ContextMenu.Resources>
             <ContextMenu.CommandBindings>
                 <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeTheme}" Executed="SettingsCommand_Executed"/>
@@ -44,11 +48,30 @@
                 <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowProgress}" Executed="SettingsCommand_Executed"/>
                 <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" Executed="SettingsCommand_Executed"/>
                 <CommandBinding Command="{x:Static ui:SettingsCommands.SignOut}" Executed="SettingsCommand_Executed"/>
+                <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeZoom}" Executed="SettingsCommand_Executed"/>
             </ContextMenu.CommandBindings>
             <MenuItem Header="Settings">
                 <MenuItem Header="Always On Top" 
                           Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
                           IsChecked="{Binding AlwaysOnTop, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+                <MenuItem Header="Zoom">
+                    <MenuItem Header="100%"
+                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale100}}"
+                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                              CommandParameter="{StaticResource scale100}"/>
+                    <MenuItem Header="125%"
+                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale125}}"
+                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                              CommandParameter="{StaticResource scale125}"/>
+                    <MenuItem Header="150%"
+                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale150}}"
+                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                              CommandParameter="{StaticResource scale150}"/>
+                    <MenuItem Header="200%"
+                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale200}}"
+                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                              CommandParameter="{StaticResource scale200}"/>
+                </MenuItem>
                 <MenuItem Header="Show or Hide">
                     <MenuItem Header="Controls" 
                           Command="{x:Static ui:SettingsCommands.HideShowControls}" 
@@ -78,8 +101,13 @@
         </ContextMenu>
     </Window.ContextMenu>
     <Grid>
-        <ctrl:SignIn Grid.Column="1" Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
-
+        <Grid.LayoutTransform>
+            <ScaleTransform 
+                ScaleX="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}" 
+                ScaleY="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"/>
+        </Grid.LayoutTransform>
+        <ctrl:SignIn Grid.Column="1" 
+                     Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
 
         <Grid x:Name="ui_grid" Grid.Column="1" 
               Visibility="{Binding NeedToken, Converter={StaticResource uiConverter}, FallbackValue=Hidden}">
