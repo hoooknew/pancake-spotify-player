@@ -16,4 +16,27 @@
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#444444" options:Freeze="True"/>
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="#888888" options:Freeze="True"/>
     <SolidColorBrush x:Key="WindowBrush" Color="#1e1e1e" options:Freeze="True"/>
+    
+    <!--Context Menu-->
+    <SolidColorBrush x:Key="MenuItem.Selected.Glyph" Color="White"/>
+    <SolidColorBrush x:Key="SubMenu.Background" Color="#444444" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Menu.Divider.Left" Color="Transparent"/>
+    <SolidColorBrush x:Key="Menu.Divider.Right" Color="Transparent"/>
+    <SolidColorBrush x:Key="Menu.Glyph.Background" Color="#6a6a6a"/>
+    <SolidColorBrush x:Key="Menu.Glyph.Foreground" Color="white"/>
+    <SolidColorBrush x:Key="Menu.Border" Color="#373737"/>
+    <SolidColorBrush x:Key="SubMenu.Border" Color="#373737"/>
+
+
+    <!--Context Menu-->
+    <SolidColorBrush x:Key="MenuPopupBrush" Color="Lime"/>
+
+    <Color x:Key="ControlLightColor">orange</Color>
+    <Color x:Key="ControlMediumColor">red</Color>
+    <Color x:Key="ControlDarkColor">green</Color>
+    
+    <Color x:Key="BorderLightColor">dodgerblue</Color>
+    <Color x:Key="BorderMediumColor">violet</Color>
+    <Color x:Key="BorderDarkColor">yellow</Color>
+    
 </ResourceDictionary>

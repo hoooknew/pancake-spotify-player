@@ -13,7 +13,8 @@
         Title="MainWindow" Height="80" Width="400"
         BorderThickness="1"
         MinWidth="250"
-        ui:WindowPosition.Save="WindowPosition">
+        ui:WindowPosition.Save="WindowPosition"
+        TextBlock.Foreground="{DynamicResource TextForegroundBrush}">
     <Window.Resources>
         <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
@@ -27,6 +28,26 @@
         <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" Executed="CommandBinding_Executed"/>
         <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" Executed="CommandBinding_Executed"/>
     </Window.CommandBindings>
+    <Window.ContextMenu>
+        <ContextMenu x:Name="_menu" Style="{StaticResource MP_ContextMenuStyle}" IsOpen="False">
+            <ContextMenu.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="Azure"/>
+                </Style>
+            </ContextMenu.Resources>
+            <MenuItem Header="Settings" IsSubmenuOpen="False">
+                <MenuItem Header="Themes">
+                    <MenuItem Header="Light"/>
+                    <MenuItem Header="Dark" IsChecked="True"/>
+                </MenuItem>
+                <MenuItem Header="Zoom" IsEnabled="False">
+                    <MenuItem Header="100%" IsChecked="True"/>
+                    <MenuItem Header="125%" />
+                </MenuItem>
+                <MenuItem Header="Always on Top" IsCheckable="True" IsEnabled="False"/>
+            </MenuItem>
+        </ContextMenu>
+    </Window.ContextMenu>
     <Grid>
         <ctrl:SignIn Grid.Column="1" Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
 
@@ -44,7 +65,7 @@
                 </Grid.ColumnDefinitions>
 
                 <ctrl:PlayerTrackDetails Grid.Column="0" Margin="2"/>
-                <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,18,0"/>
+                <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,24,0"/>
             </Grid>
             <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"/>
         </Grid>

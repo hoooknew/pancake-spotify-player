@@ -3,6 +3,7 @@ using System;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace miniplayer
 {
@@ -13,6 +14,7 @@ namespace miniplayer
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            //SaveDefaultTemplate();
             SetTheme();
 
             MainWindow = new MainWindow();
@@ -43,7 +45,7 @@ namespace miniplayer
 #if DEBUG
         public static void SaveDefaultTemplate()
         {
-            var control = Application.Current.FindResource(typeof(System.Windows.Controls.ContextMenu));
+            var control = Application.Current.FindResource(MenuItem.SubmenuHeaderTemplateKey);
             var sw = new System.IO.StringWriter();
             System.Windows.Markup.XamlWriter.Save(control, sw);
             Clipboard.SetText(sw.ToString());

@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ctrl="clr-namespace:miniplayer.ui.controls"
              xmlns:local="clr-namespace:miniplayer"
-             Startup="Application_Startup"
-             >
+             Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ui/styles/ContextMenu.xaml"/>
                 <ResourceDictionary x:Name="_theme" Source="/themes/dark.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
@@ -49,10 +49,6 @@
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="-2"/>
                 <Setter Property="Margin" Value="1,0"/>
-            </Style>
-
-            <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                <Setter Property="Foreground" Value="{DynamicResource TextForegroundBrush}"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>
