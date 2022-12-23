@@ -23,7 +23,7 @@ namespace miniplayer.ui.controls
     /// </summary>
     public partial class PlayerTrackDetails : UserControl
     {
-
+        #region NameCsv Attached Property
 
         internal static IEnumerable<LinkableObject> GetNameCsv(DependencyObject obj)
         {
@@ -63,26 +63,23 @@ namespace miniplayer.ui.controls
                 }
             }
         }
+        #endregion
 
         public PlayerTrackDetails()
         {
-            InitializeComponent();
+            InitializeComponent();            
         }
 
-        private void _title_text_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void _title_text_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (this.DataContext is PlayerModel model)
-            {
-                PlayerCommands.OpenInSpotify.Execute(null, this);
-            }
+            if (this.DataContext is PlayerModel model && model.CurrentlyPlaying != null)
+                PlayerCommands.OpenInSpotify.Execute(model.CurrentlyPlaying, this);
         }
 
-        private void _artist_text_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void _artist_text_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is Run r && r.Tag != null)
-            {
                 PlayerCommands.OpenInSpotify.Execute(r.Tag, this);
-            }
         }
     }
 }

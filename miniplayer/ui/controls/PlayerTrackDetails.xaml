@@ -34,10 +34,11 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
+            
             <TextBlock x:Name="_title_text" 
                        FontWeight="DemiBold" TextTrimming="CharacterEllipsis" 
                        Text="{Binding Title}" 
-                       MouseLeftButtonUp="_title_text_MouseLeftButtonUp">
+                       MouseLeftButtonDown="_title_text_MouseLeftButtonDown">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                         <Style.Triggers>
@@ -48,12 +49,13 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
+            
             <TextBlock x:Name="_artist_text" Grid.Row="1" 
                        TextTrimming="CharacterEllipsis" Foreground="{DynamicResource AltTextForegroundBrush}" FontWeight="Bold" FontSize="10" 
                        ctrl:PlayerTrackDetails.NameCsv="{Binding Artists}">
                 <TextBlock.Resources>
                     <Style TargetType="Run">
-                        <EventSetter Event="MouseLeftButtonDown" Handler="_artist_text_MouseLeftButtonUp"/>
+                        <EventSetter Event="MouseLeftButtonDown" Handler="_artist_text_MouseLeftButtonDown"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="TextBlock.TextDecorations" Value="Underline" />
@@ -65,6 +67,7 @@
                     </Style>
                 </TextBlock.Resources>
             </TextBlock>
+            
         </StackPanel>
 
         <ctrl:PathButton 

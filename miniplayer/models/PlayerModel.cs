@@ -113,6 +113,7 @@ namespace miniplayer.models
             }
         }
         public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
+        public IPlayableItem? CurrentlyPlaying => _context?.Item;
 
         public bool EnableControls
         {

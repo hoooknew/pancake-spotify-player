@@ -58,6 +58,7 @@
 # Bugs
 - [ ] there is a meaningful delay between when a state change in requested and when the changed state is available in the server. It tends to be less than 250ms. I think I need to verify the expected state change took place and retry otherwise.
 - [ ] retry on http errors
+- [ ] why don't the mouse up events trigger in the song and artist text boxes?
 
 ## times to update the state
 
