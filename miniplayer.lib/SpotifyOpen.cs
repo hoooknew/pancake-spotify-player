@@ -14,11 +14,11 @@ namespace miniplayer.lib
         const string SPOTIFY_APP_URI = "spotify://";
         const string SPOTIFY_WEB_URI = "https://open.spotify.com";
         public static bool WindowsAppInstalled =>
-            Registry.ClassesRoot.OpenSubKey("HKEY_CLASSES_ROOT\\spotify\\shell\\open\\command") != null;
+            Registry.ClassesRoot.OpenSubKey("spotify\\shell\\open\\command") != null;
 
         static Spotify()
         {
-            UseApp = true; // WindowsAppInstalled;
+            UseApp = WindowsAppInstalled;
         }
 
         public static bool UseApp { get; private set; }
