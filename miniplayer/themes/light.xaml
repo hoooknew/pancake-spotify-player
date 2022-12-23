@@ -12,10 +12,20 @@
     <!--Spotify Green-->
     <Color x:Key="AccentColor">#FF1ED760</Color>
     
-    <SolidColorBrush x:Key="TextForegroundBrush" Color="#4d4d4d" options:Freeze="True"/>
+    <SolidColorBrush x:Key="TextForegroundBrush" Color="Black" options:Freeze="True"/>
     <SolidColorBrush x:Key="AltTextForegroundBrush" Color="#999999" options:Freeze="True"/>
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#CCCCCC" options:Freeze="True"/>
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="#bbbbbb" options:Freeze="True"/>
     <SolidColorBrush x:Key="WindowBrush" Color="White" options:Freeze="True"/>
+
+    <!--Context Menu-->
+    <SolidColorBrush x:Key="SubMenu.Background" Color="#cccccc" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Menu.Glyph.Background" Color="#a5a5a5"/>
+    <SolidColorBrush x:Key="Menu.Glyph.Foreground" Color="Black"/>
+    <SolidColorBrush x:Key="MenuItem.Selected.Glyph" Color="Black"/>
+    <SolidColorBrush x:Key="Menu.Divider.Left" Color="Transparent"/>
+    <SolidColorBrush x:Key="Menu.Divider.Right" Color="Transparent"/>
+    <SolidColorBrush x:Key="Menu.Border" Color="#373737"/>
+    <SolidColorBrush x:Key="SubMenu.Border" Color="#373737"/>
 
 </ResourceDictionary>

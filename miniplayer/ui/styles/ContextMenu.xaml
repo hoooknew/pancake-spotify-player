@@ -24,7 +24,6 @@
     <Geometry x:Key="Checkmark">F1 M 10.0,1.2 L 4.7,9.1 L 4.5,9.1 L 0,5.2 L 1.3,3.5 L 4.3,6.1L 8.3,0 L 10.0,1.2 Z</Geometry>
 
     <SolidColorBrush x:Key="SubMenu.Background" Color="#444444" />
-    <SolidColorBrush x:Key="MenuItem.Highlight.Border" Color="Gainsboro"/>
     <SolidColorBrush x:Key="MenuItem.Selected.Glyph" Color="White"/>
     <SolidColorBrush x:Key="MenuItem.Disabled.Foreground" Color="#6a6a6a"/>
     <SolidColorBrush x:Key="Menu.Divider.Left" Color="Transparent"/>
@@ -300,7 +299,7 @@
                         FlowDirection="LeftToRight"
                         Height="11"
                         Width="9"
-                        Fill="{StaticResource MenuItem.Selected.Glyph}" />
+                        Fill="{DynamicResource MenuItem.Selected.Glyph}" />
                 </Border>
                 <ContentPresenter x:Name="menuHeaderContainer"
                     Grid.Column="2"
@@ -486,7 +485,7 @@
                     <Path Name="Glyph"
                           Width="9"
                           Height="11"
-                          Fill="#0C12A1"
+                          Fill="{DynamicResource Menu.Glyph.Foreground}"
                           FlowDirection="LeftToRight"
                           Data="{StaticResource Checkmark}"/>
                 </Border>
