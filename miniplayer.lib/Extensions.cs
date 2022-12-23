@@ -18,5 +18,10 @@ namespace miniplayer.lib
         {
             Process.Start(new ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true });
         }
+
+        public static void CallWithShell(string uri)
+        {
+            Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
+        }
     }
 }

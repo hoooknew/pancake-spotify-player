@@ -74,18 +74,18 @@ namespace miniplayer.models
             }
         }
         public string Title => _context.GetTrack()?.Name ?? _context.GetEpisode()?.Name ?? "";
-        public IEnumerable<LinkableObjectModel> Artists
+        public IEnumerable<LinkableObject> Artists
         {
             get
             {
                 var track = _context.GetTrack();
                 var episode = _context.GetEpisode();
                 if (track != null)
-                    return track.Artists.Select(r => (LinkableObjectModel)r);
+                    return track.Artists.Select(r => (LinkableObject)r);
                 else if (episode != null)
-                    return new[] { (LinkableObjectModel)episode.Show };
+                    return new[] { (LinkableObject)episode.Show };
                 else
-                    return Enumerable.Empty<LinkableObjectModel>();
+                    return Enumerable.Empty<LinkableObject>();
             }
         }
         public bool? IsFavorite

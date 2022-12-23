@@ -19,68 +19,9 @@ namespace test_auth
     /// </summary>
     public class test_auth
     {
-        private const string CredentialsPath = "credentials.json";        
-        private static readonly EmbedIOAuthServer _server = new EmbedIOAuthServer(new Uri("http://localhost:3000/auth/callback"), 3000);
-
-        private static void Exiting() => Console.CursorVisible = true;
-        public static async Task<int> Main()
+        public static async Task Main()
         {
-            // This is a bug in the SWAN Logging library, need this hack to bring back the cursor
-            AppDomain.CurrentDomain.ProcessExit += (sender, e) => Exiting();
-
-            if (string.IsNullOrEmpty(Config.ClientId))
-            {
-                throw new NullReferenceException(
-                  "Please set SPOTIFY_CLIENT_ID via environment variables before starting the program"
-                );
-            }
-
-            IRefreshableToken? token;
-            if (Authentication.TokenAvailable())
-                token = Authentication.LoadToken();
-            else
-            {
-                token = await Authentication.Login();
-                Authentication.SaveToken(token);
-            }
-
-            if (token != null)
-            {
-                var authenticator = Authentication.CreateAuthenticator(token);
-
-                var config = SpotifyClientConfig.CreateDefault()
-                    .WithAuthenticator(authenticator);
-
-                var spotify = new SpotifyClient(config);
-
-                var me = await spotify.UserProfile.Current();
-                Console.WriteLine($"Welcome {me.DisplayName} ({me.Id}), you're authenticated!");
-            }
-
-            return 0;
+            var uri = new Uri($"spotify:artist:4D8bh9Rvbpq8sHjPWVies5");
         }
-
-        private static async Task Start()
-        {
-            var json = await File.ReadAllTextAsync(CredentialsPath);
-            var token = JsonConvert.DeserializeObject<PKCETokenResponse>(json);
-
-            var authenticator = new PKCEAuthenticator(Config.ClientId!, token!);
-            authenticator.TokenRefreshed += (sender, token) => File.WriteAllText(CredentialsPath, JsonConvert.SerializeObject(token));
-
-            var config = SpotifyClientConfig.CreateDefault()
-              .WithAuthenticator(authenticator);
-
-            var spotify = new SpotifyClient(config);
-
-            var me = await spotify.UserProfile.Current();
-            Console.WriteLine($"Welcome {me.DisplayName} ({me.Id}), you're authenticated!");
-
-            var playlists = await spotify.PaginateAll(await spotify.Playlists.CurrentUsers().ConfigureAwait(false));
-            Console.WriteLine($"Total Playlists in your Account: {playlists.Count}");
-
-            _server.Dispose();
-            Environment.Exit(0);
-        }        
     }
 }

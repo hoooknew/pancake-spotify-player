@@ -34,24 +34,37 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel x:Name="_title_artist_text" HorizontalAlignment="Left">
-            <StackPanel.Resources>
-                <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="TextBlock.TextDecorations" Value="Underline" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Resources>
-
             <TextBlock x:Name="_title_text" 
                        FontWeight="DemiBold" TextTrimming="CharacterEllipsis" 
                        Text="{Binding Title}" 
-                       MouseLeftButtonUp="_title_text_MouseLeftButtonUp"/>
+                       MouseLeftButtonUp="_title_text_MouseLeftButtonUp">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <TextBlock x:Name="_artist_text" Grid.Row="1" 
                        TextTrimming="CharacterEllipsis" Foreground="{DynamicResource AltTextForegroundBrush}" FontWeight="Bold" FontSize="10" 
-                       Text="{Binding Artist}"
-                       MouseLeftButtonUp="_artist_text_MouseLeftButtonUp"/>
+                       ctrl:PlayerTrackDetails.NameCsv="{Binding Artists}">
+                <TextBlock.Resources>
+                    <Style TargetType="Run">
+                        <EventSetter Event="MouseLeftButtonDown" Handler="_artist_text_MouseLeftButtonUp"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+                            </Trigger>
+                            <Trigger Property="Tag" Value="{x:Null}">
+                                <Setter Property="TextBlock.TextDecorations" Value="None" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Resources>
+            </TextBlock>
         </StackPanel>
 
         <ctrl:PathButton 

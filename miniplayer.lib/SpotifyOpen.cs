@@ -12,13 +12,13 @@ namespace miniplayer.lib
     public class Spotify
     {
         const string SPOTIFY_APP_URI = "spotify://";
-        const string SPOTIFY_WEB_URI = "https://open.spotify.com/";
+        const string SPOTIFY_WEB_URI = "https://open.spotify.com";
         public static bool WindowsAppInstalled =>
             Registry.ClassesRoot.OpenSubKey("HKEY_CLASSES_ROOT\\spotify\\shell\\open\\command") != null;
 
         static Spotify()
         {
-            UseApp = WindowsAppInstalled;
+            UseApp = true; // WindowsAppInstalled;
         }
 
         public static bool UseApp { get; private set; }
@@ -32,35 +32,40 @@ namespace miniplayer.lib
         }
 
         private static Uri CreateWebUri(object o)
+        {
+            (string? type, string? id) = o switch
+            {
+                LinkableObject r => ( r.Type, r.Id ),
+                FullTrack r => ( r.Type.ToString(), r.Id ),
+                SimpleTrack r => ( r.Type.ToString(), r.Id ),
+                FullEpisode r => ( r.Type.ToString(), r.Id ),
+                SimpleEpisode r => ( r.Type.ToString(), r.Id ),
+                FullArtist r => ( r.Type, r.Id ),
+                SimpleArtist r => ( r.Type, r.Id ),
+                FullAlbum r => ( r.Type, r.Id ),
+                SimpleAlbum r => ( r.Type, r.Id ),
+                _ => (null,  null)
+            };
+
+            if (type != null && id != null)
+                return new Uri($"{SPOTIFY_WEB_URI}/{type}/{id}");
+            else
+                return new Uri(SPOTIFY_WEB_URI);
+        }
+
+        private static Uri CreateAppUri(object o)
             => new Uri(o switch
             {
-                FullTrack r => r.Href,
-                SimpleTrack r => r.Href,
-                FullEpisode r => r.Href,
-                SimpleEpisode r => r.Href,
-                FullArtist r => r.Href,
-                SimpleArtist r => r.Href,
-                FullAlbum r => r.Href,
-                SimpleAlbum r => r.Href,
-                _ => SPOTIFY_WEB_URI
+                LinkableObject r => r.Uri,
+                FullTrack r => r.Uri,
+                SimpleTrack r => r.Uri,
+                FullEpisode r => r.Uri,
+                SimpleEpisode r => r.Uri,
+                FullArtist r => r.Uri,
+                SimpleArtist r => r.Uri,
+                FullAlbum r => r.Uri,
+                SimpleAlbum r => r.Uri,
+                _ => SPOTIFY_APP_URI
             });
-
-        private static Regex URI_REGEX = new Regex(@"^spotify:(?!/)", RegexOptions.Compiled);
-        private static Uri CreateAppUri(object o)
-            => new Uri(
-                URI_REGEX.Replace(
-                    o switch
-                    {
-                        FullTrack r => r.Uri,
-                        SimpleTrack r => r.Uri,
-                        FullEpisode r => r.Uri,
-                        SimpleEpisode r => r.Uri,
-                        FullArtist r => r.Uri,
-                        SimpleArtist r => r.Uri,
-                        FullAlbum r => r.Uri,
-                        SimpleAlbum r => r.Uri,
-                        _ => SPOTIFY_APP_URI
-                    },
-                    "spotify://"));
     }
 }
