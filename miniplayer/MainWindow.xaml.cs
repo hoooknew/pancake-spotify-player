@@ -48,7 +48,7 @@ namespace miniplayer
             this.DataContext = _model;
         }
 
-        private async void CommandBinding_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        private async void PlayerCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
             if (!_commandExecuting)
             {
@@ -86,6 +86,22 @@ namespace miniplayer
             Authentication.SaveToken(token);
             if (token != null)
                 _model.SetToken(token);
+        }
+
+        private void SettingsCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            if (e.Command == SettingsCommands.ChangeTheme)
+            {
+                if (e.Parameter is string newTheme)
+                {
+                    if (Settings.Instance.Theme != newTheme)
+                    {
+                        (App.Current as App)!.SetTheme(newTheme);
+                        Settings.Instance.Theme = newTheme;
+                        Settings.Instance.Save();
+                    }
+                }
+            }
         }
     }
 }

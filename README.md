@@ -26,7 +26,7 @@
 - [ ] include at least part of the current playlist in the popover
 
 
-- [ ] add a settings right click that creates a user settings json in the app data folder
+- [x] add a settings right click that creates a user settings json in the app data folder
   - [x] add a settings feature to remember the last app position
     - [x] remember to only restore the position if the window is in the current screen dimensions.
   - [ ] add a settings feature to keep the app always on top

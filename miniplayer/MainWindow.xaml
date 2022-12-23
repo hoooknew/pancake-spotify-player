@@ -6,6 +6,7 @@
         xmlns:ctrl="clr-namespace:miniplayer.ui.controls"
         xmlns:cvt="clr-namespace:miniplayer.ui.converters"
         xmlns:ui="clr-namespace:miniplayer.ui"
+        xmlns:lib="clr-namespace:miniplayer.lib;assembly=miniplayer.lib"
         xmlns:mdl="clr-namespace:miniplayer.models"
         xmlns:local="clr-namespace:miniplayer"        
         mc:Ignorable="d"
@@ -18,33 +19,33 @@
     <Window.Resources>
         <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+        <cvt:IsEqualConverter x:Key="IsEqualConverter"/>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.SignIn}" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.Shuffle}" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipPrev}" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.PlayPause}" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipNext}" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" Executed="CommandBinding_Executed"/>
-        <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SignIn}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Shuffle}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipPrev}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.PlayPause}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipNext}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" Executed="PlayerCommand_Executed"/>
     </Window.CommandBindings>
     <Window.ContextMenu>
-        <ContextMenu x:Name="_menu" Style="{StaticResource MP_ContextMenuStyle}" IsOpen="False">
-            <ContextMenu.Resources>
-                <Style TargetType="Border">
-                    <Setter Property="Background" Value="Azure"/>
-                </Style>
-            </ContextMenu.Resources>
-            <MenuItem Header="Settings" IsSubmenuOpen="False">
+        <ContextMenu x:Name="_menu" Style="{StaticResource MP_ContextMenuStyle}">
+            <ContextMenu.CommandBindings>
+                <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeTheme}" Executed="SettingsCommand_Executed"/>
+            </ContextMenu.CommandBindings>
+            <MenuItem Header="Settings">
                 <MenuItem Header="Themes">
-                    <MenuItem Header="Light"/>
-                    <MenuItem Header="Dark" IsChecked="True"/>
+                    <MenuItem Header="Light" 
+                              Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
+                              CommandParameter="light"
+                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Converter={StaticResource IsEqualConverter}, ConverterParameter=light}"/>
+                    <MenuItem Header="Dark" 
+                              Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
+                              CommandParameter="dark" 
+                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Converter={StaticResource IsEqualConverter}, ConverterParameter=dark}"/>
                 </MenuItem>
-                <MenuItem Header="Zoom" IsEnabled="False">
-                    <MenuItem Header="100%" IsChecked="True"/>
-                    <MenuItem Header="125%" />
-                </MenuItem>
-                <MenuItem Header="Always on Top" IsCheckable="True" IsEnabled="False"/>
             </MenuItem>
         </ContextMenu>
     </Window.ContextMenu>

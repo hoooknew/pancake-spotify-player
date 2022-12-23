@@ -15,13 +15,13 @@ namespace miniplayer
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             //SaveDefaultTemplate();
-            SetTheme();
+            SetTheme(Settings.Instance.Theme);
 
             MainWindow = new MainWindow();
             MainWindow.Show();
         }
 
-        private void SetTheme()
+        public void SetTheme(string? theme)
         {
             var themeDic = this.Resources.MergedDictionaries
                             .Where(r => r.Source.ToString()
@@ -30,7 +30,7 @@ namespace miniplayer
 
             if (themeDic != null)
             {
-                switch (Settings.Instance.Theme?.ToLower())
+                switch (theme?.ToLower())
                 {
                     case "light":
                         themeDic.Source = new Uri("/themes/light.xaml", UriKind.Relative);
