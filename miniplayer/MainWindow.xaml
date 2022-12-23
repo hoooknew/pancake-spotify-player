@@ -16,10 +16,12 @@
         MinWidth="250"
         ui:WindowPosition.Save="WindowPosition"
         TextBlock.Foreground="{DynamicResource TextForegroundBrush}"
-        Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}">
+        Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"
+        ShowInTaskbar="{Binding TaskbarVisible, Mode=OneWay, Source={x:Static lib:Settings.Instance}}">
     <Window.Resources>
         <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+        <cvt:BoolToVisibilityConverter x:Key="hideShowConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
         <cvt:IsEqualConverter x:Key="IsEqualConverter"/>
     </Window.Resources>
     <Window.CommandBindings>
@@ -36,6 +38,9 @@
             <ContextMenu.CommandBindings>
                 <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeTheme}" Executed="SettingsCommand_Executed"/>
                 <CommandBinding Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" Executed="SettingsCommand_Executed"/>
+                <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowControls}" Executed="SettingsCommand_Executed"/>
+                <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowProgress}" Executed="SettingsCommand_Executed"/>
+                <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" Executed="SettingsCommand_Executed"/>
             </ContextMenu.CommandBindings>
             <MenuItem Header="Settings">
                 <MenuItem Header="Themes">
@@ -50,6 +55,17 @@
                 <MenuItem Header="Always On Top" 
                           Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
                           IsChecked="{Binding AlwaysOnTop, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+                <MenuItem Header="Show or Hide">
+                    <MenuItem Header="Controls" 
+                          Command="{x:Static ui:SettingsCommands.HideShowControls}" 
+                          IsChecked="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+                    <MenuItem Header="Progress" 
+                          Command="{x:Static ui:SettingsCommands.HideShowProgress}" 
+                          IsChecked="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+                    <MenuItem Header="Taskbar" 
+                          Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" 
+                          IsChecked="{Binding TaskbarVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+                </MenuItem>
             </MenuItem>
         </ContextMenu>
     </Window.ContextMenu>
@@ -70,9 +86,11 @@
                 </Grid.ColumnDefinitions>
 
                 <ctrl:PlayerTrackDetails Grid.Column="0" Margin="2"/>
-                <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,24,0"/>
+                <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,24,0" 
+                                     Visibility="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
             </Grid>
-            <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"/>
+            <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"
+                                    Visibility="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
         </Grid>
     </Grid>
 </ctrl:BaseWindow>

@@ -107,6 +107,21 @@ namespace miniplayer
                 Settings.Instance.AlwaysOnTop = !Settings.Instance.AlwaysOnTop;
                 Settings.Instance.Save();
             }
+            else if (e.Command == SettingsCommands.HideShowControls)
+            {
+                Settings.Instance.ControlsVisible = !Settings.Instance.ControlsVisible;
+                Settings.Instance.Save();
+            }
+            else if (e.Command == SettingsCommands.HideShowProgress)
+            {
+                Settings.Instance.ProgressVisible = !Settings.Instance.ProgressVisible;
+                Settings.Instance.Save();
+            }
+            else if (e.Command == SettingsCommands.HideShowTaskbar)
+            {
+                Settings.Instance.TaskbarVisible = !Settings.Instance.TaskbarVisible;
+                Settings.Instance.Save();
+            }
         }
     }
 }

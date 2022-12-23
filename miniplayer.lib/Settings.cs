@@ -49,6 +49,15 @@ namespace miniplayer.lib
         [AutoNotify]
         private bool _alwaysOnTop = false;
 
+        [AutoNotify]
+        private bool _controlsVisible = true;
+
+        [AutoNotify]
+        private bool _progressVisible = true;
+
+        [AutoNotify]
+        private bool _taskbarVisible = true;
+
         private static void CreateLocalAppFolder()
         {
             if (!Directory.Exists(Constants.LOCAL_APP_DATA))

@@ -32,10 +32,10 @@
   - [x] add a settings feature to keep the app always on top
   - [ ] have the option of responding into the windows media keys?
   - [ ] add a setting to zoom the whole window.
-  - [ ] option to show/hide progress bar
-  - [ ] option to show/hide controls
+  - [x] option to show/hide progress bar
+  - [x] option to show/hide controls
   - [ ] option to sign out
-  - [ ] add a setting top hide the window in the task bar
+  - [x] add a setting top hide the window in the task bar
 
 
 - [ ] if there isn't a spotify client open, show a UI that indicates the issue
