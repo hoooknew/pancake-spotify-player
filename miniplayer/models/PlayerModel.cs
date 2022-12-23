@@ -4,6 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
@@ -396,6 +397,12 @@ namespace miniplayer.models
                          e.Message == "Service unavailable")
                     {
                         //fail silently
+                        break;
+                    }
+                    catch (HttpRequestException e) when
+                        (e.Message == "No such host is known. (api.spotify.com:443)")
+                    {
+                        //should we have a no connection state?
                         break;
                     }
                     /* the client blew up on some ssl exception at some point, 

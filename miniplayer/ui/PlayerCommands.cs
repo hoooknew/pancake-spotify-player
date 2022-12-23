@@ -16,5 +16,6 @@ namespace miniplayer.ui
         public static readonly RoutedCommand SkipNext = new RoutedCommand("player_skip_next", typeof(PlayerCommands));
         public static readonly RoutedCommand Repeat = new RoutedCommand("player_repeat", typeof(PlayerCommands));
         public static readonly RoutedCommand Favorite = new RoutedCommand("player_favorite", typeof(PlayerCommands));
+        public static readonly RoutedCommand OpenInSpotify = new RoutedCommand("player_open_in_spotify", typeof(PlayerCommands));
     }
 }

@@ -115,3 +115,7 @@ https://github.com/vb2ae/WPFLightDarkMode
 
 ## Linking to spotify content
 https://developer.spotify.com/documentation/general/guides/content-linking-guide/
+https://medium.com/swlh/custom-protocol-handling-how-to-8ac41ff651eb
+`HKEY_CLASSES_ROOT\spotify\shell\open\command`
+`https://open.spotify.com/`
+`spotify://`

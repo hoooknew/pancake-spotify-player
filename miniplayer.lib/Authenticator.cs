@@ -72,10 +72,10 @@ namespace miniplayer.lib
                         }
                     };
 
-                    Uri uri = request.ToUri();
+                    var uri = request.ToUri();
                     try
                     {
-                        Process.Start(new ProcessStartInfo(uri.AbsoluteUri) { UseShellExecute = true });
+                        uri.CallWithShell();
                     }
                     catch (Exception)
                     {
@@ -106,6 +106,7 @@ namespace miniplayer.lib
                 }
             }
         }
+
         public static IAuthenticator CreateAuthenticator(IRefreshableToken? token)
         {
             var authenticator = new PKCEAuthenticator(Config.ClientId!, (token as PKCETokenResponse)!);

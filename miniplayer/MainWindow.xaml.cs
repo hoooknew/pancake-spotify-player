@@ -139,5 +139,10 @@ namespace miniplayer
                 }                
             }
         }
+
+        private void OpenInSpotify_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        {
+            Spotify.Open(e.Parameter);
+        }
     }
 }

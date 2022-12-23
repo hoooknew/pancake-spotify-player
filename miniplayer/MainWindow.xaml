@@ -30,6 +30,7 @@
         <CommandBinding Command="{x:Static ui:PlayerCommands.SkipNext}" Executed="PlayerCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" Executed="PlayerCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.OpenInSpotify}" Executed="OpenInSpotify_Executed"/>
     </Window.CommandBindings>
     <Window.ContextMenu>
         <ContextMenu x:Name="_menu" Style="{StaticResource MP_ContextMenuStyle}">
