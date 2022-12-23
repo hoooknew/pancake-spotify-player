@@ -458,12 +458,11 @@
                     <ColumnDefinition MinWidth="24"
                                       Width="Auto"
                                       SharedSizeGroup="MenuItemIconColumnGroup"/>
-                    <ColumnDefinition Width="4"/>
+                    <ColumnDefinition Width="13"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="37"/>
-                    <ColumnDefinition Width="Auto"
-                                      SharedSizeGroup="MenuItemIGTColumnGroup"/>
-                    <ColumnDefinition Width="17"/>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="MenuItemIGTColumnGroup"/>
+                    <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <!-- Glyph -->
                 <ContentPresenter x:Name="Icon"
