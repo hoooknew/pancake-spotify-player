@@ -1,6 +1,8 @@
 ﻿using miniplayer.lib;
+using Newtonsoft.Json.Linq;
 using SpotifyAPI.Web;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -72,18 +74,18 @@ namespace miniplayer.models
             }
         }
         public string Title => _context.GetTrack()?.Name ?? _context.GetEpisode()?.Name ?? "";
-        public string Artist
+        public IEnumerable<LinkableObjectModel> Artists
         {
             get
             {
                 var track = _context.GetTrack();
                 var episode = _context.GetEpisode();
                 if (track != null)
-                    return string.Join(", ", track.Artists.Select(r => r.Name));
+                    return track.Artists.Select(r => (LinkableObjectModel)r);
                 else if (episode != null)
-                    return episode.Show.Name;
+                    return new[] { (LinkableObjectModel)episode.Show };
                 else
-                    return "";
+                    return Enumerable.Empty<LinkableObjectModel>();
             }
         }
         public bool? IsFavorite

@@ -43,12 +43,15 @@
                     </Style.Triggers>
                 </Style>
             </StackPanel.Resources>
+
             <TextBlock x:Name="_title_text" 
                        FontWeight="DemiBold" TextTrimming="CharacterEllipsis" 
-                       Text="{Binding Title}"/>
+                       Text="{Binding Title}" 
+                       MouseLeftButtonUp="_title_text_MouseLeftButtonUp"/>
             <TextBlock x:Name="_artist_text" Grid.Row="1" 
                        TextTrimming="CharacterEllipsis" Foreground="{DynamicResource AltTextForegroundBrush}" FontWeight="Bold" FontSize="10" 
-                       Text="{Binding Artist}"/>
+                       Text="{Binding Artist}"
+                       MouseLeftButtonUp="_artist_text_MouseLeftButtonUp"/>
         </StackPanel>
 
         <ctrl:PathButton 

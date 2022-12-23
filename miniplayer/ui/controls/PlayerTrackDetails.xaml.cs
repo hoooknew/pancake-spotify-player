@@ -1,4 +1,5 @@
-﻿using System;
+﻿using miniplayer.models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,22 @@ namespace miniplayer.ui.controls
         public PlayerTrackDetails()
         {
             InitializeComponent();
+        }
+
+        private void _title_text_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (this.DataContext is PlayerModel model)
+            {
+                PlayerCommands.OpenInSpotify.Execute(null, this);
+            }
+        }
+
+        private void _artist_text_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (this.DataContext is PlayerModel model)
+            {
+                PlayerCommands.OpenInSpotify.Execute(null, this);
+            }
         }
     }
 }

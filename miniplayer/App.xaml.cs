@@ -17,7 +17,7 @@ namespace miniplayer
             //SaveDefaultTemplate();
             SetTheme(Settings.Instance.Theme);
 
-            MainWindow = new MainWindow();
+            MainWindow = new TestWindow();
             MainWindow.Show();
         }
 
