@@ -15,8 +15,8 @@ namespace miniplayer
         {
             SetTheme();
 
-            var w = new MainWindow();
-            w.Show();
+            MainWindow = new MainWindow();
+            MainWindow.Show();
         }
 
         private void SetTheme()
