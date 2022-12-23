@@ -90,6 +90,7 @@
                               IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=light}"/>
                     <MenuItem Header="Dark" 
                               Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
+                              CommandParameter="dark"
                               IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=dark}"/>
                 </MenuItem>
             </MenuItem>
