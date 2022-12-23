@@ -112,3 +112,6 @@ https://engy.us/blog/2018/10/20/dark-theme-in-wpf/
 
 https://github.com/AaronAmberman/WPF.Themes
 https://github.com/vb2ae/WPFLightDarkMode
+
+## Linking to spotify content
+https://developer.spotify.com/documentation/general/guides/content-linking-guide/
