@@ -38,8 +38,8 @@
   - [x] add a setting top hide the window in the task bar
 
 
-- [ ] if there isn't a spotify client open, show a UI that indicates the issue
-- [ ] offer a button to launch the desktop client?
+- [x] if there isn't a spotify client open, show a UI that indicates the issue
+- [x] offer a button to launch the desktop client?
 
 
 - [ ] built an installer
