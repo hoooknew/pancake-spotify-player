@@ -56,6 +56,7 @@ namespace miniplayer.models
         private int _positionMs = 0;
         private bool? _isFavorite = null;
         private bool _enableControls = true;
+        private bool _clientAvailable = true;
 
         public PlayerModel(Dispatcher dispatcher)
         {
@@ -114,6 +115,18 @@ namespace miniplayer.models
         }
         public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
         public IPlayableItem? CurrentlyPlaying => _context?.Item;
+        public bool ClientAvailable
+        {
+            get => _clientAvailable;
+            private set
+            {
+                if (_clientAvailable != value)
+                {
+                    _clientAvailable = value;
+                    _OnPropertyChanged(nameof(ClientAvailable));
+                }
+            }
+        }
 
         public bool EnableControls
         {
@@ -150,7 +163,7 @@ namespace miniplayer.models
                 else
                     await this._client!.Player.ResumePlayback();
 
-                await RefreshStateUtil(r => r.PlayPause);
+                await RefreshStateUntil(r => r.PlayPause);
             });
         }
         public async Task<bool> SkipNext()
@@ -159,7 +172,7 @@ namespace miniplayer.models
             {
                 _StopUpdates();
                 await this._client!.Player.SkipNext();
-                await RefreshStateUtil(r => r.Track);
+                await RefreshStateUntil(r => r.Track);
                 _StartUpdates();
             });
         }
@@ -170,13 +183,13 @@ namespace miniplayer.models
                 if (Position < 3000)
                 {
                     await this._client!.Player.SkipPrevious();
-                    await RefreshStateUtil(r => r.Track);
+                    await RefreshStateUntil(r => r.Track);
                 }
                 else
                 {
                     _StopUpdates();
                     await this._client!.Player.SeekTo(new PlayerSeekToRequest(0));
-                    await RefreshStateUtil(r => r.Position);
+                    await RefreshStateUntil(r => r.Position);
                     _StartUpdates();
                 }
             });
@@ -186,7 +199,7 @@ namespace miniplayer.models
             return await _TryApiCall(async () =>
             {
                 await this._client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
-                await RefreshStateUtil(r => r.Shuffle);
+                await RefreshStateUntil(r => r.Shuffle);
             });
         }
         public async Task<bool> ToggleRepeat()
@@ -209,7 +222,7 @@ namespace miniplayer.models
                 }
 
                 await this._client!.Player.SetRepeat(new PlayerSetRepeatRequest(nextState));
-                await RefreshStateUtil(r => r.Repeat);
+                await RefreshStateUntil(r => r.Repeat);
             });
         }
         public async Task<bool> ToggleFavorite()
@@ -285,11 +298,16 @@ namespace miniplayer.models
                     {
                         await Task.Delay(60_000);
                     }
+                    catch (APIException e) when
+                        (e.Message == "Player command failed: No active device found")
+                    {
+                        ClientAvailable = false;
+                    }
                 }
             });
         }
 
-        private async Task<bool> RefreshStateUtil(Func<ChangedState, bool> stateChanged)
+        private async Task<bool> RefreshStateUntil(Func<ChangedState, bool> stateChanged)
         {
             await Task.Delay(250);
             for (int i = 0; i < 3; i++)
@@ -311,6 +329,8 @@ namespace miniplayer.models
                 {
                     var oldContext = _context;
                     _context = await this._client!.Player.GetCurrentPlayback(cancelToken);
+
+                    ClientAvailable = _context != null;
 
                     var changed = ChangedState.Compare(oldContext, _context);
 
@@ -385,6 +405,9 @@ namespace miniplayer.models
                     try
                     {
                         await a();
+
+                        ClientAvailable = true;
+
                         return true;
                     }
                     catch (APITooManyRequestsException e)
@@ -395,11 +418,16 @@ namespace miniplayer.models
                     {
                         //retry
                     }
-                    catch(APIException e) when 
-                        (e.Message == "Player command failed: No active device found" ||
-                         e.Message == "Service unavailable")
+                    catch (APIException e) when
+                        (e.Message == "Service unavailable")
                     {
                         //fail silently
+                        break;
+                    }
+                    catch (APIException e) when
+                        (e.Message == "Player command failed: No active device found")
+                    {
+                        ClientAvailable = false;
                         break;
                     }
                     catch (HttpRequestException e) when
@@ -431,7 +459,7 @@ namespace miniplayer.models
         {
             SignOut();
             _OnApiError(e);
-        }        
+        }
 
         private void _OnPropertyChanged(string propertyName)
             => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

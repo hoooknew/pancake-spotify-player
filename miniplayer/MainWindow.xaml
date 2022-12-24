@@ -18,7 +18,7 @@
         Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"
         ShowInTaskbar="{Binding TaskbarVisible, Mode=OneWay, Source={x:Static lib:Settings.Instance}}">
     <Window.Resources>
-        <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Hidden" FalseVisibility="Visible"/>
+        <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Collapsed" FalseVisibility="Visible"/>
         <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
         <cvt:BoolToVisibilityConverter x:Key="hideShowConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
     </Window.Resources>
@@ -108,11 +108,8 @@
                 ScaleX="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}" 
                 ScaleY="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"/>
         </Grid.LayoutTransform>
-        <ctrl:SignIn Grid.Column="1" 
-                     Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
 
-        <Grid x:Name="ui_grid" Grid.Column="1" 
-              Visibility="{Binding NeedToken, Converter={StaticResource uiConverter}, FallbackValue=Hidden}">
+        <Grid x:Name="ui_grid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -130,5 +127,8 @@
             <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"
                                     Visibility="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
         </Grid>
+
+        <ctrl:NoClient Visibility="{Binding ClientAvailable, Converter={StaticResource uiConverter}, FallbackValue=Visible}"/>
+        <ctrl:SignIn Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
     </Grid>
 </ctrl:BaseWindow>
