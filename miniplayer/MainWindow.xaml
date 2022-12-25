@@ -18,9 +18,14 @@
         Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"
         ShowInTaskbar="{Binding TaskbarVisible, Mode=OneWay, Source={x:Static lib:Settings.Instance}}">
     <Window.Resources>
-        <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Collapsed" FalseVisibility="Visible"/>
-        <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
-        <cvt:BoolToVisibilityConverter x:Key="hideShowConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ui/controls/SettingsMenu.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Collapsed" FalseVisibility="Visible"/>
+            <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+            <cvt:BoolToVisibilityConverter x:Key="hideShowConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+        </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static ui:PlayerCommands.SignIn}" Executed="PlayerCommand_Executed"/>
@@ -40,65 +45,7 @@
         <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeZoom}" Executed="SettingsCommand_Executed"/>
     </Window.CommandBindings>
     <Window.ContextMenu>
-        <ContextMenu x:Name="_menu" Style="{StaticResource MP_ContextMenuStyle}">
-            <ContextMenu.Resources>
-                <cvt:IsEqualConverter x:Key="IsEqualConverter"/>
-                <s:Boolean x:Key="False">False</s:Boolean>
-                <s:Double x:Key="scale100">1.0</s:Double>
-                <s:Double x:Key="scale125">1.25</s:Double>
-                <s:Double x:Key="scale150">1.5</s:Double>
-                <s:Double x:Key="scale200">2.0</s:Double>
-            </ContextMenu.Resources>
-            <MenuItem Header="Settings">
-                <MenuItem Header="Always On Top" 
-                          Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
-                          IsChecked="{Binding AlwaysOnTop, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-                <MenuItem Header="Zoom">
-                    <MenuItem Header="100%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale100}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale100}"/>
-                    <MenuItem Header="125%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale125}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale125}"/>
-                    <MenuItem Header="150%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale150}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale150}"/>
-                    <MenuItem Header="200%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale200}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale200}"/>
-                </MenuItem>
-                <MenuItem Header="Show or Hide">
-                    <MenuItem Header="Controls" 
-                          Command="{x:Static ui:SettingsCommands.HideShowControls}" 
-                          IsChecked="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-                    <MenuItem Header="Progress" 
-                          Command="{x:Static ui:SettingsCommands.HideShowProgress}" 
-                          IsChecked="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-                    <MenuItem Header="Taskbar" 
-                          Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" 
-                          IsChecked="{Binding TaskbarVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-                </MenuItem>
-                <MenuItem Header="Themes">
-                    <MenuItem Header="Light" 
-                              Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
-                              CommandParameter="light"
-                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=light}"/>
-                    <MenuItem Header="Dark" 
-                              Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
-                              CommandParameter="dark"
-                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=dark}"/>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="Account">
-                <MenuItem Header="Sign Out" 
-                          IsEnabled="{Binding NeedToken, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource False}}"
-                          Command="{x:Static ui:SettingsCommands.SignOut}"/>
-            </MenuItem>
-        </ContextMenu>
+        <StaticResource ResourceKey="SettingsMenu"/>
     </Window.ContextMenu>
     <Grid>
         <Grid.LayoutTransform>
