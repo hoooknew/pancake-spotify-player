@@ -31,6 +31,13 @@
         <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" Executed="PlayerCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" Executed="PlayerCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:PlayerCommands.OpenInSpotify}" Executed="OpenInSpotify_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeTheme}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowControls}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowProgress}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.SignOut}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeZoom}" Executed="SettingsCommand_Executed"/>
     </Window.CommandBindings>
     <Window.ContextMenu>
         <ContextMenu x:Name="_menu" Style="{StaticResource MP_ContextMenuStyle}">
@@ -42,15 +49,6 @@
                 <s:Double x:Key="scale150">1.5</s:Double>
                 <s:Double x:Key="scale200">2.0</s:Double>
             </ContextMenu.Resources>
-            <ContextMenu.CommandBindings>
-                <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeTheme}" Executed="SettingsCommand_Executed"/>
-                <CommandBinding Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" Executed="SettingsCommand_Executed"/>
-                <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowControls}" Executed="SettingsCommand_Executed"/>
-                <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowProgress}" Executed="SettingsCommand_Executed"/>
-                <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" Executed="SettingsCommand_Executed"/>
-                <CommandBinding Command="{x:Static ui:SettingsCommands.SignOut}" Executed="SettingsCommand_Executed"/>
-                <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeZoom}" Executed="SettingsCommand_Executed"/>
-            </ContextMenu.CommandBindings>
             <MenuItem Header="Settings">
                 <MenuItem Header="Always On Top" 
                           Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
