@@ -120,3 +120,10 @@ https://medium.com/swlh/custom-protocol-handling-how-to-8ac41ff651eb
 `HKEY_CLASSES_ROOT\spotify\shell\open\command`
 `https://open.spotify.com/`
 `spotify://`
+
+## Building in Actions
+https://github.com/microsoft/github-actions-for-desktop-apps/blob/lance/net6-update/.github/workflows/ci-net6-temp.yml
+https://github.com/microsoft/github-actions-for-desktop-apps/blob/lance/net6-update/.github/workflows/cd-net6-temp.yml
+
+## Distributing with MSIX
+https://montemagno.com/distributing-a-net-core-3-wpf-and-winforms-app-with-msix/
