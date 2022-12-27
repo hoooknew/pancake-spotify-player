@@ -1,0 +1,79 @@
+﻿<ctrl:BaseWindow x:Class="pancake.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctrl="clr-namespace:pancake.ui.controls"
+        xmlns:cvt="clr-namespace:pancake.ui.converters"
+        xmlns:ui="clr-namespace:pancake.ui"
+        xmlns:lib="clr-namespace:pancake.lib;assembly=pancake.lib"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        SizeToContent="Height"
+        Title="MainWindow" Height="80" Width="400"
+        BorderThickness="1"
+        MinWidth="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance},Converter={StaticResource MultiplyDoublesConverter}, ConverterParameter={StaticResource 1xMinWidth}}"
+        ui:WindowPosition.Save="WindowPosition"
+        TextBlock.Foreground="{DynamicResource TextForegroundBrush}"
+        Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"
+        ShowInTaskbar="{Binding TaskbarVisible, Mode=OneWay, Source={x:Static lib:Settings.Instance}}">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ui/controls/SettingsMenu.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <cvt:BoolToVisibilityConverter x:Key="uiConverter" TrueVisibility="Collapsed" FalseVisibility="Visible"/>
+            <cvt:BoolToVisibilityConverter x:Key="signinConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+            <cvt:BoolToVisibilityConverter x:Key="hideShowConverter" TrueVisibility="Visible" FalseVisibility="Collapsed"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SignIn}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Shuffle}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipPrev}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.PlayPause}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.SkipNext}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Repeat}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.Favorite}" Executed="PlayerCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:PlayerCommands.OpenInSpotify}" Executed="OpenInSpotify_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeTheme}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowControls}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowProgress}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.SignOut}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeZoom}" Executed="SettingsCommand_Executed"/>
+    </Window.CommandBindings>
+    <Window.ContextMenu>
+        <StaticResource ResourceKey="SettingsMenu"/>
+    </Window.ContextMenu>
+    <Grid>
+        <Grid.LayoutTransform>
+            <ScaleTransform 
+                ScaleX="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}" 
+                ScaleY="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"/>
+        </Grid.LayoutTransform>
+
+        <Grid x:Name="ui_grid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ctrl:PlayerTrackDetails Grid.Column="0" Margin="2"/>
+                <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,24,0" 
+                                     Visibility="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
+            </Grid>
+            <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"
+                                    Visibility="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
+        </Grid>
+
+        <ctrl:NoClient Visibility="{Binding ClientAvailable, Converter={StaticResource uiConverter}, FallbackValue=Visible}"/>
+        <ctrl:SignIn Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
+    </Grid>
+</ctrl:BaseWindow>
