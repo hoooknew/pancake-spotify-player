@@ -63,6 +63,7 @@
 - [ ] the clickable area for the title box includes the black space to the right.
 - [ ] the border on the bottom is missing.
 - [ ] close button is missing on the sign in screen
+- [ ] rename app on the spotify dev site
 
 ## times to update the state
 
