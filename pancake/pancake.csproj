@@ -5,7 +5,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>pancake.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="pancake.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SpotifyAPI.Web" Version="7.0.0" />
