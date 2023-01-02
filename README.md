@@ -62,7 +62,7 @@
 - [ ] the clickable area for the title box includes the black space to the right.
 - [x] the border on the bottom is missing at 125% zoom.
 - [x] close button is missing on the sign in screen
-- [ ] rename app on the spotify dev site
+- [x] rename app on the spotify dev site
 
 ## times to update the state
 
@@ -77,6 +77,7 @@ as time ticks
 
 ## References
 [Getting a Client Id](https://support.heateor.com/get-spotify-client-id-client-secret/)
+https://developer.spotify.com/dashboard/applications
 [Getting an access and refresh token](https://github.com/JohnnyCrazy/SpotifyAPI-NET/blob/master/SpotifyAPI.Web.Examples/Example.TokenSwap/Client/Program.cs)
 [Getting Started with SpotifyAPI-NET](https://johnnycrazy.github.io/SpotifyAPI-NET/docs/getting_started)
 https://johnnycrazy.github.io/SpotifyAPI-NET/docs/pkce
