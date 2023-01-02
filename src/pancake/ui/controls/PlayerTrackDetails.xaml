@@ -38,7 +38,7 @@
             <TextBlock x:Name="_title_text" 
                        FontWeight="DemiBold" TextTrimming="CharacterEllipsis" 
                        Text="{Binding Title}" 
-                       MouseLeftButtonDown="_title_text_MouseLeftButtonDown">
+                       MouseLeftButtonUp="_title_text_MouseLeftButtonUp">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                         <Style.Triggers>
@@ -55,7 +55,7 @@
                        ctrl:PlayerTrackDetails.NameCsv="{Binding Artists}">
                 <TextBlock.Resources>
                     <Style TargetType="Run">
-                        <EventSetter Event="MouseLeftButtonDown" Handler="_artist_text_MouseLeftButtonDown"/>
+                        <EventSetter Event="MouseLeftButtonUp" Handler="_artist_text_MouseLeftButtonUp"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="TextBlock.TextDecorations" Value="Underline" />

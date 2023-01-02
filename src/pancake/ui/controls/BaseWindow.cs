@@ -46,9 +46,16 @@ namespace pancake.ui.controls
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
-                this.DragMove();
+                this.MouseMove += BaseWindow_MouseMove;
         }
 
+        private void BaseWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            this.MouseMove -= BaseWindow_MouseMove;
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+                this.DragMove();            
+        }
 
         private void Resize_Init(object sender, MouseButtonEventArgs e)
         {
