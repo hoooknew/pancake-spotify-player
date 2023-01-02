@@ -1,19 +1,14 @@
 ﻿using Newtonsoft.Json;
 using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace pancake.lib
 {
     public static class Authentication
     {
         private static readonly string _credentialsPath = Path.Combine(Constants.LOCAL_APP_DATA, @"credentials.json");
-        
+
         public static async Task<IRefreshableToken?> Login()
         {
             if (string.IsNullOrEmpty(Config.ClientId))
@@ -21,7 +16,7 @@ namespace pancake.lib
                   "Please set SPOTIFY_CLIENT_ID via environment variables before starting the program"
                 );
 
-            using (EmbedIOAuthServer server = new EmbedIOAuthServer(new Uri("http://localhost:3000/auth/callback"), 3000))
+            using (EmbedIOAuthServer server = new EmbedIOAuthServer(new Uri("http://localhost:3000/auth/callback"), 3000, Assembly.GetExecutingAssembly(), "pancake.lib.resources.default_site"))
             {
 
                 var (verifier, challenge) = PKCEUtil.GenerateCodes();
@@ -125,7 +120,7 @@ namespace pancake.lib
                 File.Delete(_credentialsPath);
             else
                 File.WriteAllText(_credentialsPath, JsonConvert.SerializeObject(token));
-        }        
+        }
 
         public static IRefreshableToken? LoadToken()
         {

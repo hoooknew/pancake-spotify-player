@@ -19,4 +19,10 @@
     <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.0.0" />
     <ProjectReference Include="..\autonotify\autonotify.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="resources\default_site\favicon.ico" />
+    <EmbeddedResource Include="resources\default_site\index.html" />
+    <EmbeddedResource Include="resources\default_site\logo.svg" />
+  </ItemGroup>
 </Project>
