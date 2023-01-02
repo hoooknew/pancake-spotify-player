@@ -62,7 +62,7 @@
 - [ ] change the artist and title clicks to mouse up so the drag to move can work on top of them.
 - [ ] the clickable area for the title box includes the black space to the right.
 - [ ] the border on the bottom is missing.
-- [ ] close button is missing on the sign in screen
+- [x] close button is missing on the sign in screen
 - [ ] rename app on the spotify dev site
 
 ## times to update the state

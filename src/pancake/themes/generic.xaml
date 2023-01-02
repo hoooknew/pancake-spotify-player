@@ -22,6 +22,13 @@
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}">
             <Grid>
+                <AdornerDecorator>
+                    <ContentPresenter/>
+                </AdornerDecorator>
+
+                <Rectangle x:Name="PART_leftSizeGrip" Style="{StaticResource ResizeGripStyle}"  HorizontalAlignment="Left"/>
+                <Rectangle x:Name="PART_rightSizeGrip" Style="{StaticResource ResizeGripStyle}" HorizontalAlignment="Right"/>
+
                 <ctrl:PathButton x:Name="PART_closeBtn" 
                                  Grid.ColumnSpan="3" 
                                  PathData="{DynamicResource geo_close}" 
@@ -31,12 +38,6 @@
                                  Margin="0,4,4,0"
                                  VerticalAlignment="Top"
                                  HorizontalAlignment="Right"/>
-
-                <Rectangle x:Name="PART_leftSizeGrip" Style="{StaticResource ResizeGripStyle}"  HorizontalAlignment="Left"/>
-                <Rectangle x:Name="PART_rightSizeGrip" Style="{StaticResource ResizeGripStyle}" HorizontalAlignment="Right"/>
-                <AdornerDecorator>
-                    <ContentPresenter/>
-                </AdornerDecorator>
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
