@@ -62,6 +62,7 @@
 - [ ] change the artist and title clicks to mouse up so the drag to move can work on top of them.
 - [ ] the clickable area for the title box includes the black space to the right.
 - [ ] the border on the bottom is missing.
+- [ ] close button is missing on the sign in screen
 
 ## times to update the state
 
@@ -132,6 +133,10 @@ https://github.com/microsoft/github-actions-for-desktop-apps/blob/lance/net6-upd
 https://montemagno.com/distributing-a-net-core-3-wpf-and-winforms-app-with-msix/
 Wix3
 https://wixtoolset.org/docs/v3/msbuild/authoring_first_msbuild_project/
+
+## MSI's with Advanced Installer
+The free version is enough, but it unfortunately won't install [.net 6](https://download.visualstudio.microsoft.com/download/pr/0a672516-37fb-40de-8bef-725975e0b137/a632cde8d629f9ba9c12196f7e7660db/dotnet-sdk-6.0.404-win-x64.exe
+) automatically.
 
 ## LOGO
 https://redketchup.io/icon-editor
