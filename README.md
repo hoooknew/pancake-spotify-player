@@ -61,7 +61,7 @@
 - [ ] why don't the mouse up events trigger in the song and artist text boxes?
 - [ ] change the artist and title clicks to mouse up so the drag to move can work on top of them.
 - [ ] the clickable area for the title box includes the black space to the right.
-- [ ] the border on the bottom is missing.
+- [x] the border on the bottom is missing at 125% zoom.
 - [x] close button is missing on the sign in screen
 - [ ] rename app on the spotify dev site
 

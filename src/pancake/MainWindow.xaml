@@ -11,7 +11,7 @@
         mc:Ignorable="d"
         SizeToContent="Height"
         Title="MainWindow" Height="80" Width="400"
-        BorderThickness="1"
+        BorderThickness="0"
         MinWidth="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance},Converter={StaticResource MultiplyDoublesConverter}, ConverterParameter={StaticResource 1xMinWidth}}"
         ui:WindowPosition.Save="WindowPosition"
         TextBlock.Foreground="{DynamicResource TextForegroundBrush}"
@@ -47,33 +47,35 @@
     <Window.ContextMenu>
         <StaticResource ResourceKey="SettingsMenu"/>
     </Window.ContextMenu>
-    <Grid>
-        <Grid.LayoutTransform>
+    <Border BorderBrush="{DynamicResource DefaultBorderBrush}" BorderThickness="1">
+        <Border.LayoutTransform>
             <ScaleTransform 
                 ScaleX="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}" 
                 ScaleY="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"/>
-        </Grid.LayoutTransform>
+        </Border.LayoutTransform>
 
-        <Grid x:Name="ui_grid">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="auto"/>
-                </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid x:Name="ui_grid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <ctrl:PlayerTrackDetails Grid.Column="0" Margin="2"/>
-                <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,24,0" 
+                    <ctrl:PlayerTrackDetails Grid.Column="0" Margin="2"/>
+                    <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,24,0" 
                                      Visibility="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
-            </Grid>
-            <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"
+                </Grid>
+                <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"
                                     Visibility="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
+            </Grid>
+            <ctrl:NoClient Visibility="{Binding ClientAvailable, Converter={StaticResource uiConverter}, FallbackValue=Visible}"/>
+            <ctrl:SignIn Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
         </Grid>
 
-        <ctrl:NoClient Visibility="{Binding ClientAvailable, Converter={StaticResource uiConverter}, FallbackValue=Visible}"/>
-        <ctrl:SignIn Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
-    </Grid>
+    </Border>
 </ctrl:BaseWindow>
