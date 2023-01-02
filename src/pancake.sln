@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution 
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test", "test\test.csproj", "{930266A7-CAF4-4106-8DDE-336915283795}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake.lib", "pancake.lib\pancake.lib.csproj", "{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify.generator", "autonotify.generator\autonotify.generator.csproj", "{249F8718-7057-419A-8B51-8A2DF25DD309}"
@@ -32,10 +30,6 @@ Global
 		{4ACD6FB2-36B8-4FCC-913B-26761497B787}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ACD6FB2-36B8-4FCC-913B-26761497B787}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ACD6FB2-36B8-4FCC-913B-26761497B787}.Release|Any CPU.Build.0 = Release|Any CPU
-		{930266A7-CAF4-4106-8DDE-336915283795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{930266A7-CAF4-4106-8DDE-336915283795}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{930266A7-CAF4-4106-8DDE-336915283795}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{930266A7-CAF4-4106-8DDE-336915283795}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
