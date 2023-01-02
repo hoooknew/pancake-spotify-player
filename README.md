@@ -54,10 +54,9 @@
 - [ ] add the ability to skip to a new position in the track by clicking on the progress bar.
 
 - [ ] Put an icon on the window.
+- [ ] Put the track picture in the background or make a larger layout that includes the 
 
 # Bugs
-- [ ] there is a meaningful delay between when a state change in requested and when the changed state is available in the server. It tends to be less than 250ms. I think I need to verify the expected state change took place and retry otherwise.
-- [ ] retry on http errors
 - [x] change the artist and title clicks to mouse up so the drag to move can work on top of them.
 - [x] the clickable area for the title box includes the black space to the right.
 - [x] the border on the bottom is missing at 125% zoom.
