@@ -42,18 +42,18 @@
 - [x] offer a button to launch the desktop client?
 
 
-- [ ] built an installer
+- [x] built an installer
   - [ ] figure out a versioning pattern
 - [ ] create a github actions workflow to create releases
 - [ ] make a readme that explains the app functionality
   - [ ] is there anything inside worth explaining how it works?
-- [ ] style the auth callback page?
+- [x] style the auth callback page?
 
 - [ ] expose errors in the login to the user.
 
 - [ ] add the ability to skip to a new position in the track by clicking on the progress bar.
 
-- [ ] Put an icon on the window.
+- [x] Put an icon on the window.
 - [ ] Put the track picture in the background or make a larger layout that includes the 
 
 # Bugs
