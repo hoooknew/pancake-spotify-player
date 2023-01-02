@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="resources\default_site\main.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\autonotify.generator\autonotify.generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
@@ -24,5 +28,6 @@
     <EmbeddedResource Include="resources\default_site\favicon.ico" />
     <EmbeddedResource Include="resources\default_site\index.html" />
     <EmbeddedResource Include="resources\default_site\logo.svg" />
+    <EmbeddedResource Include="resources\default_site\main.css" />
   </ItemGroup>
 </Project>
