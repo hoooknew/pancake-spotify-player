@@ -50,6 +50,6 @@ namespace pancake
             System.Windows.Markup.XamlWriter.Save(control, sw);
             Clipboard.SetText(sw.ToString());
         }
-    }
 #endif
+    }
 }
