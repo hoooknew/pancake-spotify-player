@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<DOCUMENT Type="Advanced Installer" CreateVersion="20.2" version="20.2" Modules="simple" RootPath="." Language="en" Id="{9B72AD76-1D43-4B2F-843D-07753D6D4CB6}">
+  <COMPONENT cid="caphyon.advinst.msicomp.ProjectOptionsComponent">
+    <ROW Name="HiddenItems" Value="AppXProductDetailsComponent;AppXDependenciesComponent;AppXAppDetailsComponent;AppXVisualAssetsComponent;AppXCapabilitiesComponent;AppXAppDeclarationsComponent;AppXUriRulesComponent;FixupComponent;MsiXDiffComponent;MsixManifestEditorComponent"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
+    <ROW Property="AI_BITMAP_DISPLAY_MODE" Value="0"/>
+    <ROW Property="AI_CURRENT_YEAR" Value="2023" ValueLocId="-"/>
+    <ROW Property="AI_PACKAGING_TOOL" Value="Advanced Installer 20.2 build 2c3f1cf9" ValueLocId="-"/>
+    <ROW Property="AI_PREDEF_LCONDS_PROPS" Value="AI_DETECTED_ADMIN_USER;AI_DETECTED_DOTNET_CORE_VERSION"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_DISPLAY" MultiBuildValue="AnyCPU_Release:6.0" ValueLocId="-"/>
+    <ROW Property="AI_REQUIRED_DOTNET_CORE_VERSION" MultiBuildValue="AnyCPU_Release:6.0" ValueLocId="-"/>
+    <ROW Property="ALLUSERS" Value="1" MultiBuildValue="AnyCPU_Release:2"/>
+    <ROW Property="ARPCOMMENTS" Value="This installer database contains the logic and data required to install [|ProductName]." ValueLocId="*"/>
+    <ROW Property="ARPCONTACT" Value="https://github.com/hoooknew/pancake-spotify-player"/>
+    <ROW Property="ARPHELPLINK" Value="https://github.com/hoooknew/pancake-spotify-player"/>
+    <ROW Property="ARPPRODUCTICON" Value="pancake.exe" Type="8"/>
+    <ROW Property="ARPURLINFOABOUT" Value="https://github.com/hoooknew/pancake-spotify-player"/>
+    <ROW Property="Manufacturer" Value="hoooknew, GitHub"/>
+    <ROW Property="ProductCode" Value="1033:{F582016A-0456-424C-954B-EC9306AAD3A5} " Type="16"/>
+    <ROW Property="ProductLanguage" Value="1033"/>
+    <ROW Property="ProductName" Value="Pancake Player"/>
+    <ROW Property="ProductVersion" Value="1.0.0"/>
+    <ROW Property="REBOOT" MultiBuildValue="AnyCPU_Release:ReallySuppress"/>
+    <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
+    <ROW Property="UpgradeCode" Value="{3BC7EB82-1198-4D1A-8334-8ACCD87491C5}"/>
+    <ROW Property="WindowsType9X" MultiBuildValue="AnyCPU_Release:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsType9XDisplay" MultiBuildValue="AnyCPU_Release:Windows 9x/ME" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT" MultiBuildValue="AnyCPU_Release:Windows Vista x86, Windows Server 2008 x86, Windows 7 x86, Windows 8 x86, Windows 8.1 x86" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40" MultiBuildValue="AnyCPU_Release:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT40Display" MultiBuildValue="AnyCPU_Release:Windows NT 4.0" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50" MultiBuildValue="AnyCPU_Release:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT50Display" MultiBuildValue="AnyCPU_Release:Windows 2000" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5X" MultiBuildValue="AnyCPU_Release:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT5XDisplay" MultiBuildValue="AnyCPU_Release:Windows XP/2003" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT64" MultiBuildValue="AnyCPU_Release:Windows Vista x64, Windows Server 2008 x64, Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64, Windows Server 2012 R2 x64" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNT64Display" MultiBuildValue="AnyCPU_Release:Windows Vista x64, Windows Server 2008 x64, Windows 7 x64, Windows Server 2008 R2 x64, Windows 8 x64, Windows Server 2012 x64, Windows 8.1 x64, Windows Server 2012 R2 x64" ValueLocId="-"/>
+    <ROW Property="WindowsTypeNTDisplay" MultiBuildValue="AnyCPU_Release:Windows Vista x86, Windows Server 2008 x86, Windows 7 x86, Windows 8 x86, Windows 8.1 x86" ValueLocId="-"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
+    <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
+    <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
+    <ROW Component="AI_INSTALLPERUSER" ComponentId="{8883573E-5BE5-479A-A5D6-DAB9F98B99E5}" Directory_="APPDIR" Attributes="4" KeyPath="AI_INSTALLPERUSER" Options="1"/>
+    <ROW Component="APPDIR" ComponentId="{8A062CA9-17CB-4F14-9C3F-6EE236D1FB51}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="EmbedIO.dll" ComponentId="{EC0FE354-FFFD-4427-AB1C-E2FC3C10531D}" Directory_="APPDIR" Attributes="0" KeyPath="EmbedIO.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{912C4B0F-6D24-41B8-A171-D2FAB176F068}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{B9016104-E00A-4CD6-9A17-1A28A15EE217}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{8CE03B0A-055B-4F29-8DA4-B9CCB0085D01}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{900E2670-7D09-4F51-BD19-DBBA05802716}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{D3527322-8EC8-45B1-924E-B5007ED2A981}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{E0062F0F-3B1B-437A-9F54-3CE4811F6231}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{C005F95B-5024-41FC-8988-BC8BF69966C7}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{B809405B-1D99-4A0C-BB53-6241291EA9DF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{12896D6F-19DF-427F-892F-8720D029D2A8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="Newtonsoft.Json.dll" ComponentId="{16BF3C71-3CC8-49B5-91F6-299FA15849C8}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
+    <ROW Component="ProductInformation" ComponentId="{6F8B03DC-E519-494A-8492-25D2229AE3E8}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{B37D6972-11D6-4BB5-9B6A-6A11DA82DE51}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="SpotifyAPI.Web.Auth.dll" ComponentId="{DED69240-6FE9-4224-9BE2-D52DC63521F9}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.Auth.dll"/>
+    <ROW Component="SpotifyAPI.Web.dll" ComponentId="{556E8B0E-F11F-4A29-91EC-D875670CED59}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.dll"/>
+    <ROW Component="Swan.Lite.dll" ComponentId="{AABC1887-AF6B-41CF-9F77-8EA1D0C6105D}" Directory_="APPDIR" Attributes="0" KeyPath="Swan.Lite.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll_1" ComponentId="{3E9C3E8E-0FEB-4042-A21A-6D1D42016927}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_1"/>
+    <ROW Component="System.Text.Json.dll" ComponentId="{49CE60FE-E9F3-4440-8D36-DBF0DF7E302F}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
+    <ROW Component="appsettings.json" ComponentId="{2983A0C2-D996-48DC-8295-BD10B4C72801}" Directory_="APPDIR" Attributes="0" KeyPath="appsettings.json_1" Type="0"/>
+    <ROW Component="autonotify.dll" ComponentId="{93579159-9C08-4187-B806-CD3E904AC135}" Directory_="APPDIR" Attributes="0" KeyPath="autonotify.dll_1"/>
+    <ROW Component="pancake.dll_1" ComponentId="{F5ECA2C2-2D03-4C33-B9C3-E03F90AE526B}" Directory_="APPDIR" Attributes="0" KeyPath="pancake.dll_1"/>
+    <ROW Component="pancake.exe" ComponentId="{511B88CB-E93C-4F98-B0D8-6FFCE01814F6}" Directory_="APPDIR" Attributes="256" KeyPath="pancake.exe_1"/>
+    <ROW Component="pancake.lib.dll_1" ComponentId="{ECBC72A4-8851-4558-96E9-A53339A452FC}" Directory_="APPDIR" Attributes="0" KeyPath="pancake.lib.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
+    <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
+    <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
+    <ROW File="appsettings.json_1" Component_="appsettings.json" FileName="APPSET~1.JSO|appsettings.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\appsettings.json" SelfReg="false"/>
+    <ROW File="autonotify.dll_1" Component_="autonotify.dll" FileName="AUTONO~1.DLL|autonotify.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\autonotify.dll" SelfReg="false"/>
+    <ROW File="autonotify.pdb" Component_="autonotify.dll" FileName="AUTONO~1.PDB|autonotify.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\autonotify.pdb" SelfReg="false"/>
+    <ROW File="EmbedIO.dll" Component_="EmbedIO.dll" FileName="EmbedIO.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\EmbedIO.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~1.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICROS~2.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICROS~6.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICROS~7.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICROS~8.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
+    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Newtonsoft.Json.dll" SelfReg="false"/>
+    <ROW File="pancake.deps.json" Component_="appsettings.json" FileName="PANCAK~1.JSO|pancake.deps.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.deps.json" SelfReg="false"/>
+    <ROW File="pancake.dll_1" Component_="pancake.dll_1" FileName="pancake.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.dll" SelfReg="false"/>
+    <ROW File="pancake.exe_1" Component_="pancake.exe" FileName="pancake.exe" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="pancake.lib.dll" Component_="pancake.lib.dll_1" FileName="PANCAK~1.DLL|pancake.lib.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.lib.dll" SelfReg="false"/>
+    <ROW File="pancake.lib.pdb" Component_="pancake.lib.dll_1" FileName="PANCAK~1.PDB|pancake.lib.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.lib.pdb" SelfReg="false"/>
+    <ROW File="pancake.pdb" Component_="pancake.exe" FileName="pancake.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.pdb" SelfReg="false"/>
+    <ROW File="pancake.runtimeconfig.json" Component_="appsettings.json" FileName="PANCAK~2.JSO|pancake.runtimeconfig.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="SpotifyAPI.Web.Auth.dll" Component_="SpotifyAPI.Web.Auth.dll" FileName="SPOTIF~1.DLL|SpotifyAPI.Web.Auth.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\SpotifyAPI.Web.Auth.dll" SelfReg="false"/>
+    <ROW File="SpotifyAPI.Web.dll" Component_="SpotifyAPI.Web.dll" FileName="SPOTIF~2.DLL|SpotifyAPI.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\SpotifyAPI.Web.dll" SelfReg="false"/>
+    <ROW File="Swan.Lite.dll" Component_="Swan.Lite.dll" FileName="SWANLI~1.DLL|Swan.Lite.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Swan.Lite.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll_1" Component_="System.Text.Encodings.Web.dll_1" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~2.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Json.dll" SelfReg="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
+    <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
+    <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BootstrapperUISequenceComponent">
+    <ROW Action="AI_DetectSoftware" Sequence="151"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
+    <ROW BuildKey="AnyCPU_Release" BuildName="AnyCPU_Release" BuildOrder="1" BuildType="0" PackageFolder="bin" PackageFileName="pancake-[|ProductVersion]" Languages="en" InstallationType="4" UseLargeSchema="true"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.DictionaryComponent">
+    <ROW Path="&lt;AI_DICTS&gt;ui.ail"/>
+    <ROW Path="&lt;AI_DICTS&gt;ui_en.ail"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.FragmentComponent">
+    <ROW Fragment="CommonUI.aip" Path="&lt;AI_FRAGS&gt;CommonUI.aip"/>
+    <ROW Fragment="FolderDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\FolderDlg.aip"/>
+    <ROW Fragment="InstallTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\InstallTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceTypeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceTypeDlg.aip"/>
+    <ROW Fragment="MaintenanceWelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\MaintenanceWelcomeDlg.aip"/>
+    <ROW Fragment="SequenceDialogs.aip" Path="&lt;AI_THEMES&gt;classic\fragments\SequenceDialogs.aip"/>
+    <ROW Fragment="Sequences.aip" Path="&lt;AI_FRAGS&gt;Sequences.aip"/>
+    <ROW Fragment="StaticUIStrings.aip" Path="&lt;AI_FRAGS&gt;StaticUIStrings.aip"/>
+    <ROW Fragment="Themes.aip" Path="&lt;AI_FRAGS&gt;Themes.aip"/>
+    <ROW Fragment="UI.aip" Path="&lt;AI_THEMES&gt;classic\fragments\UI.aip"/>
+    <ROW Fragment="Validation.aip" Path="&lt;AI_FRAGS&gt;Validation.aip"/>
+    <ROW Fragment="VerifyRemoveDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRemoveDlg.aip"/>
+    <ROW Fragment="VerifyRepairDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\VerifyRepairDlg.aip"/>
+    <ROW Fragment="WelcomeDlg.aip" Path="&lt;AI_THEMES&gt;classic\fragments\WelcomeDlg.aip"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiAppSearchComponent">
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER"/>
+    <ROW Property="AI_INSTALLPERUSER" Signature_="AI_INSTALLPERUSER_1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiBinaryComponent">
+    <ROW Name="SoftwareDetector.dll" SourcePath="&lt;AI_CUSTACTS&gt;SoftwareDetector.dll"/>
+    <ROW Name="aicustact.dll" SourcePath="&lt;AI_CUSTACTS&gt;aicustact.dll"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiControlEventComponent">
+    <ROW Dialog_="WelcomeDlg" Control_="Next" Event="NewDialog" Argument="InstallTypeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="FolderDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="FolderDlg" Control_="Back" Event="NewDialog" Argument="InstallTypeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="MaintenanceWelcomeDlg" Control_="Next" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="99"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_MAINT" Ordering="198"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="202"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_INSTALL" Ordering="197"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="201"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_MAINT" Ordering="101"/>
+    <ROW Dialog_="CustomizeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="ChangeButton" Event="NewDialog" Argument="CustomizeDlg" Condition="AI_MAINT" Ordering="501"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceWelcomeDlg" Condition="AI_MAINT" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RemoveButton" Event="NewDialog" Argument="VerifyRemoveDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="1"/>
+    <ROW Dialog_="MaintenanceTypeDlg" Control_="RepairButton" Event="NewDialog" Argument="VerifyRepairDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="601"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Back" Event="NewDialog" Argument="MaintenanceTypeDlg" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="1"/>
+    <ROW Dialog_="VerifyRepairDlg" Control_="Repair" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Repair&quot;" Ordering="399" Options="1"/>
+    <ROW Dialog_="VerifyRemoveDlg" Control_="Remove" Event="EndDialog" Argument="Return" Condition="AI_MAINT AND InstallMode=&quot;Remove&quot;" Ordering="299" Options="1"/>
+    <ROW Dialog_="PatchWelcomeDlg" Control_="Next" Event="NewDialog" Argument="VerifyReadyDlg" Condition="AI_PATCH" Ordering="201"/>
+    <ROW Dialog_="ResumeDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_RESUME" Ordering="299"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Next" Event="NewDialog" Argument="FolderDlg" Condition="AI_INSTALL" Ordering="101"/>
+    <ROW Dialog_="InstallTypeDlg" Control_="Back" Event="NewDialog" Argument="WelcomeDlg" Condition="AI_INSTALL" Ordering="1"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Install" Event="EndDialog" Argument="Return" Condition="AI_PATCH" Ordering="199"/>
+    <ROW Dialog_="VerifyReadyDlg" Control_="Back" Event="NewDialog" Argument="PatchWelcomeDlg" Condition="AI_PATCH" Ordering="203"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
+    <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
+    <ROW Action="AI_AuthorSinglePackage" Type="1" Source="aicustact.dll" Target="AI_AuthorSinglePackage" WithoutSeq="true"/>
+    <ROW Action="AI_DOWNGRADE" Type="19" Target="4010"/>
+    <ROW Action="AI_DetectSoftware" Type="257" Source="SoftwareDetector.dll" Target="OnDetectSoftware"/>
+    <ROW Action="AI_DpiContentScale" Type="1" Source="aicustact.dll" Target="DpiContentScale"/>
+    <ROW Action="AI_EnableDebugLog" Type="321" Source="aicustact.dll" Target="EnableDebugLog"/>
+    <ROW Action="AI_InstallModeCheck" Type="1" Source="aicustact.dll" Target="UpdateInstallMode" WithoutSeq="true"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Type="65" Source="aicustact.dll" Target="PrepareUpgrade"/>
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Type="65" Source="aicustact.dll" Target="PreserveInstallType"/>
+    <ROW Action="AI_RESTORE_LOCATION" Type="65" Source="aicustact.dll" Target="RestoreLocation"/>
+    <ROW Action="AI_ResolveKnownFolders" Type="1" Source="aicustact.dll" Target="AI_ResolveKnownFolders"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Type="1" Source="aicustact.dll" Target="MixedAllUsersInstallLocation"/>
+    <ROW Action="AI_SHOW_LOG" Type="65" Source="aicustact.dll" Target="LaunchLogFile" WithoutSeq="true"/>
+    <ROW Action="AI_STORE_LOCATION" Type="51" Source="ARPINSTALLLOCATION" Target="[APPDIR]"/>
+    <ROW Action="SET_APPDIR" Type="307" Source="APPDIR" Target="[ProgramFilesFolder][Manufacturer]\[ProductName]" MultiBuildTarget="AnyCPU_Release:[AI_UserProgramFiles][Manufacturer]\[ProductName]"/>
+    <ROW Action="SET_SHORTCUTDIR" Type="307" Source="SHORTCUTDIR" Target="[ProgramMenuFolder][ProductName]"/>
+    <ROW Action="SET_TARGETDIR_TO_APPDIR" Type="51" Source="TARGETDIR" Target="[APPDIR]"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
+    <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="ProductInformation"/>
+    <ROW Feature_="MainFeature" Component_="EmbedIO.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="pancake.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+    <ROW Feature_="MainFeature" Component_="AI_INSTALLPERUSER"/>
+    <ROW Feature_="MainFeature" Component_="SpotifyAPI.Web.Auth.dll"/>
+    <ROW Feature_="MainFeature" Component_="SpotifyAPI.Web.dll"/>
+    <ROW Feature_="MainFeature" Component_="Swan.Lite.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="appsettings.json"/>
+    <ROW Feature_="MainFeature" Component_="autonotify.dll"/>
+    <ROW Feature_="MainFeature" Component_="pancake.exe"/>
+    <ROW Feature_="MainFeature" Component_="pancake.lib.dll_1"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
+    <ROW Name="pancake.exe" SourcePath="..\..\media\pancake.ico" Index="0"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstExSeqComponent">
+    <ROW Action="AI_DOWNGRADE" Condition="AI_NEWERPRODUCTFOUND AND (UILevel &lt;&gt; 5)" Sequence="210"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_STORE_LOCATION" Condition="(Not Installed) OR REINSTALL" Sequence="1501"/>
+    <ROW Action="AI_PREPARE_UPGRADE" Condition="AI_UPGRADE=&quot;No&quot; AND (Not Installed)" Sequence="1399"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiInstallUISequenceComponent">
+    <ROW Action="AI_PRESERVE_INSTALL_TYPE" Sequence="199"/>
+    <ROW Action="AI_RESTORE_LOCATION" Condition="APPDIR=&quot;&quot;" Sequence="749"/>
+    <ROW Action="AI_ResolveKnownFolders" Sequence="53"/>
+    <ROW Action="AI_DpiContentScale" Sequence="52"/>
+    <ROW Action="AI_EnableDebugLog" Sequence="51"/>
+    <ROW Action="AI_DetectSoftware" Sequence="101"/>
+    <ROW Action="AI_SETMIXINSTLOCATION" Sequence="748"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiLaunchConditionsComponent">
+    <ROW Condition="( Version9X OR ( NOT VersionNT64 ) OR ( VersionNT64 AND ((VersionNT64 &lt;&gt; 600) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 600) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 601) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 602) OR (MsiNTProductType = 1)) AND ((VersionNT64 &lt;&gt; 603) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT64 &lt;&gt; 603) OR (MsiNTProductType = 1)) ) )" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNT64Display]." DescriptionLocId="AI.LaunchCondition.NoSpecificNT64" IsPredefined="true" Builds="AnyCPU_Release"/>
+    <ROW Condition="( Version9X OR VersionNT64 OR ( VersionNT AND ((VersionNT &lt;&gt; 600) OR (MsiNTProductType &lt;&gt; 1)) AND ((VersionNT &lt;&gt; 600) OR (MsiNTProductType = 1)) AND (VersionNT &lt;&gt; 601) AND (VersionNT &lt;&gt; 602) AND (VersionNT &lt;&gt; 603) ) )" Description="[ProductName] cannot be installed on the following Windows versions: [WindowsTypeNTDisplay]." DescriptionLocId="AI.LaunchCondition.NoSpecificNT" IsPredefined="true" Builds="AnyCPU_Release"/>
+    <ROW Condition="((VersionNT &lt;&gt; 501) AND (VersionNT &lt;&gt; 502))" Description="[ProductName] cannot be installed on [WindowsTypeNT5XDisplay]." DescriptionLocId="AI.LaunchCondition.NoNT5X" IsPredefined="true" Builds="AnyCPU_Release"/>
+    <ROW Condition="(VersionNT &lt;&gt; 400)" Description="[ProductName] cannot be installed on [WindowsTypeNT40Display]." DescriptionLocId="AI.LaunchCondition.NoNT40" IsPredefined="true" Builds="AnyCPU_Release"/>
+    <ROW Condition="(VersionNT &lt;&gt; 500)" Description="[ProductName] cannot be installed on [WindowsTypeNT50Display]." DescriptionLocId="AI.LaunchCondition.NoNT50" IsPredefined="true" Builds="AnyCPU_Release"/>
+    <ROW Condition="AI_DETECTED_DOTNET_CORE_VERSION &gt;= AI_REQUIRED_DOTNET_CORE_VERSION" Description="[ProductName] cannot be installed on systems with .NET Core version lower than [AI_REQUIRED_DOTNET_CORE_DISPLAY]." DescriptionLocId="AI.LaunchCondition.DotNETCore" IsPredefined="true" Builds="AnyCPU_Release"/>
+    <ROW Condition="VersionNT" Description="[ProductName] cannot be installed on [WindowsType9XDisplay]." DescriptionLocId="AI.LaunchCondition.No9X" IsPredefined="true" Builds="AnyCPU_Release"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegLocatorComponent">
+    <ROW Signature_="AI_INSTALLPERUSER" Root="2" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="2"/>
+    <ROW Signature_="AI_INSTALLPERUSER_1" Root="1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Type="2"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiRegsComponent">
+    <ROW Registry="AI_INSTALLPERUSER" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="AI_INSTALLPERUSER" Value="[AI_INSTALLPERUSER]" Component_="AI_INSTALLPERUSER"/>
+    <ROW Registry="Manufacturer" Root="-1" Key="Software\[Manufacturer]" Name="\"/>
+    <ROW Registry="Path" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Path" Value="[APPDIR]" Component_="ProductInformation"/>
+    <ROW Registry="ProductName" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="\"/>
+    <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
+    <ROW Registry="UpgradeCode" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="\"/>
+    <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="pancake" Directory_="SHORTCUTDIR" Name="PANCAK~1|Pancake Player" Component_="pancake.exe" Target="[#pancake.exe_1]" Description="A flat set of media controls for Spotify." Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
+    <ATTRIBUTE name="UsedTheme" value="classic"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiUpgradeComponent">
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="0.0.1" VersionMax="[|ProductVersion]" Attributes="257" ActionProperty="OLDPRODUCTS"/>
+    <ROW UpgradeCode="[|UpgradeCode]" VersionMin="[|ProductVersion]" Attributes="2" ActionProperty="AI_NEWERPRODUCTFOUND"/>
+  </COMPONENT>
+</DOCUMENT>
