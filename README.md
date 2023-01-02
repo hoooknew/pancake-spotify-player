@@ -59,6 +59,9 @@
 - [ ] there is a meaningful delay between when a state change in requested and when the changed state is available in the server. It tends to be less than 250ms. I think I need to verify the expected state change took place and retry otherwise.
 - [ ] retry on http errors
 - [ ] why don't the mouse up events trigger in the song and artist text boxes?
+- [ ] change the artist and title clicks to mouse up so the drag to move can work on top of them.
+- [ ] the clickable area for the title box includes the black space to the right.
+- [ ] the border on the bottom is missing.
 
 ## times to update the state
 
@@ -127,3 +130,9 @@ https://github.com/microsoft/github-actions-for-desktop-apps/blob/lance/net6-upd
 
 ## Distributing with MSIX
 https://montemagno.com/distributing-a-net-core-3-wpf-and-winforms-app-with-msix/
+Wix3
+https://wixtoolset.org/docs/v3/msbuild/authoring_first_msbuild_project/
+
+## LOGO
+https://redketchup.io/icon-editor
+https://affinity.serif.com/en-us/designer/
