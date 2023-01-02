@@ -38,6 +38,7 @@
             <TextBlock x:Name="_title_text" 
                        FontWeight="DemiBold" TextTrimming="CharacterEllipsis" 
                        Text="{Binding Title}" 
+                       HorizontalAlignment="Left"
                        MouseLeftButtonUp="_title_text_MouseLeftButtonUp">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
@@ -51,7 +52,8 @@
             </TextBlock>
             
             <TextBlock x:Name="_artist_text" Grid.Row="1" 
-                       TextTrimming="CharacterEllipsis" Foreground="{DynamicResource AltTextForegroundBrush}" FontWeight="Bold" FontSize="10" 
+                       TextTrimming="CharacterEllipsis" Foreground="{DynamicResource AltTextForegroundBrush}" FontWeight="Bold" FontSize="10"
+                       HorizontalAlignment="Left"
                        ctrl:PlayerTrackDetails.NameCsv="{Binding Artists}">
                 <TextBlock.Resources>
                     <Style TargetType="Run">

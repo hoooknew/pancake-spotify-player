@@ -59,7 +59,7 @@
 - [ ] there is a meaningful delay between when a state change in requested and when the changed state is available in the server. It tends to be less than 250ms. I think I need to verify the expected state change took place and retry otherwise.
 - [ ] retry on http errors
 - [x] change the artist and title clicks to mouse up so the drag to move can work on top of them.
-- [ ] the clickable area for the title box includes the black space to the right.
+- [x] the clickable area for the title box includes the black space to the right.
 - [x] the border on the bottom is missing at 125% zoom.
 - [x] close button is missing on the sign in screen
 - [x] rename app on the spotify dev site
