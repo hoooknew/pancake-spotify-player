@@ -10,7 +10,7 @@
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         SizeToContent="Height"
-        Title="MainWindow" Height="80" Width="400"
+        Title="Pancake Player" Height="80" Width="400"
         BorderThickness="0"
         MinWidth="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance},Converter={StaticResource MultiplyDoublesConverter}, ConverterParameter={StaticResource 1xMinWidth}}"
         ui:WindowPosition.Save="WindowPosition"
