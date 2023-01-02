@@ -138,6 +138,18 @@ https://wixtoolset.org/docs/v3/msbuild/authoring_first_msbuild_project/
 The free version is enough, but it unfortunately won't install [.net 6](https://download.visualstudio.microsoft.com/download/pr/0a672516-37fb-40de-8bef-725975e0b137/a632cde8d629f9ba9c12196f7e7660db/dotnet-sdk-6.0.404-win-x64.exe
 ) automatically.
 
+## build the app with a product version
+https://stackoverflow.com/questions/58433665/how-to-specify-the-assembly-version-for-a-net-core-project
+`dotnet build /p:Version=1.2.3`
+
+https://www.advancedinstaller.com/user-guide/set-version.html
+```
+$AI="C:\Program Files (x86)\Caphyon\Advanced Installer 20.2\bin\x86\AdvancedInstaller.com"
+& $AI /edit "./installer/installer.aip" /SetVersion 1.2.3
+```
+
+https://github.com/marketplace/actions/advanced-installer-tool
+
 ## LOGO
 https://redketchup.io/icon-editor
 https://affinity.serif.com/en-us/designer/
