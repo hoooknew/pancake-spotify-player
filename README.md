@@ -54,7 +54,13 @@
 - [ ] add the ability to skip to a new position in the track by clicking on the progress bar.
 
 - [x] Put an icon on the window.
-- [ ] Put the track picture in the background or make a larger layout that includes the 
+- [ ] Put the track picture in the background or make a larger layout that includes the full image
+- [ ] Can I start spotify locally and play a playlist? How can I make sure the client is ready to play before I 
+
+- [ ] change the dark theme to match the invert of the light theme
+- [ ] offer some other accent color choices under themes
+- [ ] replace the context menu settings with a dialog
+  - [ ] add some hotkeys for some settings?
 
 # Bugs
 - [x] change the artist and title clicks to mouse up so the drag to move can work on top of them.
@@ -62,6 +68,7 @@
 - [x] the border on the bottom is missing at 125% zoom.
 - [x] close button is missing on the sign in screen
 - [x] rename app on the spotify dev site
+- [ ] fix the blurriness on high dpi displays
 
 ## times to update the state
 
