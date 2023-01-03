@@ -49,6 +49,7 @@
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Padding" Value="-2"/>
                 <Setter Property="Margin" Value="1,0"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             </Style>
 
             <!--needed for bindings on the main window-->

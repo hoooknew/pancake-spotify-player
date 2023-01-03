@@ -74,6 +74,7 @@
 
         <ctrl:PathButton 
                             x:Name="_favorite_btn"
+                            Style="{StaticResource buttonStyle}"
                             Grid.Column="1" 
                             HorizontalAlignment="Left"
                             Margin="4,0,8,0" Height="30" Width="30"                            
