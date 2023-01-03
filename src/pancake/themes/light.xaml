@@ -14,6 +14,7 @@
     
     <SolidColorBrush x:Key="TextForegroundBrush" Color="Black" options:Freeze="True"/>
     <SolidColorBrush x:Key="AltTextForegroundBrush" Color="#999999" options:Freeze="True"/>
+    <SolidColorBrush x:Key="AltTextForegroundBrush.MouseOver" Color="#6e6e6e" options:Freeze="True"/>
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#CCCCCC" options:Freeze="True"/>
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="#bbbbbb" options:Freeze="True"/>
     <SolidColorBrush x:Key="WindowBrush" Color="White" options:Freeze="True"/>

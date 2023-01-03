@@ -61,6 +61,7 @@
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="true">
                                 <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+                                <Setter Property="TextBlock.Foreground" Value="{DynamicResource AltTextForegroundBrush.MouseOver}" />
                             </Trigger>
                             <Trigger Property="Tag" Value="{x:Null}">
                                 <Setter Property="TextBlock.TextDecorations" Value="None" />
