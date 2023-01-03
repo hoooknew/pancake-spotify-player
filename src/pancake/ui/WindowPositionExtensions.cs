@@ -57,21 +57,16 @@ namespace pancake.ui
             if (sender is Window w && GetSave(w) is string settingName)
             {
                 var newPos = Settings.Instance.GetValue(settingName) as Settings.Rect;
-                if (newPos!= null)
+                if (newPos != null && IsOnScreen(w, newPos.ToRect()))
                 {
-                    var oldPos = w.GetWindowPosition();                    
-
-                    if (newPos != null)
-                    {
-                        w.WindowState = WindowState.Normal;
-                        w.SetWindowPosition(newPos);                        
-
-                        if (!IsOnScreen(w))
-                            w.SetWindowPosition(oldPos);
-                    }
+                    w.WindowState = WindowState.Normal;
+                    w.SetWindowPosition(newPos);                        
                 }
             }
         }
+
+        private static System.Windows.Rect ToRect(this Settings.Rect rect)
+            => new System.Windows.Rect(rect.Left, rect.Top, rect.Width, rect.Height);
 
         public static class NativeMethods
         {
@@ -116,7 +111,7 @@ namespace pancake.ui
             }
         }      
 
-        private static bool IsOnScreen(this Window w)
+        private static bool IsOnScreen(this Window w, System.Windows.Rect rect)
         {
             var hwnd = new WindowInteropHelper(w).EnsureHandle();
             var monitor = NativeMethods.MonitorFromWindow(hwnd, NativeMethods.MONITOR_DEFAULTTONEAREST);
@@ -124,7 +119,7 @@ namespace pancake.ui
 
             return 
                 monitor_rect != null && 
-                (monitor_rect?.Contains(w.RestoreBounds) ?? false);
+                (monitor_rect?.Contains(rect) ?? false);
         }
 
         private static System.Windows.Rect? GetMonitorRect(IntPtr monitor)
