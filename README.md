@@ -68,7 +68,7 @@
 - [x] the border on the bottom is missing at 125% zoom.
 - [x] close button is missing on the sign in screen
 - [x] rename app on the spotify dev site
-- [ ] fix the blurriness on high dpi displays
+- [x] fix the blurriness on high dpi displays when there is also a lower dpi display
 
 ## times to update the state
 
@@ -160,3 +160,7 @@ https://github.com/marketplace/actions/advanced-installer-tool
 ## LOGO
 https://redketchup.io/icon-editor
 https://affinity.serif.com/en-us/designer/
+
+## WPF DPI Awareness
+https://github.com/Microsoft/WPF-Samples/tree/master/PerMonitorDPI
+https://learn.microsoft.com/en-us/answers/questions/643007/how-to-set-permonitor-dpiawareness-for-net-6-windo.html
