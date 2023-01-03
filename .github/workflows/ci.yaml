@@ -25,6 +25,7 @@ jobs:
     - name: Add MSBuild
       uses: microsoft/setup-msbuild@v1.1
       with: 
+        # 17.4 is required for the source code generator to work.
         vs-version: '[17.4'
 
     - name: Restore
