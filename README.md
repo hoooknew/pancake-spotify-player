@@ -1,6 +1,7 @@
 
 ## TODO
 
+- [ ] make a readme that describes the app, the features, and how to install it.
 - [x] delete the tokens on auth or api error
 
 - [x] add an *accurate* internal timer to update the track position so we can lengthen the time between status polls.
@@ -57,7 +58,7 @@
 - [ ] Put the track picture in the background or make a larger layout that includes the full image
 - [ ] Can I start spotify locally and play a playlist? How can I make sure the client is ready to play before I 
 
-- [ ] change the dark theme to match the invert of the light theme
+- [x] change the dark theme to match the invert of the light theme
 - [ ] offer some other accent color choices under themes
 - [ ] replace the context menu settings with a dialog
   - [ ] add some hotkeys for some settings?
@@ -69,17 +70,6 @@
 - [x] close button is missing on the sign in screen
 - [x] rename app on the spotify dev site
 - [x] fix the blurriness on high dpi displays when there is also a lower dpi display
-
-## times to update the state
-
-### full refresh
-- we know the song ends
-- we see the song changed
-- after the user clicks a button?
-
-### small refresh 
-as time ticks
-
 
 ## References
 [Getting a Client Id](https://support.heateor.com/get-spotify-client-id-client-secret/)

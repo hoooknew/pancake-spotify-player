@@ -5,17 +5,17 @@
                     mc:Ignorable="options">
 
     <!--App Specific-->
-    <SolidColorBrush x:Key="PathButtonFillBrush" Color="#888888" options:Freeze="True"/>
+    <SolidColorBrush x:Key="PathButtonFillBrush" Color="#9a9a9a" options:Freeze="True"/>
     <SolidColorBrush x:Key="PathButtonFillBrush_MouseOver" Color="#a1a1a1" options:Freeze="True"/>
     <SolidColorBrush x:Key="PathButtonFillBrush_Pressed" Color="#d3d5df" options:Freeze="True"/>
     <SolidColorBrush x:Key="PathButtonFillBrush_Disabled" Color="#3b3b3b" options:Freeze="True"/>
     <!--Spotify Green-->
     <Color x:Key="AccentColor">#FF1ED760</Color>
-    <SolidColorBrush x:Key="TextForegroundBrush" Color="#e4e6e5" options:Freeze="True"/>
-    <SolidColorBrush x:Key="AltTextForegroundBrush" Color="#888888" options:Freeze="True"/>
+    <SolidColorBrush x:Key="TextForegroundBrush" Color="White" options:Freeze="True"/>
+    <SolidColorBrush x:Key="AltTextForegroundBrush" Color="#444444" options:Freeze="True"/>
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#444444" options:Freeze="True"/>
-    <SolidColorBrush x:Key="LightBackgroundBrush" Color="#888888" options:Freeze="True"/>
-    <SolidColorBrush x:Key="WindowBrush" Color="#1e1e1e" options:Freeze="True"/>
+    <SolidColorBrush x:Key="LightBackgroundBrush" Color="#444444" options:Freeze="True"/>
+    <SolidColorBrush x:Key="WindowBrush" Color="Black" options:Freeze="True"/>
     
     <!--Context Menu-->
     <SolidColorBrush x:Key="MenuItem.Selected.Glyph" Color="White"/>
