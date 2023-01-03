@@ -8,33 +8,33 @@ using System.Threading.Tasks;
 
 namespace pancake.models
 {
-    internal class ContextModel : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler? PropertyChanged;
+    //internal class ContextModel : INotifyPropertyChanged
+    //{
+    //    public event PropertyChangedEventHandler? PropertyChanged;
 
-        public ContextModel() { }
+    //    public ContextModel() { }
         
-        private CurrentlyPlayingContext? _context;        
+    //    private CurrentlyPlayingContext? _context;        
 
-        public void SetContext(CurrentlyPlayingContext? context)
-        {
-            this._context = context;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
-        }
+    //    public void SetContext(CurrentlyPlayingContext? context)
+    //    {
+    //        this._context = context;
+    //        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(""));
+    //    }
 
-        private FullTrack _ft;
-        /*
-         * FullTrack
-         * List<SimpleArtist> Artists 
-         * SimpleAlbum Album
-         */
-        private FullEpisode _fe;
-        /*
-         * FullEpisode
-         * string Name
-         * SimpleShow Show
-         * Images
-         * Description
-         */
-    }
+    //    private FullTrack _ft;
+    //    /*
+    //     * FullTrack
+    //     * List<SimpleArtist> Artists 
+    //     * SimpleAlbum Album
+    //     */
+    //    private FullEpisode _fe;
+    //    /*
+    //     * FullEpisode
+    //     * string Name
+    //     * SimpleShow Show
+    //     * Images
+    //     * Description
+    //     */
+    //}
 }
