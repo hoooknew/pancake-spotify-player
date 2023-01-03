@@ -28,4 +28,4 @@ jobs:
         RuntimeIdentifier: win-x64
         
     - name: Build
-      run: dotnet build /p:Version=1.0.0
+      run: dotnet build /p:Version=1.0.0 ${{ env.Solution_Path }}
