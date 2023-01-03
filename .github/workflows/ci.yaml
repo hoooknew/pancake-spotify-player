@@ -26,6 +26,9 @@ jobs:
       uses: microsoft/setup-msbuild@v1.1
       with: 
         vs-version: '[17.4'
-    
+
+    - name: Restore
+      run: MSBuild  ${{ env.Solution_Path }} /t:Restore
+      
     - name: Build
-      run: dotnet build /p:Version=1.0.0 ${{ env.Solution_Path }}
+      run: MSBuild  ${{ env.Solution_Path }} /p:Version=1.2.4
