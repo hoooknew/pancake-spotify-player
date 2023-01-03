@@ -22,8 +22,14 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.1
       
+    - name: pwd
+      run: pwd
+      
+    - name: ls
+      run: ls
+      
     - name: .NET Restore
-      run: dotnet restore ${{ env.Solution_Path }} --runtime $env:RuntimeIdentifier
+      run: dotnet restore ${{ env.Solution_Path }}
       env:
         RuntimeIdentifier: win-x64
         
