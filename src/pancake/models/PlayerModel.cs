@@ -346,7 +346,8 @@ namespace pancake.models
 
                     if (_context != null && REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
                     {
-                        if (changed.Track || Math.Abs(_context.ProgressMs - _positionMs) > 500)
+                        var diff = Math.Abs(_context.ProgressMs - _positionMs);
+                        if (changed.Track || diff > 500)
                         {
                             this.Position = _context.ProgressMs;
 
@@ -355,15 +356,19 @@ namespace pancake.models
                              * (1000 - _positionMs % 1000) = time till the next even second
                              * (1000 - _positionMs % 1000) + 1000 = a second after that
                              */
-                            _trackTimer.Change((1000 - _positionMs % 1000) + 1000, 1000);
+                            _trackTimer.Change((1000 - _positionMs % 1000), 1000);
+                            Debug.WriteLine($" time till next tick {(1000 - _positionMs % 1000)}");
+                            Debug.WriteLine($"{DateTime.Now.ToString("mm:ss.fff")} correction :{ new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
                         }
+                        else
+                            Debug.WriteLine($"{DateTime.Now.ToString("mm:ss.fff")} ok :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
                     }
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
                     _OnPropertyChanged("");
 
-                    Debug.WriteLine(changed);
+                    //Debug.WriteLine(changed);
                     return changed;
 
                 }
@@ -388,7 +393,11 @@ namespace pancake.models
                     player._RefreshState();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                 else
+                {
                     player.Position = player.Position + 1000;
+                    Debug.WriteLine($"{DateTime.Now.ToString("mm:ss.fff")} tick :{new TimeSpan(0, 0, 0, 0, player.Position)}");
+
+                }
 
             }
         }
