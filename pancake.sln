@@ -3,30 +3,30 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake", "pancake\pancake.csproj", "{4ACD6FB2-36B8-4FCC-913B-26761497B787}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{F033E4EB-5FDD-4240-9062-6E88A06DA47A}"
 	ProjectSection(SolutionItems) = preProject
-		..\.gitignore = ..\.gitignore
-		..\LICENSE.txt = ..\LICENSE.txt
-		..\README.md = ..\README.md
+		.gitignore = .gitignore
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake.lib", "pancake.lib\pancake.lib.csproj", "{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake.lib", "src\pancake.lib\pancake.lib.csproj", "{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify.generator", "autonotify.generator\autonotify.generator.csproj", "{249F8718-7057-419A-8B51-8A2DF25DD309}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify.generator", "src\autonotify.generator\autonotify.generator.csproj", "{249F8718-7057-419A-8B51-8A2DF25DD309}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify", "autonotify\autonotify.csproj", "{3E5CBAD4-1FC1-445B-8A51-5510ACCACBFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify", "src\autonotify\autonotify.csproj", "{3E5CBAD4-1FC1-445B-8A51-5510ACCACBFE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "autonotify", "autonotify", "{1586D8F4-289D-4281-8E9A-5D97E7E72B7E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4ADDAE02-89F6-4AB8-A450-211B6C82BE0D}"
 	ProjectSection(SolutionItems) = preProject
-		..\docs\building-in-actions.md = ..\docs\building-in-actions.md
-		..\docs\features-and-bugs.md = ..\docs\features-and-bugs.md
-		..\docs\logging.md = ..\docs\logging.md
-		..\docs\references.md = ..\docs\references.md
+		docs\building-in-actions.md = docs\building-in-actions.md
+		docs\features-and-bugs.md = docs\features-and-bugs.md
+		docs\logging.md = docs\logging.md
+		docs\references.md = docs\references.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake", "src\pancake\pancake.csproj", "{EC43D118-73F4-43EF-898B-1B1A292D66AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,10 +34,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4ACD6FB2-36B8-4FCC-913B-26761497B787}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4ACD6FB2-36B8-4FCC-913B-26761497B787}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4ACD6FB2-36B8-4FCC-913B-26761497B787}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4ACD6FB2-36B8-4FCC-913B-26761497B787}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BD16A7AB-C30F-4391-8269-EE09AEE8EDE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -50,6 +46,10 @@ Global
 		{3E5CBAD4-1FC1-445B-8A51-5510ACCACBFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E5CBAD4-1FC1-445B-8A51-5510ACCACBFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E5CBAD4-1FC1-445B-8A51-5510ACCACBFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC43D118-73F4-43EF-898B-1B1A292D66AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC43D118-73F4-43EF-898B-1B1A292D66AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC43D118-73F4-43EF-898B-1B1A292D66AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC43D118-73F4-43EF-898B-1B1A292D66AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
