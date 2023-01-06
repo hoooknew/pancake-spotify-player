@@ -20,6 +20,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "autonotify", "autonotify\au
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "autonotify", "autonotify", "{1586D8F4-289D-4281-8E9A-5D97E7E72B7E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4ADDAE02-89F6-4AB8-A450-211B6C82BE0D}"
+	ProjectSection(SolutionItems) = preProject
+		..\docs\building-in-actions.md = ..\docs\building-in-actions.md
+		..\docs\features-and-bugs.md = ..\docs\features-and-bugs.md
+		..\docs\logging.md = ..\docs\logging.md
+		..\docs\references.md = ..\docs\references.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +57,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{249F8718-7057-419A-8B51-8A2DF25DD309} = {1586D8F4-289D-4281-8E9A-5D97E7E72B7E}
 		{3E5CBAD4-1FC1-445B-8A51-5510ACCACBFE} = {1586D8F4-289D-4281-8E9A-5D97E7E72B7E}
+		{4ADDAE02-89F6-4AB8-A450-211B6C82BE0D} = {F033E4EB-5FDD-4240-9062-6E88A06DA47A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B4C517D4-B0C2-46E8-BCA8-C4B3E3C413B1}
