@@ -23,7 +23,7 @@ namespace pancake.lib
 
         public static bool UseApp { get; private set; }
 
-        public static void Open(Object o = null)
+        public static void Open(Object? o = null)
         {
             if (UseApp)
                 CreateAppUri(o).CallWithShell();
@@ -31,7 +31,7 @@ namespace pancake.lib
                 CreateWebUri(o).CallWithShell();
         }
 
-        private static Uri CreateWebUri(object o)
+        private static Uri CreateWebUri(object? o)
         {
             (string? type, string? id) = o switch
             {
@@ -53,8 +53,8 @@ namespace pancake.lib
                 return new Uri(SPOTIFY_WEB_URI);
         }
 
-        private static Uri CreateAppUri(object o)
-            => new Uri(o switch
+        private static Uri CreateAppUri(object? o)
+            => new(o switch
             {
                 LinkableObject r => r.Uri,
                 FullTrack r => r.Uri,
