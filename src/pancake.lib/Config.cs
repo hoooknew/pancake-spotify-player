@@ -33,5 +33,7 @@ namespace pancake.lib
 
         public static string? ClientId => Instance["clientId"];
         public static int RefreshDelayMS => int.Parse(Instance["refreshDelayMS"] ?? "1000");
+
+        public static IConfigurationSection? Logging => Instance.GetSection("Logging");
     }
 }

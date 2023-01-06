@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace pancake.models
 {
@@ -57,6 +58,9 @@ namespace pancake.models
         private bool? _isFavorite = null;
         private bool _enableControls = true;
         private bool _clientAvailable = true;
+
+        private readonly ILogger _stateLog = Logging.Category("pancake.playermodel.state");
+        private readonly ILogger _timingLog = Logging.Category("pancake.playermodel.timing");
 
         public PlayerModel(Dispatcher dispatcher)
         {
@@ -315,7 +319,7 @@ namespace pancake.models
                     return true;
                 else
                 {
-                    Debug.WriteLine("bad refresh");
+                    _stateLog.LogWarning("bad refresh");
                     await Task.Delay(250);
                 }
 
@@ -357,18 +361,18 @@ namespace pancake.models
                              * (1000 - _positionMs % 1000) + 1000 = a second after that
                              */
                             _trackTimer.Change((1000 - _positionMs % 1000), 1000);
-                            Debug.WriteLine($" time till next tick {(1000 - _positionMs % 1000)}");
-                            Debug.WriteLine($"{DateTime.Now.ToString("mm:ss.fff")} correction :{ new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
+                            _timingLog.LogInformation($" time till next tick {(1000 - _positionMs % 1000)}");
+                            _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{ new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
                         }
                         else
-                            Debug.WriteLine($"{DateTime.Now.ToString("mm:ss.fff")} ok :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
+                            _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
                     }
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
 
                     _OnPropertyChanged("");
 
-                    //Debug.WriteLine(changed);
+                    _stateLog.LogInformation(changed.ToString());
                     return changed;
 
                 }
@@ -395,7 +399,7 @@ namespace pancake.models
                 else
                 {
                     player.Position = player.Position + 1000;
-                    Debug.WriteLine($"{DateTime.Now.ToString("mm:ss.fff")} tick :{new TimeSpan(0, 0, 0, 0, player.Position)}");
+                    player._timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} tick :{new TimeSpan(0, 0, 0, 0, player.Position)}");
 
                 }
 
