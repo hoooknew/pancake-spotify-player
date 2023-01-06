@@ -70,3 +70,4 @@
 - [x] close button is missing on the sign in screen
 - [x] rename app on the spotify dev site
 - [x] fix the blurriness on high dpi displays when there is also a lower dpi display
+- [ ] the open spotify screen is taller than the normal screen. let's make it so the button shows up over the controls (or where they should be).
