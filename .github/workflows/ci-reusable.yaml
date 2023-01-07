@@ -1,0 +1,49 @@
+name: CI - Reusable
+
+on: 
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'a copy of the bin folder after a build'
+        default: 'bin'
+        required: false
+        type: string
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    env:      
+      Solution_Path: src/pancake.sln      
+      Wpf_Project_Path: src/pancake/pancake.csproj      
+      
+    steps:
+    
+    - name: Checkout
+      uses: actions/checkout@v2      
+    
+    # maybe add nerdbank versioning? https://github.com/AArnott/nbgv
+    
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: "6.0.x"
+        
+    - name: Add MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+      with: 
+        # 17.4 is required for the source code generator to work.
+        vs-version: '[17.4'
+
+    - name: Restore
+      run: MSBuild  ${{ env.Solution_Path }} /t:Restore
+      
+    - name: Build
+      run: MSBuild  ${{ env.Solution_Path }} /p:Version=1.2.4
+      
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: src/pancake/bin/
+        
