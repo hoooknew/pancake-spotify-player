@@ -1,0 +1,38 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-num:
+        description: 'the product version number'
+        required: true
+        type: string
+
+jobs:
+  build:
+    uses: ./.github/workflows/ci-reusable.yaml
+    with:
+      version-num: ${{ inputs.version-num }}
+      bin-artifact: 'bin'
+  
+  deploy:
+    runs-on: windows-latest
+    
+    env:
+      installer-file: 'src/installer/installer.aip'      
+      output-dir: 'src/installer/bin'
+      package-name: pancake-${{ inputs.version-num }}.msi
+    
+    steps:
+      - name: create installer
+        uses: caphyon/advinst-github-action@v1.0
+        with:
+          advinst-version: ${{ env.version-num }}
+          aip-path: ${{ env.installer-file }}
+          aip-build-name: 'AnyCPU_Release'
+          aip-package-name: ${{ env.package-name }}
+          aip-output-dir: ${{ env.output-dir }}
+          aip-commands: |
+            SetVersion ${{ inputs.version-num }}
+      
+    
