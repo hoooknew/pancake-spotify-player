@@ -3,18 +3,22 @@ name: CI - Reusable
 on: 
   workflow_call:
     inputs:
+      version-num:
+        description: 'the product version number'
+        required: true
+        type: string
       artifact-name:
         description: 'a copy of the bin folder after a build'
         default: 'bin'
         required: false
-        type: string
+        type: string      
 
 jobs:
   build:
     runs-on: windows-latest
     
     env:      
-      Solution_Path: pancake.sln
+      Solution_Path: pancake.sln      
       Wpf_Project_Path: src/pancake/pancake.csproj      
       
     steps:
@@ -39,11 +43,12 @@ jobs:
       run: MSBuild  ${{ env.Solution_Path }} /t:Restore
       
     - name: Build
-      run: MSBuild  ${{ env.Solution_Path }} /p:Version=1.2.4
-      
+      run: MSBuild  ${{ env.Solution_Path }} /p:Version=${{ inputs.version-num }}
+          
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.artifact-name }}
         path: src/pancake/bin/
         
+
