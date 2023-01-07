@@ -7,17 +7,14 @@
              xmlns:local="clr-namespace:pancake.ui.controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border Background="#DDDDDD">
-        <StackPanel Orientation="Vertical">
-            <TextBlock Foreground="Black" Text="No Spotify client found." Margin="8,4,8,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <Button Padding="8,4" Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" Command="{x:Static ui:PlayerCommands.OpenInSpotify}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">Open</TextBlock>
-                    <Viewbox Height="25">
-                        <Path Fill="{StaticResource SpotifyGreenBrush}" Data="{StaticResource geo_spotify_logo}"/>
-                    </Viewbox>
-                </StackPanel>
-            </Button>
-        </StackPanel>
+    <Border Background="{DynamicResource WindowBrush}">
+        <Button Padding="8,4" Margin="4" HorizontalAlignment="Right" VerticalAlignment="Center" Background="White" Command="{x:Static ui:PlayerCommands.OpenInSpotify}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center" FontSize="10" Margin="0,0,4,0">Open</TextBlock>
+                <Viewbox Height="16">
+                    <Path Fill="{StaticResource SpotifyGreenBrush}" Data="{StaticResource geo_spotify_logo}"/>
+                </Viewbox>
+            </StackPanel>
+        </Button>
     </Border>
 </UserControl>

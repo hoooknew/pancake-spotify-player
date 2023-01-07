@@ -69,11 +69,12 @@
                     <ctrl:PlayerTrackDetails Grid.Column="0" Margin="2"/>
                     <ctrl:PlayerControls Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,24,0" 
                                      Visibility="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
+                    <ctrl:NoClient Grid.Column="1" Margin="0,0,24,0"
+                        Visibility="{Binding ClientAvailable, Converter={StaticResource uiConverter}, FallbackValue=Visible}"/>
                 </Grid>
                 <ctrl:PlayerProgressBar Grid.Row="1" Margin="2,0"
                                     Visibility="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Converter={StaticResource hideShowConverter}}"/>
             </Grid>
-            <ctrl:NoClient Visibility="{Binding ClientAvailable, Converter={StaticResource uiConverter}, FallbackValue=Visible}"/>
             <ctrl:SignIn Visibility="{Binding NeedToken, Converter={StaticResource signinConverter}, FallbackValue=Collapsed}"/>
         </Grid>
 
