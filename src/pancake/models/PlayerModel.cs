@@ -68,6 +68,9 @@ namespace pancake.models
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
         }
 
+        private CurrentlyPlayingContext? Context { get => _context ?? PrevContext; set => _context = value; }
+        private CurrentlyPlayingContext? PrevContext { get; set; }
+
         private bool _needToken = true;
         public bool NeedToken
         {
@@ -78,13 +81,13 @@ namespace pancake.models
                 _OnPropertyChanged(nameof(NeedToken));
             }
         }
-        public string Title => _context.GetTrack()?.Name ?? _context.GetEpisode()?.Name ?? "";
+        public string Title => Context.GetTrack()?.Name ?? Context.GetEpisode()?.Name ?? "";
         public IEnumerable<LinkableObject> Artists
         {
             get
             {
-                var track = _context.GetTrack();
-                var episode = _context.GetEpisode();
+                var track = Context.GetTrack();
+                var episode = Context.GetEpisode();
                 if (track != null)
                     return track.Artists.Select(r => (LinkableObject)r);
                 else if (episode != null)
@@ -102,12 +105,12 @@ namespace pancake.models
                 _OnPropertyChanged(nameof(IsFavorite));
             }
         }
-        public bool IsPlaying => _context?.IsPlaying ?? false;
-        public bool IsShuffleOn => _context?.ShuffleState ?? false;
+        public bool IsPlaying => Context?.IsPlaying ?? false;
+        public bool IsShuffleOn => Context?.ShuffleState ?? false;
         /// <summary>
         /// returns "off", "track", or "context"
         /// </summary>
-        public string RepeatState => _context?.RepeatState ?? "off";
+        public string RepeatState => Context?.RepeatState ?? "off";
         public int Position
         {
             get => _positionMs;
@@ -117,8 +120,8 @@ namespace pancake.models
                 _OnPropertyChanged(nameof(Position));
             }
         }
-        public int Duration => _context.GetTrack()?.DurationMs ?? _context.GetEpisode()?.DurationMs ?? 0;
-        public IPlayableItem? CurrentlyPlaying => _context?.Item;
+        public int Duration => Context.GetTrack()?.DurationMs ?? Context.GetEpisode()?.DurationMs ?? 0;
+        public IPlayableItem? CurrentlyPlaying => Context?.Item;
         public bool ClientAvailable
         {
             get => _clientAvailable;
@@ -141,7 +144,6 @@ namespace pancake.models
                 _OnPropertyChanged(nameof(EnableControls));
             }
         }
-
 
         public void SetToken(IRefreshableToken token)
         {
@@ -233,7 +235,7 @@ namespace pancake.models
         {
             return await _TryApiCall(async () =>
             {
-                string? id = _context?.Item?.GetItemId();
+                string? id = Context?.Item?.GetItemId();
 
                 if (id != null)
                 {
@@ -331,41 +333,46 @@ namespace pancake.models
             {
                 try
                 {
-                    var oldContext = _context;
-                    _context = await this._client!.Player.GetCurrentPlayback(cancelToken);
+                    var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
 
-                    ClientAvailable = _context != null;
+                    Context = newContext;
+                    PrevContext = newContext ?? PrevContext;
+                    ClientAvailable = newContext != null;
+                    
+                    var changed = ChangedState.Compare(PrevContext, newContext);
 
-                    var changed = ChangedState.Compare(oldContext, _context);
-
-                    if (changed.Track)
+                    if (ClientAvailable)
                     {
-                        IsFavorite = null;
-                        if (_context?.Item != null)
+                        if (changed.Track)
                         {
-                            var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { _context!.Item!.GetItemId()! }));
-                            IsFavorite = isFavs.All(r => r);
+                            if (Context?.Item != null)
+                            {
+                                var isFavs = await this._client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { Context!.Item!.GetItemId()! }));
+                                IsFavorite = isFavs.All(r => r);
+                            }
+                            else
+                                IsFavorite = null;
                         }
-                    }
 
-                    if (_context != null && REFRESH_DELAY > 1000 && (_context?.IsPlaying ?? false))
-                    {
-                        var diff = Math.Abs(_context.ProgressMs - _positionMs);
-                        if (changed.Track || diff > 500)
+                        if (REFRESH_DELAY > 1000 && (Context?.IsPlaying ?? false))
                         {
-                            this.Position = _context.ProgressMs;
+                            var diff = Math.Abs(Context.ProgressMs - _positionMs);
+                            if (changed.Track || diff > 500)
+                            {
+                                this.Position = Context.ProgressMs;
 
-                            /*
-                             * _positionMs % 1000 = time since the last even second
-                             * (1000 - _positionMs % 1000) = time till the next even second
-                             * (1000 - _positionMs % 1000) + 1000 = a second after that
-                             */
-                            _trackTimer.Change((1000 - _positionMs % 1000), 1000);
-                            _timingLog.LogInformation($" time till next tick {(1000 - _positionMs % 1000)}");
-                            _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{ new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
+                                /*
+                                 * _positionMs % 1000 = time since the last even second
+                                 * (1000 - _positionMs % 1000) = time till the next even second
+                                 * (1000 - _positionMs % 1000) + 1000 = a second after that
+                                 */
+                                _trackTimer.Change((1000 - _positionMs % 1000), 1000);
+                                _timingLog.LogInformation($" time till next tick {(1000 - _positionMs % 1000)}");
+                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
+                            }
+                            else
+                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
                         }
-                        else
-                            _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
                     }
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
