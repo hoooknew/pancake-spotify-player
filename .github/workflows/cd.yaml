@@ -15,8 +15,9 @@ jobs:
       version-num: ${{ inputs.version-num }}
       bin-artifact: 'bin'
   
-  deploy:
+  deploy:  
     runs-on: windows-latest
+    needs: build
     
     env:
       installer-file: 'src/installer/installer.aip'      
@@ -24,10 +25,19 @@ jobs:
       package-name: pancake-${{ inputs.version-num }}.msi
     
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2    
+        
+      - name: download bin
+        uses: actions/download-artifact@v3
+        with:
+          name: 'bin'
+          path: src/pancake/bin/
+        
       - name: create installer
         uses: caphyon/advinst-github-action@v1.0
         with:
-          advinst-version: ${{ env.version-num }}
+          advinst-version: '20.2'
           aip-path: ${{ env.installer-file }}
           aip-build-name: 'AnyCPU_Release'
           aip-package-name: ${{ env.package-name }}
