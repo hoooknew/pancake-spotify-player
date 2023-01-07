@@ -41,6 +41,10 @@
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
     <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="browser_Dir" Directory_Parent="rumtimes_Dir" DefaultDir="browser"/>
+    <ROW Directory="lib_Dir" Directory_Parent="browser_Dir" DefaultDir="lib"/>
+    <ROW Directory="net6.0_Dir" Directory_Parent="lib_Dir" DefaultDir="net6.0"/>
+    <ROW Directory="rumtimes_Dir" Directory_Parent="APPDIR" DefaultDir="runtimes"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_INSTALLPERUSER" ComponentId="{8883573E-5BE5-479A-A5D6-DAB9F98B99E5}" Directory_="APPDIR" Attributes="4" KeyPath="AI_INSTALLPERUSER" Options="1"/>
@@ -61,6 +65,7 @@
     <ROW Component="SpotifyAPI.Web.Auth.dll" ComponentId="{DED69240-6FE9-4224-9BE2-D52DC63521F9}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.Auth.dll"/>
     <ROW Component="SpotifyAPI.Web.dll" ComponentId="{556E8B0E-F11F-4A29-91EC-D875670CED59}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.dll"/>
     <ROW Component="Swan.Lite.dll" ComponentId="{AABC1887-AF6B-41CF-9F77-8EA1D0C6105D}" Directory_="APPDIR" Attributes="0" KeyPath="Swan.Lite.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{CC186EDE-A340-4F54-A77E-CDDE559C46CB}" Directory_="net6.0_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
     <ROW Component="System.Text.Encodings.Web.dll_1" ComponentId="{3E9C3E8E-0FEB-4042-A21A-6D1D42016927}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_1"/>
     <ROW Component="System.Text.Json.dll" ComponentId="{49CE60FE-E9F3-4440-8D36-DBF0DF7E302F}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
     <ROW Component="appsettings.json" ComponentId="{2983A0C2-D996-48DC-8295-BD10B4C72801}" Directory_="APPDIR" Attributes="0" KeyPath="appsettings.json_1" Type="0"/>
@@ -100,6 +105,7 @@
     <ROW File="Swan.Lite.dll" Component_="Swan.Lite.dll" FileName="SWANLI~1.DLL|Swan.Lite.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Swan.Lite.dll" SelfReg="false"/>
     <ROW File="System.Text.Encodings.Web.dll_1" Component_="System.Text.Encodings.Web.dll_1" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Encodings.Web.dll" SelfReg="false"/>
     <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~2.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Json.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
     <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1"/>
@@ -215,6 +221,7 @@
     <ROW Feature_="MainFeature" Component_="autonotify.dll"/>
     <ROW Feature_="MainFeature" Component_="pancake.exe"/>
     <ROW Feature_="MainFeature" Component_="pancake.lib.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="pancake.exe" SourcePath="..\..\media\pancake.ico" Index="0"/>
