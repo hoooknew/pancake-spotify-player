@@ -7,7 +7,7 @@ on:
         description: 'the product version number'
         required: true
         type: string
-      artifact-name:
+      bin-artifact:
         description: 'a copy of the bin folder after a build'
         default: 'bin'
         required: false
@@ -48,7 +48,7 @@ jobs:
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.artifact-name }}
+        name: ${{ inputs.bin-artifact }}
         path: src/pancake/bin/
         
 
