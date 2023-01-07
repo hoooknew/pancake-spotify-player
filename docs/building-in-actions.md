@@ -32,3 +32,9 @@ on:
         draft: false
         prerelease: false
 ```
+
+
+https://docs.github.com/en/actions/using-workflows/reusing-workflows
+https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
+https://github.com/actions/upload-artifact
+https://github.com/actions/download-artifact
