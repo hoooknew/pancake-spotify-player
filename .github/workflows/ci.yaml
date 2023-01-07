@@ -33,3 +33,8 @@ jobs:
       
     - name: Build
       run: MSBuild  ${{ env.Solution_Path }} /p:Version=1.2.4
+      
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      with:        
+        path: src/pancake/bin/
