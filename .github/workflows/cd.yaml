@@ -41,7 +41,7 @@ jobs:
         
       # Archive the package
       - name: Create archive
-        run: Compress-Archive -Path src\pancake\bin\Release\net6.0-windows\* -DestinationPath $env:output-dir\$env:zip-name
+        run: Compress-Archive -Path src\pancake\bin\Release\net6.0-windows\* -DestinationPath ${{ env.output-dir }}\${{ env.zip-name }}
         
       - name: create installer
         uses: caphyon/advinst-github-action@v1.0
