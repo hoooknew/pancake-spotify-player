@@ -46,7 +46,7 @@
 - [x] built an installer
   - [ ] figure out a versioning pattern
 - [ ] create a github actions workflow to create releases
-- [ ] make a readme that explains the app functionality
+- [x] make a readme that explains the app functionality
   - [ ] is there anything inside worth explaining how it works?
 - [x] style the auth callback page?
 
@@ -70,4 +70,4 @@
 - [x] close button is missing on the sign in screen
 - [x] rename app on the spotify dev site
 - [x] fix the blurriness on high dpi displays when there is also a lower dpi display
-- [ ] the open spotify screen is taller than the normal screen. let's make it so the button shows up over the controls (or where they should be).
+- [x] the open spotify screen is taller than the normal screen. let's make it so the button shows up over the controls (or where they should be).
