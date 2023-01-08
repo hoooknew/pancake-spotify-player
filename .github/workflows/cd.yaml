@@ -20,8 +20,8 @@ jobs:
     needs: build
     
     env:
-      installer-file: 'src/installer/installer.aip'      
-      output-dir: 'src/installer/bin'
+      installer-file: './src/installer/installer.aip'      
+      output-dir: './src/installer/bin'
       package-name: pancake-${{ inputs.version-num }}.msi
     
     steps:
@@ -44,7 +44,7 @@ jobs:
           aip-path: ${{ env.installer-file }}
           aip-build-name: 'AnyCPU_Release'
           aip-package-name: ${{ env.package-name }}
-          aip-output-dir: ${{ env.output-dir }}
+          # aip-output-dir: ${{ env.output-dir }}
           aip-commands: |
             SetVersion ${{ inputs.version-num }}
       
