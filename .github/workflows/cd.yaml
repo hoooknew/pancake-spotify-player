@@ -48,4 +48,8 @@ jobs:
           aip-commands: |
             SetVersion ${{ inputs.version-num }}
       
-    
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: installer
+          path: ${{ env.output-dir }}/${{ env.package-name }}
