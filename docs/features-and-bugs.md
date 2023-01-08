@@ -1,7 +1,7 @@
 
 ## TODO
 
-- [ ] make a readme that describes the app, the features, and how to install it.
+- [x] make a readme that describes the app, the features, and how to install it.
 - [x] delete the tokens on auth or api error
 
 - [x] add an *accurate* internal timer to update the track position so we can lengthen the time between status polls.
