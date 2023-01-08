@@ -43,7 +43,7 @@ jobs:
       run: MSBuild  ${{ env.Solution_Path }} /t:Restore
       
     - name: Build
-      run: MSBuild  ${{ env.Solution_Path }} /p:Version=${{ inputs.version-num }}
+      run: MSBuild  ${{ env.Solution_Path }} /p:Configuration=Release /p:Version=${{ inputs.version-num }}
           
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
