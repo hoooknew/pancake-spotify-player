@@ -39,6 +39,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiDirsComponent">
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
+    <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="browser_Dir" Directory_Parent="rumtimes_Dir" DefaultDir="browser"/>
     <ROW Directory="lib_Dir" Directory_Parent="browser_Dir" DefaultDir="lib"/>
@@ -69,6 +70,7 @@
     <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{2E18D042-19BE-4D8A-92F9-64B68F88B662}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
     <ROW Component="Newtonsoft.Json.dll" ComponentId="{5DB5E04F-4BDA-4548-A90B-BB5098A82EF4}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="ProductInformation" ComponentId="{6F8B03DC-E519-494A-8492-25D2229AE3E8}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{BB05BC4E-8C87-4057-A79D-A8F1931E9EFC}" Directory_="SHORTCUTDIR" Attributes="0"/>
     <ROW Component="SpotifyAPI.Web.Auth.dll" ComponentId="{E512304A-67B5-4B61-81F7-6F4279FE036B}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.Auth.dll"/>
     <ROW Component="SpotifyAPI.Web.dll" ComponentId="{5A73699D-0CAF-4476-B59D-03D750C25438}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.dll"/>
     <ROW Component="Swan.Lite.dll" ComponentId="{8C8E2E96-FB6C-4132-A72E-406DCAEA5584}" Directory_="APPDIR" Attributes="0" KeyPath="Swan.Lite.dll"/>
@@ -191,6 +193,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCreateFolderComponent">
     <ROW Directory_="APPDIR" Component_="APPDIR" ManualDelete="true"/>
+    <ROW Directory_="SHORTCUTDIR" Component_="SHORTCUTDIR" ManualDelete="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCustActComponent">
     <ROW Action="AI_AuthorSinglePackage" Type="1" Source="aicustact.dll" Target="AI_AuthorSinglePackage" WithoutSeq="true"/>
@@ -245,6 +248,7 @@
     <ROW Feature_="MainFeature" Component_="Swan.Lite.dll"/>
     <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll_1"/>
     <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="pancake.exe" SourcePath="..\..\media\pancake.ico" Index="0"/>
@@ -289,6 +293,9 @@
     <ROW Registry="Software" Root="-1" Key="Software" Name="\"/>
     <ROW Registry="UpgradeCode" Root="-1" Key="Software\[Manufacturer]\[UpgradeCode]" Name="\"/>
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
+  </COMPONENT>
+  <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
+    <ROW Shortcut="PancakePlayer" Directory_="SHORTCUTDIR" Name="PANCAK~1|Pancake Player" Component_="pancake.exe" Target="[#pancake.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>
