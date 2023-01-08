@@ -35,7 +35,7 @@ jobs:
           path: src/pancake/bin/
           
       - name: make installer bin
-        run: ${{ env.output-dir }}
+        run: mkdir ${{ env.output-dir }}
         
       - name: create installer
         uses: caphyon/advinst-github-action@v1.0
