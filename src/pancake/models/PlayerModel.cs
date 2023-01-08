@@ -373,6 +373,8 @@ namespace pancake.models
                             else
                                 _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
                         }
+                        else
+                            this.Position = Context!.ProgressMs;
                     }
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
