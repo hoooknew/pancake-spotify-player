@@ -38,3 +38,7 @@ https://docs.github.com/en/actions/using-workflows/reusing-workflows
 https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts
 https://github.com/actions/upload-artifact
 https://github.com/actions/download-artifact
+
+## Better Release Management
+https://github.com/marvinpinto/action-automatic-releases
+https://github.com/softprops/action-gh-release
