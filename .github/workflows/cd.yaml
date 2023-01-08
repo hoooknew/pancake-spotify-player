@@ -22,7 +22,9 @@ jobs:
     env:
       installer-file: './src/installer/installer.aip'      
       output-dir: './src/installer/bin'
-      package-name: pancake-${{ inputs.version-num }}.msi
+      msi-name: pancake-${{ inputs.version-num }}.msi
+      zip-name: pancake-${{ inputs.version-num }}.zip
+      
     
     steps:
       - name: Checkout
@@ -34,8 +36,12 @@ jobs:
           name: 'bin'
           path: src/pancake/bin/
           
-      - name: make installer bin
+      - name: make installer bin folder
         run: mkdir ${{ env.output-dir }}
+        
+      # Archive the package
+      - name: Create archive
+        run: Compress-Archive -Path src\pancake\bin\Release\net6.0-windows\* -DestinationPath $env:output-dir\$env:zip-name
         
       - name: create installer
         uses: caphyon/advinst-github-action@v1.0
@@ -43,13 +49,48 @@ jobs:
           advinst-version: '20.2'
           aip-path: ${{ env.installer-file }}
           aip-build-name: 'AnyCPU_Release'
-          aip-package-name: ${{ env.package-name }}
+          aip-package-name: ${{ env.msi-name }}
           # aip-output-dir: ${{ env.output-dir }}
           aip-commands: |
             SetVersion ${{ inputs.version-num }}
+            
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          tag_name: ${{ inputs.version-num }}
+          release_name:  ${{ inputs.version-num }}
+          draft: false
+          prerelease: false
       
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: installer
-          path: ${{ env.output-dir }}/${{ env.package-name }}
+          path: |
+            ${{ env.output-dir }}/${{ env.msi-name }}
+            ${{ env.output-dir }}/${{ env.zip-name }}
+          
+      - name: Update release asset
+        id: upload-release-zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}  # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ${{ env.output-dir }}\${{ env.zip-name }}
+          asset_name: ${{ env.zip-name }}
+          asset_content_type: application/zip
+          
+      - name: Update release asset
+        id: upload-release-msi
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}  # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: ${{ env.output-dir }}\${{ env.msi-name }}
+          asset_name: ${{ env.msi-name }}
+          asset_content_type: application/octet-stream
