@@ -42,3 +42,6 @@ https://github.com/actions/download-artifact
 ## Better Release Management
 https://github.com/marvinpinto/action-automatic-releases
 https://github.com/softprops/action-gh-release
+
+## Restricting who can run an action? 
+https://github.com/orgs/community/discussions/26622

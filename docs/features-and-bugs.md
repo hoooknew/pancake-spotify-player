@@ -71,3 +71,5 @@
 - [x] rename app on the spotify dev site
 - [x] fix the blurriness on high dpi displays when there is also a lower dpi display
 - [x] the open spotify screen is taller than the normal screen. let's make it so the button shows up over the controls (or where they should be).
+- [ ] prevent multiple copies of the app from opening?
+- [ ] can I prevent the downloaded msi from being blocked my windows for free?
