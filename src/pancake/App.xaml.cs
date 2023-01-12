@@ -1,4 +1,8 @@
-﻿using pancake.lib;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using pancake.lib;
+using pancake.models;
 using System;
 using System.Data;
 using System.Linq;
@@ -12,13 +16,52 @@ namespace pancake
     /// </summary>
     public partial class App : Application
     {
-        private void Application_Startup(object sender, StartupEventArgs e)
+        public static IHost? Host { get; private set; }
+
+        public App()
         {
-            //SaveDefaultTemplate();
+            Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    ConfigureServices(services);
+                })
+                .Build();
+        }
+
+        private void ConfigureServices(IServiceCollection services)
+        {
+            // Add Services
+            services
+                .AddLogging(lb =>
+                    {
+                        var config = Config.Logging;
+                        if (config != null)
+                            lb.AddConfiguration(config);
+
+                        lb.AddDebug();
+                    })
+                .AddSingleton<App>(this)
+                .AddTransient(typeof(IDispatcherHelper), typeof(DispatcherHelper))
+                .AddTransient<PlayerModel>()
+                .AddSingleton<MainWindow>();
+        }
+
+        protected async override void OnStartup(StartupEventArgs e)
+        {
             SetTheme(Settings.Instance.Theme);
 
-            MainWindow = new MainWindow();
-            MainWindow.Show();
+            await Host!.StartAsync();
+
+            var mainWindow = Host.Services.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+
+            base.OnStartup(e);
+        }
+
+        protected override async void OnExit(ExitEventArgs e)
+        {
+            await Host!.StopAsync();
+            base.OnExit(e);
         }
 
         public void SetTheme(string? theme)

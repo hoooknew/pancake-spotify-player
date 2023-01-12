@@ -4,8 +4,7 @@
              xmlns:ctrl="clr-namespace:pancake.ui.controls"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:cvt="clr-namespace:pancake.ui.converters"
-             xmlns:local="clr-namespace:pancake"
-             Startup="Application_Startup">
+             xmlns:local="clr-namespace:pancake">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

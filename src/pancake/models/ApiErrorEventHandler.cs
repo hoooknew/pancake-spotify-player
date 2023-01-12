@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace pancake.models
 {
-    internal class ApiErrorEventArgs : EventArgs
+    public class ApiErrorEventArgs : EventArgs
     {
         public Exception Exception { get; private set; }
         public ApiErrorEventArgs(Exception exception)

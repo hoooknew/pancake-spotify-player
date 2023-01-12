@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace pancake.models
 {
-    internal class PlayerModel : IDisposable, INotifyPropertyChanged
+    public class PlayerModel : IDisposable, INotifyPropertyChanged
     {
         private record ChangedState(bool Track = false, bool PlayPause = false, bool Shuffle = false, bool Repeat = false, bool Position = false)
         {
@@ -42,7 +42,7 @@ namespace pancake.models
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<ApiErrorEventArgs>? ApiError;
 
-        private readonly Dispatcher _dispatcher;
+        private readonly IDispatcherHelper _dispatcher;
 
 
         private SpotifyClient? _client = null;
@@ -62,7 +62,7 @@ namespace pancake.models
         private readonly ILogger _stateLog = Logging.Category("pancake.playermodel.state");
         private readonly ILogger _timingLog = Logging.Category("pancake.playermodel.timing");
 
-        public PlayerModel(Dispatcher dispatcher)
+        public PlayerModel(IDispatcherHelper dispatcher)
         {
             this._dispatcher = dispatcher;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);

@@ -16,12 +16,12 @@ namespace pancake
         private readonly PlayerModel _model;
         private bool _commandExecuting = false;
 
-        public MainWindow()
+        public MainWindow(PlayerModel model)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
 
-            _model = new PlayerModel(this.Dispatcher);
+            _model = model;
             _model.ApiError += _model_ApiError;
         }
 

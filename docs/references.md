@@ -82,3 +82,8 @@ https://affinity.serif.com/en-us/designer/
 ## WPF DPI Awareness
 https://github.com/Microsoft/WPF-Samples/tree/master/PerMonitorDPI
 https://learn.microsoft.com/en-us/answers/questions/643007/how-to-set-permonitor-dpiawareness-for-net-6-windo.html
+
+## Dependency Injection
+https://github.com/mwhite102/WPFDependencyInjection/blob/master/src/DependencyInjection.WPF/App.xaml.cs
+https://www.thecodebuzz.com/logging-in-net-core-console-application/
+https://stackify.com/net-core-loggerfactory-use-correctly/
