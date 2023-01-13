@@ -13,7 +13,7 @@
         Title="Pancake Player" Height="80" Width="400"
         BorderThickness="0"
         MinWidth="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance},Converter={StaticResource MultiplyDoublesConverter}, ConverterParameter={StaticResource 1xMinWidth}}"
-        ui:WindowPosition.Save="WindowPosition"
+        ui:WindowPlacement.Save="MainWindowPlacement"
         TextBlock.Foreground="{DynamicResource TextForegroundBrush}"
         Topmost="{Binding AlwaysOnTop, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"
         ShowInTaskbar="{Binding TaskbarVisible, Mode=OneWay, Source={x:Static lib:Settings.Instance}}">
