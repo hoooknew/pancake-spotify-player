@@ -12,7 +12,7 @@ namespace pancake.ui
     /// </summary>
     /// <see cref="https://github.com/danielchalmers/WpfWindowPlacement/blob/master/WpfWindowPlacement/NativeMethods.cs"/>
     /// <seealso cref="https://github.com/danielchalmers/DesktopClock"/>
-    public static class WindowPosition
+    public static class WindowPlacement
     {        
         public static string GetSave(DependencyObject obj)
             => (string)obj.GetValue(SaveProperty);
