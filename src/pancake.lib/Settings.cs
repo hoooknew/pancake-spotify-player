@@ -41,7 +41,7 @@ namespace pancake.lib
         }
 
         [AutoNotify]
-        private Rect? _windowPosition = null;
+        private string? _windowPosition = null;
 
         [AutoNotify]
         private string? _theme = "dark";
