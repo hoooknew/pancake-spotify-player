@@ -7,6 +7,11 @@ using System.Windows.Threading;
 
 namespace pancake.models
 {
+    public interface IDispatcherHelper
+    {
+        void Invoke(Action callback);
+        TResult Invoke<TResult>(Func<TResult> callback);
+    }
     internal class DispatcherHelper : IDispatcherHelper
     {
         private readonly Dispatcher _dispatcher;

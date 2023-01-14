@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using pancake.lib;
 using pancake.models;
+using pancake.spotify;
 using System;
 using System.Data;
 using System.Linq;
@@ -42,6 +43,7 @@ namespace pancake
                     })
                 .AddSingleton<App>(this)
                 .AddTransient(typeof(IDispatcherHelper), typeof(DispatcherHelper))
+                .AddSingleton(typeof(IClientFactory), typeof(ClientFactory))
                 .AddTransient<PlayerModel>()
                 .AddSingleton<MainWindow>();
         }

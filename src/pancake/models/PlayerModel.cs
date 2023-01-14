@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using Microsoft.Extensions.Logging;
+using pancake.spotify;
 
 namespace pancake.models
 {
@@ -43,9 +44,8 @@ namespace pancake.models
         public event EventHandler<ApiErrorEventArgs>? ApiError;
 
         private readonly IDispatcherHelper _dispatcher;
-
-
-        private SpotifyClient? _client = null;
+        private readonly IClientFactory _clientFactory;
+        private ISpotifyClient? _client = null;
         private Task? _updaterTask = null;
         private CancellationTokenSource? _updaterCancel = null;
         private SemaphoreSlim _refreshLock = new SemaphoreSlim(1);
@@ -62,9 +62,10 @@ namespace pancake.models
         private readonly ILogger _stateLog = Logging.Category("pancake.playermodel.state");
         private readonly ILogger _timingLog = Logging.Category("pancake.playermodel.timing");
 
-        public PlayerModel(IDispatcherHelper dispatcher)
+        public PlayerModel(IDispatcherHelper dispatcher, IClientFactory clientFactory)
         {
             this._dispatcher = dispatcher;
+            this._clientFactory = clientFactory;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
         }
 
@@ -149,12 +150,7 @@ namespace pancake.models
         {
             _StopUpdates();
 
-            var authenticator = Authentication.CreateAuthenticator(token);
-
-            var config = SpotifyClientConfig.CreateDefault()
-                .WithAuthenticator(authenticator);
-
-            _client = new SpotifyClient(config);
+            _client = _clientFactory.CreateClient(token);
             NeedToken = false;
 
             _StartUpdates();
