@@ -43,7 +43,6 @@ namespace pancake.models
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<ApiErrorEventArgs>? ApiError;
 
-        private readonly IDispatcherHelper _dispatcher;
         private readonly IClientFactory _clientFactory;
         private ISpotifyClient? _client = null;
         private Task? _updaterTask = null;
@@ -62,9 +61,8 @@ namespace pancake.models
         private readonly ILogger _stateLog = Logging.Category("pancake.playermodel.state");
         private readonly ILogger _timingLog = Logging.Category("pancake.playermodel.timing");
 
-        public PlayerModel(IDispatcherHelper dispatcher, IClientFactory clientFactory)
+        public PlayerModel(IClientFactory clientFactory)
         {
-            this._dispatcher = dispatcher;
             this._clientFactory = clientFactory;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
         }
@@ -253,7 +251,7 @@ namespace pancake.models
         public void SignOut()
         {
             _StopUpdates();
-            _dispatcher.Invoke(() => this.NeedToken = true);
+            NeedToken = true;
         }
 
 
@@ -469,13 +467,13 @@ namespace pancake.models
             }
             catch (APIException e) when (e is not APITooManyRequestsException)
             {
-                this._dispatcher.Invoke(() => _HandleAPIError(e));
+                //this._dispatcher.Invoke(() => _HandleAPIError(e));
+                _HandleAPIError(e);
                 return false;
             }
         }
         private void _HandleAPIError(Exception e)
         {
-            SignOut();
             _OnApiError(e);
         }
 

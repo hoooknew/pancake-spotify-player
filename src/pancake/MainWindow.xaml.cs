@@ -1,4 +1,5 @@
-﻿using pancake.lib;
+﻿using Microsoft.Extensions.Logging;
+using pancake.lib;
 using pancake.models;
 using pancake.ui;
 using pancake.ui.controls;
@@ -13,23 +14,34 @@ namespace pancake
 {
     public partial class MainWindow : BaseWindow
     {
-        private readonly PlayerModel _model;
-        private bool _commandExecuting = false;
+        readonly ILogger<MainWindow> _logger;
+        readonly PlayerModel _model;
+        bool _commandExecuting = false;
 
-        public MainWindow(PlayerModel model)
+        public MainWindow(ILogger<MainWindow> logger, PlayerModel model)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
 
+            _logger = logger;
             _model = model;
             _model.ApiError += _model_ApiError;
         }
 
         private void _model_ApiError(object? sender, ApiErrorEventArgs e)
         {
-            Authentication.SaveToken(null);
-            if (!(e.Exception is APIUnauthorizedException))
-                MessageBox.Show(e.Exception.Message);
+            //is this on a worker thread? does it need to be invoked?
+            this.Dispatcher.Invoke(() =>
+            {
+                this._model.SignOut();
+                Authentication.SaveToken(null);
+
+                if (!(e.Exception is APIUnauthorizedException))
+                {
+                    _logger.LogError(e.Exception, "api error: {0}", e.Exception.Message);
+                    MessageBox.Show(e.Exception.Message);
+                }
+            });
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
