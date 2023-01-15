@@ -32,17 +32,11 @@ namespace pancake
         private void ConfigureServices(IServiceCollection services)
         {
             // Add Services
-            services
-                .AddLogging(lb =>
-                    {
-                        var config = Config.Logging;
-                        if (config != null)
-                            lb.AddConfiguration(config);
-
-                        lb.AddDebug();
-                    })
+            services                
                 .AddSingleton<App>(this)
-                .AddTransient(typeof(IDispatcherHelper), typeof(DispatcherHelper))
+                .AddSingleton(typeof(IConfig), typeof(Config))
+                .AddSingleton(typeof(ILogging), typeof(Logging))
+                .AddSingleton(typeof(IAuthentication), typeof(Authentication))
                 .AddSingleton(typeof(IClientFactory), typeof(ClientFactory))
                 .AddTransient<PlayerModel>()
                 .AddSingleton<MainWindow>();

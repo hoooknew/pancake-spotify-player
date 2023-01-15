@@ -43,12 +43,13 @@ namespace pancake.models
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<ApiErrorEventArgs>? ApiError;
 
+        private readonly IConfig _config;
         private readonly IClientFactory _clientFactory;
         private ISpotifyClient? _client = null;
         private Task? _updaterTask = null;
         private CancellationTokenSource? _updaterCancel = null;
         private SemaphoreSlim _refreshLock = new SemaphoreSlim(1);
-        private readonly int REFRESH_DELAY = Config.RefreshDelayMS;
+        private readonly int REFRESH_DELAY;
         private readonly System.Threading.Timer _trackTimer;
         private bool _disposed = false;
 
@@ -58,11 +59,17 @@ namespace pancake.models
         private bool _enableControls = true;
         private bool _clientAvailable = true;
 
-        private readonly ILogger _stateLog = Logging.Category("pancake.playermodel.state");
-        private readonly ILogger _timingLog = Logging.Category("pancake.playermodel.timing");
+        private readonly ILogger _stateLog;
+        private readonly ILogger _timingLog;
 
-        public PlayerModel(IClientFactory clientFactory)
+        public PlayerModel(IConfig config, IClientFactory clientFactory, ILogging logging)
         {
+            this._config = config;
+            REFRESH_DELAY = _config.RefreshDelayMS;
+
+            _stateLog = logging.Create("pancake.playermodel.state");
+            _timingLog = logging.Create("pancake.playermodel.timing");
+
             this._clientFactory = clientFactory;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
         }

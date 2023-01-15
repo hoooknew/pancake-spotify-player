@@ -5,13 +5,27 @@ using System.Reflection;
 
 namespace pancake.lib
 {
-    public static class Authentication
+    public interface IAuthentication
+    {
+        IAuthenticator CreateAuthenticator(IRefreshableToken? token);
+        IRefreshableToken? LoadToken();
+        Task<IRefreshableToken?> Login();
+        void SaveToken(IRefreshableToken? token);
+        bool TokenAvailable();
+    }
+
+    public class Authentication : IAuthentication
     {
         private static readonly string _credentialsPath = Path.Combine(Constants.LOCAL_APP_DATA, @"credentials.json");
+        private readonly IConfig _config;
 
-        public static async Task<IRefreshableToken?> Login()
+        public Authentication(IConfig config, ILogging logging)
         {
-            if (string.IsNullOrEmpty(Config.ClientId))
+            _config = config;            
+        }
+        public async Task<IRefreshableToken?> Login()
+        {
+            if (string.IsNullOrEmpty(_config.ClientId))
                 throw new NullReferenceException(
                   "Please set SPOTIFY_CLIENT_ID via environment variables before starting the program"
                 );
@@ -32,7 +46,7 @@ namespace pancake.lib
                         await server.Stop();
 
                         PKCETokenResponse token = await new OAuthClient().RequestToken(
-                          new PKCETokenRequest(Config.ClientId!, response.Code, server.BaseUri, verifier)
+                          new PKCETokenRequest(_config.ClientId!, response.Code, server.BaseUri, verifier)
                         );
 
                         lock (syncObj)
@@ -53,7 +67,7 @@ namespace pancake.lib
                         resetEvent.Set();
                     };
 
-                    var request = new LoginRequest(server.BaseUri, Config.ClientId!, LoginRequest.ResponseType.Code)
+                    var request = new LoginRequest(server.BaseUri, _config.ClientId!, LoginRequest.ResponseType.Code)
                     {
                         CodeChallenge = challenge,
                         CodeChallengeMethod = "S256",
@@ -102,17 +116,17 @@ namespace pancake.lib
             }
         }
 
-        public static IAuthenticator CreateAuthenticator(IRefreshableToken? token)
+        public IAuthenticator CreateAuthenticator(IRefreshableToken? token)
         {
-            var authenticator = new PKCEAuthenticator(Config.ClientId!, (token as PKCETokenResponse)!);
+            var authenticator = new PKCEAuthenticator(_config.ClientId!, (token as PKCETokenResponse)!);
             authenticator.TokenRefreshed += (sender, token) => SaveToken(token);
 
             return authenticator;
         }
 
 
-        public static bool TokenAvailable() => File.Exists(_credentialsPath);
-        public static void SaveToken(IRefreshableToken? token)
+        public bool TokenAvailable() => File.Exists(_credentialsPath);
+        public void SaveToken(IRefreshableToken? token)
         {
             CreateLocalAppFolder();
 
@@ -122,7 +136,7 @@ namespace pancake.lib
                 File.WriteAllText(_credentialsPath, JsonConvert.SerializeObject(token));
         }
 
-        public static IRefreshableToken? LoadToken()
+        public IRefreshableToken? LoadToken()
         {
             if (TokenAvailable())
             {

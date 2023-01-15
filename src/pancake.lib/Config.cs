@@ -9,31 +9,29 @@ using System.Threading.Tasks;
 
 namespace pancake.lib
 {
-    public static class Config
+    public interface IConfig
     {
-        private static IConfiguration? __instance = null;
-        public static IConfiguration Instance
+        string? ClientId { get; }
+        IConfigurationSection? Logging { get; }
+        int RefreshDelayMS { get; }
+    }
+
+    public class Config : IConfig
+    {
+        private readonly IConfiguration _config;
+
+
+        public Config()
         {
-            get
-            {
-                if (__instance == null)
-                    lock (typeof(Config))
-                    {
-                        if (__instance == null)
-                        {   
-                            var builder = new ConfigurationBuilder()
-                                .AddJsonFile($"appsettings.json", true);
-                            __instance = builder.Build();
-                        }
-                    }
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                .AddJsonFile($"appsettings.json", true);
 
-                return __instance;
-            }
-        }        
+            _config = builder.Build();
+        }
 
-        public static string? ClientId => Instance["clientId"];
-        public static int RefreshDelayMS => int.Parse(Instance["refreshDelayMS"] ?? "1000");
+        public string? ClientId => _config["clientId"];
+        public int RefreshDelayMS => int.Parse(_config["refreshDelayMS"] ?? "1000");
 
-        public static IConfigurationSection? Logging => Instance.GetSection("Logging");
+        public IConfigurationSection? Logging => _config.GetSection("Logging");
     }
 }

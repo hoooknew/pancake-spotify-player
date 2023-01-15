@@ -15,15 +15,17 @@ namespace pancake
     public partial class MainWindow : BaseWindow
     {
         readonly ILogger<MainWindow> _logger;
+        private readonly IAuthentication _auth;
         readonly PlayerModel _model;
         bool _commandExecuting = false;
 
-        public MainWindow(ILogger<MainWindow> logger, PlayerModel model)
+        public MainWindow(ILogging logging, IAuthentication auth, PlayerModel model)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
 
-            _logger = logger;
+            _logger = logging.Create<MainWindow>();
+            _auth = auth;
             _model = model;
             _model.ApiError += _model_ApiError;
         }
@@ -34,7 +36,7 @@ namespace pancake
             this.Dispatcher.Invoke(() =>
             {
                 this._model.SignOut();
-                Authentication.SaveToken(null);
+                _auth.SaveToken(null);
 
                 if (!(e.Exception is APIUnauthorizedException))
                 {
@@ -47,9 +49,9 @@ namespace pancake
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             IRefreshableToken? token;
-            if (Authentication.TokenAvailable())
+            if (_auth.TokenAvailable())
             {
-                token = Authentication.LoadToken();
+                token = _auth.LoadToken();
 
                 if (token != null)
                     _model.SetToken(token);
@@ -94,8 +96,8 @@ namespace pancake
 
         private async Task SignIn()
         {
-            var token = await Authentication.Login();
-            Authentication.SaveToken(token);
+            var token = await _auth.Login();
+            _auth.SaveToken(token);
             if (token != null)
                 _model.SetToken(token);
         }
@@ -136,7 +138,7 @@ namespace pancake
             }
             else if (e.Command == SettingsCommands.SignOut)
             {
-                Authentication.SaveToken(null);
+                _auth.SaveToken(null);
                 _model.SignOut();
             }
             else if (e.Command == SettingsCommands.ChangeZoom)

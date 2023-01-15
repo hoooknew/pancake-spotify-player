@@ -7,26 +7,34 @@ using System.Threading.Tasks;
 
 namespace pancake.lib
 {
-    public class Logging
+    public interface ILogging
     {
-        private static readonly ILogger __default;
-        private static readonly ILoggerFactory __factory;
-        static Logging()
+        ILogger Default { get; }
+
+        ILogger Create(string category);
+        ILogger<T> Create<T>();
+    }
+
+    public class Logging : ILogging
+    {
+        private readonly ILogger _default;
+        private readonly ILoggerFactory _factory;
+        public Logging(IConfig config)
         {
-            __factory = LoggerFactory.Create(lb =>
-            {                
-                var config = Config.Logging;
-                if (config != null) 
-                    lb.AddConfiguration(config);
+            _factory = LoggerFactory.Create(lb =>
+            {
+                if (config.Logging != null)
+                    lb.AddConfiguration(config.Logging);
 
                 lb.AddDebug();
             });
-            __default = __factory.CreateLogger<Logging>();
+            _default = _factory.CreateLogger<Logging>();
         }
 
-        public static ILogger Default => __default;
-        public static ILoggerFactory Factory => __factory;
+        public ILogger Default => _default;
+        private ILoggerFactory Factory => _factory;
 
-        public static ILogger Category(string category) => Factory.CreateLogger(category);
+        public ILogger Create(string category) => Factory.CreateLogger(category);
+        public ILogger<T> Create<T>() => Factory.CreateLogger<T>();
     }
 }
