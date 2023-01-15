@@ -48,7 +48,7 @@ namespace pancake
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            IRefreshableToken? token;
+            object? token;
             if (_auth.TokenAvailable())
             {
                 token = _auth.LoadToken();

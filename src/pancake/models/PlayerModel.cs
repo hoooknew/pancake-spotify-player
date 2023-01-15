@@ -151,7 +151,7 @@ namespace pancake.models
             }
         }
 
-        public void SetToken(IRefreshableToken token)
+        public void SetToken(object token)
         {
             _StopUpdates();
 

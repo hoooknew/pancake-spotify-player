@@ -11,7 +11,7 @@ namespace pancake.spotify
 {
     public interface IClientFactory
     {
-        ISpotifyClient CreateClient(IRefreshableToken token);
+        ISpotifyClient CreateClient(object token);
     }
 
     public class ClientFactory : IClientFactory
@@ -22,7 +22,7 @@ namespace pancake.spotify
         {
             _auth = auth;
         }
-        public ISpotifyClient CreateClient(IRefreshableToken token)
+        public ISpotifyClient CreateClient(object token)
         {
             var authenticator = _auth.CreateAuthenticator(token);
 

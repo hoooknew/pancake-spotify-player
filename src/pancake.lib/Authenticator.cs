@@ -7,10 +7,10 @@ namespace pancake.lib
 {
     public interface IAuthentication
     {
-        IAuthenticator CreateAuthenticator(IRefreshableToken? token);
-        IRefreshableToken? LoadToken();
-        Task<IRefreshableToken?> Login();
-        void SaveToken(IRefreshableToken? token);
+        IAuthenticator CreateAuthenticator(object? token);
+        object? LoadToken();
+        Task<object?> Login();
+        void SaveToken(object? token);
         bool TokenAvailable();
     }
 
@@ -23,7 +23,7 @@ namespace pancake.lib
         {
             _config = config;            
         }
-        public async Task<IRefreshableToken?> Login()
+        public async Task<object?> Login()
         {
             if (string.IsNullOrEmpty(_config.ClientId))
                 throw new NullReferenceException(
@@ -116,7 +116,7 @@ namespace pancake.lib
             }
         }
 
-        public IAuthenticator CreateAuthenticator(IRefreshableToken? token)
+        public IAuthenticator CreateAuthenticator(object? token)
         {
             var authenticator = new PKCEAuthenticator(_config.ClientId!, (token as PKCETokenResponse)!);
             authenticator.TokenRefreshed += (sender, token) => SaveToken(token);
@@ -126,7 +126,7 @@ namespace pancake.lib
 
 
         public bool TokenAvailable() => File.Exists(_credentialsPath);
-        public void SaveToken(IRefreshableToken? token)
+        public void SaveToken(object? token)
         {
             CreateLocalAppFolder();
 
@@ -136,7 +136,7 @@ namespace pancake.lib
                 File.WriteAllText(_credentialsPath, JsonConvert.SerializeObject(token));
         }
 
-        public IRefreshableToken? LoadToken()
+        public object? LoadToken()
         {
             if (TokenAvailable())
             {
