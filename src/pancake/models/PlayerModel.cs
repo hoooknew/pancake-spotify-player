@@ -292,7 +292,7 @@ namespace pancake.models
             await _TryApiCall(async () =>
             {
                 var cancelToken = this._updaterCancel!.Token;
-                var timer = new PeriodicTimer(new TimeSpan(0, 0, 0, 0, REFRESH_DELAY));
+                var timer = new PeriodicTimer(REFRESH_DELAY.MSasTimeSpan());
                 while (!cancelToken.IsCancellationRequested)
                 {
                     try
@@ -369,10 +369,10 @@ namespace pancake.models
                                  */
                                 _trackTimer.Change((1000 - _positionMs % 1000), 1000);
                                 _timingLog.LogInformation($" time till next tick {(1000 - _positionMs % 1000)}");
-                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
+                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
                             }
                             else
-                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{new TimeSpan(0, 0, 0, 0, _positionMs)} {diff.ToString()}");
+                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
                         }
                         else
                             this.Position = Context!.ProgressMs;
@@ -382,6 +382,7 @@ namespace pancake.models
 
                     _OnPropertyChanged("");
 
+                    _stateLog.LogInformation($"{Title}, {String.Join(", ", Artists.Select(r => r.Name))} : {Position.MSasTimeSpan()} / {Duration.MSasTimeSpan()}, IsPlaying: {IsPlaying}");
                     _stateLog.LogInformation(changed.ToString());
                     return changed;
 
@@ -409,7 +410,7 @@ namespace pancake.models
                 else
                 {
                     player.Position = player.Position + 1000;
-                    player._timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} tick :{new TimeSpan(0, 0, 0, 0, player.Position)}");
+                    player._timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} tick :{player.Position.MSasTimeSpan()}");
 
                 }
 

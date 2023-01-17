@@ -23,5 +23,8 @@ namespace pancake.lib
         {
             Process.Start(new ProcessStartInfo(uri) { UseShellExecute = true });
         }
+
+        public static TimeSpan MSasTimeSpan(this int ms)
+            => new TimeSpan(0, 0, 0, 0, ms);
     }
 }
