@@ -1,17 +1,14 @@
-﻿using pancake.lib;
-using Newtonsoft.Json.Linq;
+﻿using Microsoft.Extensions.Logging;
+using pancake.lib;
+using pancake.spotify;
 using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Threading;
-using Microsoft.Extensions.Logging;
-using pancake.spotify;
 
 namespace pancake.models
 {
@@ -61,6 +58,7 @@ namespace pancake.models
 
         private readonly ILogger _stateLog;
         private readonly ILogger _timingLog;
+        private readonly ILogger _commandsLog;
 
         public PlayerModel(IConfig config, IClientFactory clientFactory, ILogging logging)
         {
@@ -69,6 +67,7 @@ namespace pancake.models
 
             _stateLog = logging.Create("pancake.playermodel.state");
             _timingLog = logging.Create("pancake.playermodel.timing");
+            _commandsLog = logging.Create("pancake.playermodel.commands");
 
             this._clientFactory = clientFactory;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
@@ -165,6 +164,9 @@ namespace pancake.models
         {
             return await _TryApiCall(async () =>
             {
+                _commandsLog.LogInformation("play/pause");
+
+                var prev = this.IsPlaying;
                 if (this.IsPlaying)
                     await this._client!.Player.PausePlayback();
                 else
@@ -177,6 +179,8 @@ namespace pancake.models
         {
             return await _TryApiCall(async () =>
             {
+                _commandsLog.LogInformation("skip next");
+
                 _StopUpdates();
                 await this._client!.Player.SkipNext();
                 await RefreshStateUntil(r => r.Track);
@@ -189,22 +193,29 @@ namespace pancake.models
             {
                 if (Position < 3000)
                 {
+                    _commandsLog.LogInformation("skip prev");
+
                     await this._client!.Player.SkipPrevious();
                     await RefreshStateUntil(r => r.Track);
                 }
                 else
                 {
+                    _commandsLog.LogInformation("skip prev/seek");
+
                     _StopUpdates();
                     await this._client!.Player.SeekTo(new PlayerSeekToRequest(0));
                     await RefreshStateUntil(r => r.Position);
                     _StartUpdates();
                 }
+                
             });
         }
         public async Task<bool> ToggleShuffle()
         {
             return await _TryApiCall(async () =>
             {
+                _commandsLog.LogInformation($"toggle shuffle: {IsShuffleOn}");
+
                 await this._client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
                 await RefreshStateUntil(r => r.Shuffle);
             });
@@ -213,6 +224,8 @@ namespace pancake.models
         {
             return await _TryApiCall(async () =>
             {
+                _commandsLog.LogInformation($"toggle repeat: {RepeatState}");
+
                 PlayerSetRepeatRequest.State nextState;
                 switch (RepeatState)
                 {
@@ -236,6 +249,8 @@ namespace pancake.models
         {
             return await _TryApiCall(async () =>
             {
+                _commandsLog.LogInformation($"toggle favorite: {IsFavorite}");
+
                 string? id = Context?.Item?.GetItemId();
 
                 if (id != null)
@@ -257,6 +272,8 @@ namespace pancake.models
         }
         public void SignOut()
         {
+            _commandsLog.LogInformation("sign out");
+
             _StopUpdates();
             NeedToken = true;
         }
@@ -328,16 +345,19 @@ namespace pancake.models
 
             return false;
         }
+        
         private async Task<ChangedState> _RefreshState(CancellationToken cancelToken = default(CancellationToken))
         {
             if (await _refreshLock.WaitAsync(0))
             {
+                _stateLog.LogInformation("enter writer");
                 try
                 {
                     var newContext = await this._client!.Player.GetCurrentPlayback(cancelToken);
 
+                    PrevContext = Context ?? PrevContext;
                     Context = newContext;
-                    PrevContext = newContext ?? PrevContext;
+
                     ClientAvailable = newContext != null;
                     
                     var changed = ChangedState.Compare(PrevContext, newContext);
@@ -360,7 +380,7 @@ namespace pancake.models
                             if (REFRESH_DELAY > 1000)
                             {
                                 var diff = Math.Abs(Context.ProgressMs - _positionMs);
-                                if (changed.Track || diff > 500)
+                                if ((changed.PlayPause && Context.IsPlaying) || changed.Track || diff > 500)
                                 {
                                     this.Position = Context.ProgressMs;
 
@@ -369,12 +389,13 @@ namespace pancake.models
                                      * (1000 - _positionMs % 1000) = time till the next even second
                                      * (1000 - _positionMs % 1000) + 1000 = a second after that
                                      */
-                                    _trackTimer.Change((1000 - _positionMs % 1000), 1000);
-                                    _timingLog.LogInformation($" time till next tick {(1000 - _positionMs % 1000)}");
-                                    _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
+
+                                    _timingLog.LogInformation($"TICK FIXED | Now: {DateTime.Now.ToString("mm:ss.fff")}, Next tick: {(1000 - _positionMs % 1000)}");
+                                    //_timingLog.LogInformation($"correction :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
+                                    _trackTimer.Change((1000 - _positionMs % 1000).MSasTimeSpan(), 1000.MSasTimeSpan());                                                                        
                                 }
                                 else
-                                    _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
+                                    _timingLog.LogInformation($"TICK OK | Now: {DateTime.Now.ToString("mm:ss.fff")}, Position :{_positionMs.MSasTimeSpan()}, Diff from Position: {diff}");
                             }
                             else
                                 this.Position = Context!.ProgressMs;
@@ -390,7 +411,7 @@ namespace pancake.models
 
                     _OnPropertyChanged("");
 
-                    _stateLog.LogInformation($"{Title}, {String.Join(", ", Artists.Select(r => r.Name))} : {Position.MSasTimeSpan()} / {Duration.MSasTimeSpan()}, IsPlaying: {IsPlaying}");
+                    _stateLog.LogInformation($"Now: {DateTime.Now.ToString("mm:ss.fff")}, {Title}, {String.Join(", ", Artists.Select(r => r.Name))} : {Position.MSasTimeSpan()} / {Duration.MSasTimeSpan()}, IsPlaying: {IsPlaying}");
                     _stateLog.LogInformation(changed.ToString());
                     return changed;
 
@@ -398,12 +419,23 @@ namespace pancake.models
                 finally
                 {
                     _refreshLock.Release();
+                    _stateLog.LogInformation("exit writer");
                 }
             }
             else
             {
-                Debug.WriteLine("skipped refresh because of lock.");
-                return ChangedState.NothingChanged;
+                var prev = Context;
+                try
+                {
+                    _stateLog.LogInformation("enter reader");
+                    while (!await _refreshLock.WaitAsync(10)) ;
+                    return ChangedState.Compare(PrevContext, Context);
+                }
+                finally
+                {
+                    _refreshLock.Release();
+                    _stateLog.LogInformation("enter reader");
+                }
             }
         }
 
@@ -418,7 +450,7 @@ namespace pancake.models
                 else
                 {
                     player.Position = player.Position + 1000;
-                    player._timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} tick :{player.Position.MSasTimeSpan()}");
+                    player._timingLog.LogInformation($"tick, now: {DateTime.Now.ToString("mm:ss.fff")}, Position:{player.Position.MSasTimeSpan()}");
 
                 }
 
