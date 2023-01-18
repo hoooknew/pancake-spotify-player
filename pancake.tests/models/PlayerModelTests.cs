@@ -51,43 +51,43 @@ namespace pancake.tests.models
 
             return factory;
         }
-        //[Fact]
-        //public void time_is_stopped_when_always_paused()
-        //{
-        //    var final = PlayingContext(cpc =>
-        //    {
-        //        cpc.IsPlaying = false;
-        //        cpc.ProgressMs = 5 * 1_000;
-        //    });
+        [Fact]
+        public void time_is_stopped_when_always_paused()
+        {
+            var final = PlayingContext(cpc =>
+            {
+                cpc.IsPlaying = false;
+                cpc.ProgressMs = 5 * 1_000;
+            });
 
-        //    var factory = ClientFactory(client =>
-        //    {
-        //        client
-        //            .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
-        //            .ReturnsAsync(PlayingContext(cpc =>
-        //            {
-        //                cpc.IsPlaying = false;
-        //                cpc.ProgressMs = 5 * 1_000;
-        //            }))
-        //            .ReturnsAsync(final);
+            var factory = ClientFactory(client =>
+            {
+                client
+                    .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(final)
+                    .ReturnsAsync(final)
+                    .ReturnsAsync(final)
+                    .ReturnsAsync(final)
+                    .ReturnsAsync(final)
+                    .ReturnsAsync(final);
 
-        //        client
-        //            .Setup(r => r.Library.CheckTracks(It.IsAny<LibraryCheckTracksRequest>(), It.IsAny<CancellationToken>()))
-        //            .ReturnsAsync(new List<bool>() { false });
-        //    });
-
-
-        //    var config = new Mock<IConfig>();
-        //    config.Setup(r => r.RefreshDelayMS).Returns(3000);
+                client
+                    .Setup(r => r.Library.CheckTracks(It.IsAny<LibraryCheckTracksRequest>(), It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(new List<bool>() { false });
+            });
 
 
-        //    var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
+            var config = new Mock<IConfig>();
+            config.Setup(r => r.RefreshDelayMS).Returns(2000);
 
-        //    model.SetToken(new object());
-        //    Thread.Sleep(3_500);
-        //    model.Dispose();
-        //    Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);
-        //}
+
+            var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
+
+            model.SetToken(new object());
+            Thread.Sleep(5_500);
+            model.Dispose();
+            Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);
+        }
 
         [Fact]
         public void time_stops_when_paused()
