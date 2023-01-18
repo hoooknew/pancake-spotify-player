@@ -355,27 +355,35 @@ namespace pancake.models
                                 IsFavorite = null;
                         }
 
-                        if (REFRESH_DELAY > 1000 && (Context?.IsPlaying ?? false))
+                        if (Context?.IsPlaying ?? false)
                         {
-                            var diff = Math.Abs(Context.ProgressMs - _positionMs);
-                            if (changed.Track || diff > 500)
+                            if (REFRESH_DELAY > 1000)
                             {
-                                this.Position = Context.ProgressMs;
+                                var diff = Math.Abs(Context.ProgressMs - _positionMs);
+                                if (changed.Track || diff > 500)
+                                {
+                                    this.Position = Context.ProgressMs;
 
-                                /*
-                                 * _positionMs % 1000 = time since the last even second
-                                 * (1000 - _positionMs % 1000) = time till the next even second
-                                 * (1000 - _positionMs % 1000) + 1000 = a second after that
-                                 */
-                                _trackTimer.Change((1000 - _positionMs % 1000), 1000);
-                                _timingLog.LogInformation($" time till next tick {(1000 - _positionMs % 1000)}");
-                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
+                                    /*
+                                     * _positionMs % 1000 = time since the last even second
+                                     * (1000 - _positionMs % 1000) = time till the next even second
+                                     * (1000 - _positionMs % 1000) + 1000 = a second after that
+                                     */
+                                    _trackTimer.Change((1000 - _positionMs % 1000), 1000);
+                                    _timingLog.LogInformation($" time till next tick {(1000 - _positionMs % 1000)}");
+                                    _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} correction :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
+                                }
+                                else
+                                    _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
                             }
                             else
-                                _timingLog.LogInformation($"{DateTime.Now.ToString("mm:ss.fff")} ok :{_positionMs.MSasTimeSpan()} {diff.ToString()}");
+                                this.Position = Context!.ProgressMs;
                         }
                         else
+                        {
+                            _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
                             this.Position = Context!.ProgressMs;
+                        }
                     }
                     else
                         _trackTimer.Change(Timeout.Infinite, Timeout.Infinite);
