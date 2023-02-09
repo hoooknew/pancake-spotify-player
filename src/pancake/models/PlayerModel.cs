@@ -164,7 +164,7 @@ namespace pancake.models
         {
             return await _TryApiCall(async () =>
             {
-                _commandsLog.LogInformation("play/pause");
+                _commandsLog.LogInformation($"play/pause {DateTime.Now.ToString("mm:ss.fff")}");
 
                 var prev = this.IsPlaying;
                 if (this.IsPlaying)

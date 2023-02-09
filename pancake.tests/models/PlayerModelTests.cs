@@ -3,10 +3,12 @@ using pancake.lib;
 using pancake.models;
 using pancake.spotify;
 using pancake.tests.lib;
+using pancake.tests.spotify;
 using pancake.ui.controls;
 using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +53,15 @@ namespace pancake.tests.models
 
             return factory;
         }
+
+        private static Mock<IClientFactory> ClientFactory(SpotifyClientFake fake)
+        {
+            var factory = new Mock<IClientFactory>();
+            factory.Setup(r => r.CreateClient(It.IsAny<object>())).Returns(fake);
+
+            return factory;
+        }
+
         [Fact]
         public void time_is_stopped_when_always_paused()
         {
@@ -128,6 +139,54 @@ namespace pancake.tests.models
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);            
+        }
+
+        //I'm unconvinced that this test does anything useful.
+        [Fact]
+        public async void tick_delayed_after_play()
+        {
+            int refresh_delay = 3_000;
+            int starting_ms = 0_000;            
+
+            var config = new Mock<IConfig>();
+            config.Setup(r => r.RefreshDelayMS).Returns(refresh_delay);
+
+            bool isPlaying = false;            
+            Stopwatch time_playing = new Stopwatch();
+
+            var client = new SpotifyClientFake();
+            client.PlayerFake.Callback_ResumePlayback = request =>
+                {
+                    Debug.WriteLine($"set isplaying");
+                    isPlaying = true;
+                    time_playing.Start();
+                    return true;
+                };
+            client.PlayerFake.Callback_GetCurrentPlayback = () => PlayingContext(cpc =>
+                {
+                    cpc.IsPlaying = isPlaying;
+                    cpc.ProgressMs = starting_ms + (int)time_playing.ElapsedMilliseconds;                    
+
+                    Debug.WriteLine($"isplaying:{isPlaying}");
+                });
+
+            var factory = ClientFactory(client);
+
+            var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
+            model.SetToken(new object());
+            
+            await Task.Delay(1000);
+            await model.PlayPause();
+            await Task.Delay(10_000);
+
+
+            time_playing.Stop();
+            model.Dispose();
+            
+
+            var time_passed = starting_ms + time_playing.ElapsedMilliseconds;
+            Assert.True(model.IsPlaying && Math.Abs(model.Position - time_passed) < 1000);
+            
         }
     }
 }
