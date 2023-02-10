@@ -22,9 +22,9 @@
 
 
 - [x] customize the path button so it changes the button path color instead of using the default button behavior.
-- [ ] add a popover with extra track details, and album art.
-- [ ] add links to the popover that open the artist, song, or album in the desktop client
-- [ ] include at least part of the current playlist in the popover
+- [ ] create another window that is dockable to the top of the main window that has a horizontal stack of the albums in the playlist
+    - [ ] it should show past, current, and future
+    - [ ] should clicking on the items do anything? maybe change tracks or open the track details in spotify?
 
 
 - [x] add a settings right click that creates a user settings json in the app data folder
@@ -44,8 +44,9 @@
 
 
 - [x] built an installer
-  - [ ] figure out a versioning pattern
-- [ ] create a github actions workflow to create releases
+  - [x] figure out a versioning pattern
+- [x] create a github actions workflow to create releases
+    - [ ] change the CD so it triggers on the push of a release tag instead of a dispatch that makes the tag.
 - [x] make a readme that explains the app functionality
   - [ ] is there anything inside worth explaining how it works?
 - [x] style the auth callback page?
@@ -73,3 +74,4 @@
 - [x] the open spotify screen is taller than the normal screen. let's make it so the button shows up over the controls (or where they should be).
 - [ ] prevent multiple copies of the app from opening?
 - [ ] can I prevent the downloaded msi from being blocked my windows for free?
+- [ ] handle the bad gateway error without signing the user out?
