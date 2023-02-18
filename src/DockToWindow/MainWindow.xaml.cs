@@ -26,19 +26,28 @@ namespace DockToWindow
             InitializeComponent();
         }
 
+        private DockableWindows _dw;
+
         private void _mainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             this.Top = 1000;
             this.Left = 100;
             this.Topmost = true;
 
-            var dw = new DockableWindows(this);
+            _dw = new DockableWindows(this);
+
+            this.MouseRightButtonUp += MainWindow_MouseRightButtonUp;
 
             var dockable = new DockableWindow();
             dockable.Topmost = true;
 
-            dw.AddDockable(dockable);
+            _dw.AddDockable(dockable);
             dockable.Show();
+        }
+
+        private void MainWindow_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _dw.Dispose();
         }
     }
 }

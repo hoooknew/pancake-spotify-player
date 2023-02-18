@@ -45,7 +45,9 @@ namespace DockToWindow
             DWMWA_LAST
         }
 
-        public static RECT GetWindowRectangle(IntPtr hWnd)
+        // The wpf sizes includes transparent space around the window. This function returns a
+        // rectangle that describes the visual area painted much better.
+        public static RECT GetExtendedFrameBounds(IntPtr hWnd)
         {
             int size = Marshal.SizeOf(typeof(RECT));
             DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out RECT rect, size);
