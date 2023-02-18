@@ -30,10 +30,14 @@ namespace DockToWindow
         {
             this.Top = 1000;
             this.Left = 100;
+            this.Topmost = true;
+
+            var dw = new DockableWindows(this);
 
             var dockable = new DockableWindow();
+            dockable.Topmost = true;
 
-            DockableWindows.SetWindow(dockable, this);
+            dw.AddDockable(dockable);
             dockable.Show();
         }
     }

@@ -12,23 +12,21 @@ using System.Windows.Interop;
 
 namespace DockToWindow
 {
-    internal class DockableWindows
+    internal class DockableWindows : IDisposable
     {
         public enum Side { Left, Right, Top, Bottom }
-        private record DockedPosition(Point position, Side side);
-        private record WindowEdges(double left, double top, double right, double bottom)
-        {
-            public static WindowEdges From(Window w)
-                => new WindowEdges(w.Left, w.Top, w.Left + w.ActualWidth, w.Top + w.ActualHeight);
-        }
-
+        private record DockedPosition(Point position, Side side);        
 
         private Window _main;
+        private List<Window> _dockable;
         private Dictionary<Window, DockedPosition> _dockedWindows;
 
         public DockableWindows(Window main)
         {
             _main = main;
+            _main.LocationChanged += MainWindow_LocationChanged;
+
+            _dockable = new List<Window>();
             _dockedWindows = new Dictionary<Window, DockedPosition>();
         }
 
@@ -49,11 +47,31 @@ namespace DockToWindow
             DependencyProperty.RegisterAttached("Handle", typeof(IntPtr), typeof(DockableWindows), new PropertyMetadata(IntPtr.Zero));
 
 
+        public void AddDockable(Window w)
+        {
+            if (!_dockable.Contains(w))
+            {
+                _dockable.Add(w);
+                AddHook(w, Dockable_WndProc);
+            }
+        }
+
+        public void RemoveDockable(Window w)
+        {
+            if (_dockable.Contains(w))
+            {
+                RemoveHook(w, Dockable_WndProc);
+                _dockable.Remove(w);
+            }
+        }
 
         private DockedPosition? GetDockedPosition(Window dockable)
         {
             return _dockedWindows?.GetValueOrDefault(dockable) ?? null;
         }
+
+        private Window? GetDockableWithHandle(IntPtr h)
+            => _dockable.FirstOrDefault(w => GetHandle(w) == h);
 
         private void SetDockedPosition(Window dockable, DockedPosition? position)
         {
@@ -73,96 +91,78 @@ namespace DockToWindow
             }
         }
 
-
-        void WindowChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is Window dockable)
-            {
-                var x = GetHandle(dockable);
-                HwndSource source = HwndSource.FromHwnd(x);
-
-                source.RemoveHook(new HwndSourceHook(Dockable_WndProc));
-
-                if (e.OldValue is Window oldMain)
-                    oldMain.LocationChanged -= MainWindow_LocationChanged;
-
-                if (e.NewValue is Window newMain)
-                {
-                    source.AddHook(new HwndSourceHook(Dockable_WndProc));
-
-                    newMain.LocationChanged += MainWindow_LocationChanged;
-                }
-            }
-        }
-
-        private static IntPtr Dockable_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private IntPtr Dockable_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == NativeMethods.WM_EXITSIZEMOVE)
             {
-                Debug.WriteLine("Dockable_WndProc");
+                Window? dockable = GetDockableWithHandle(hwnd);
+
+                if (dockable != null)
+                {
+                    const double SNAP_DISTANCE = 20;
+
+                    var position = GetDockedPosition(dockable);
+
+                    var me = NativeMethods.GetWindowRectangle(GetHandle(_main));
+                    var de = NativeMethods.GetWindowRectangle(GetHandle(dockable));
+                    //if dockable window bottom is close to the main window top
+                    if (Math.Abs(me.Top - de.Bottom) < SNAP_DISTANCE &&
+                        (
+                            (de.Left >= me.Left && de.Left <= me.Right) ||
+                            (de.Right >= me.Left && de.Right <= me.Right)
+                        ))
+                    {
+                        var newTop = dockable.Top + me.Top - de.Bottom;
+                        SetDockedPosition(dockable, new DockedPosition(new Point(dockable.Left - _main.Left, newTop - _main.Top), Side.Top));
+
+                        if (position == null || position.side != Side.Top)
+                        {
+                            dockable.Top = newTop;
+                            Debug.WriteLine("docked on top");
+                        }
+                    }
+                    else
+                    {
+                        if (position != null)
+                        {
+                            SetDockedPosition(dockable, null);
+                            Debug.WriteLine("undocked");
+                        }
+                    }
+                }
             }
 
             return IntPtr.Zero;
         }
 
-        private bool __inside_DockableWindow_LocationChanged = false;
-        private void DockableWindow_LocationChanged(object? sender, EventArgs e)
+        private void AddHook(Window w, HwndSourceHook callback)
         {
-            const double SNAP_DISTANCE = 20;
-
-            if (!__inside_DockableWindow_LocationChanged)
+            if (w.IsLoaded)
             {
-                __inside_DockableWindow_LocationChanged = true;
-                try
-                {
-                    if (sender is Window dockable)
-                    {
-                        var position = GetDockedPosition(dockable);
-
-                        var me = WindowEdges.From(_main);
-                        var de = WindowEdges.From(dockable);
-                        //if dockable window bottom is close to the main window top
-                        if (Math.Abs(me.top - de.bottom) < SNAP_DISTANCE &&
-                            (
-                                (de.left >= me.left && de.left <= me.right) ||
-                                (de.right >= me.left && de.right <= me.right)
-                            ))
-                        {
-                            var newTop = dockable.Top + me.top - de.bottom;
-                            SetDockedPosition(dockable, new DockedPosition(new Point(dockable.Left - _main.Left, newTop - _main.Top), Side.Top));
-
-                            if (position == null || position.side != Side.Top)
-                            {
-                                dockable.Top = newTop;
-                                Debug.WriteLine("docked on top");
-                            }
-                        }
-                        else
-                        {
-                            if (position != null)
-                            {
-                                SetDockedPosition(dockable, null);
-                                Debug.WriteLine("undocked");
-                            }
-                        }
-
-                        //if dockable window top is close to the main window bottom
-
-                        //if dockable window left is close to the main window right
-
-                        //if dockable window right is close to the main window left
-                    }
-                }
-                finally
-                {
-                    __inside_DockableWindow_LocationChanged = false;
-                }
+                var h = GetHandle(w);
+                HwndSource source = HwndSource.FromHwnd(h);
+                source.AddHook(callback);
             }
+            else
+                w.Loaded += (s, e) => AddHook(w, callback);
+ 
+        }
+
+        private void RemoveHook(Window w, HwndSourceHook callback)
+        {
+            var h = GetHandle(w);
+            HwndSource source = HwndSource.FromHwnd(h);
+            source.RemoveHook(callback);
         }
 
         private void MainWindow_LocationChanged(object? sender, EventArgs e)
         {
             PositionDockedWindows();
+        }
+
+        public void Dispose()
+        {
+            _main.LocationChanged -= MainWindow_LocationChanged;
         }
     }
 }
