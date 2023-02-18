@@ -100,6 +100,7 @@ namespace DockToWindow
             // rectangle that describes the visual area painted much better.
             public static RECT GetExtendedFrameBounds(IntPtr hWnd)
             {
+                // https://github.com/StrongCod3r/SnapWindow/blob/master/WpfExample/WinApi.cs#L44
                 int size = Marshal.SizeOf(typeof(RECT));
                 DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out RECT rect, size);
 
@@ -269,6 +270,7 @@ namespace DockToWindow
 
         private IntPtr Dockable_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
+            // https://github.com/StrongCod3r/SnapWindow/blob/master/WpfExample/SnapWindow.cs#L23
             if (msg == NativeMethods.WM_EXITSIZEMOVE)
             {
                 Window? dockable = GetDockableWithHandle(hwnd);
