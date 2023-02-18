@@ -36,6 +36,7 @@ namespace DockToWindow
         [Flags]
         public enum Side 
         {
+            None = 0,
             Top_Out = 1, 
             Bottom_Out = 2,
             Left_Out = 4,
@@ -165,28 +166,40 @@ namespace DockToWindow
 
                 if (dockable != null)
                 {
-                    
-
                     var mainSize = _main.GetWindowSize();
                     var dockableSize = dockable.GetWindowSize();
 
-                    //if dockable window bottom is close to the main window top
+                    var sides = Side.None;
+
                     if (dockableSize.BottomCloseToTop(mainSize, SnapDistance) &&
                         dockableSize.HasHorizontalOverlap(mainSize))
+                        sides = Side.Top_Out;
+                    else if (dockableSize.TopCloseToBottom(mainSize, SnapDistance) &&
+                        dockableSize.HasHorizontalOverlap(mainSize))
+                        sides = Side.Bottom_Out;
+                    else if (dockableSize.LeftCloseToRight(mainSize, SnapDistance) &&
+                        dockableSize.HasVerticalOverlap(mainSize))
+                        sides = Side.Right_Out;
+                    else if (dockableSize.LeftCloseToRight(mainSize, SnapDistance) &&
+                        dockableSize.HasVerticalOverlap(mainSize))
+                        sides = Side.Left_Out;
+
+                    if (sides.HasFlag(Side.Top_Out) || sides.HasFlag(Side.Bottom_Out))
                     {
-                        var sides = Side.Top_Out;
                         if (dockableSize.LeftCloseToLeft(mainSize, SnapDistance))
                             sides |= Side.Left_In;
                         else if (dockableSize.RightCloseToRight(mainSize, SnapDistance))
                             sides |= Side.Right_In;
-
-                        SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, 0), sides));
-
-                        PositionDockedWindows();
-
-                        Debug.WriteLine("docked to top");
                     }
-                    else
+                    else if (sides.HasFlag(Side.Top_Out) || sides.HasFlag(Side.Bottom_Out))
+                    {
+                        if (dockableSize.TopCloseToTop(mainSize, SnapDistance))
+                            sides |= Side.Top_In;
+                        else if (dockableSize.BottomCloseToBottom(mainSize, SnapDistance))
+                            sides |= Side.Bottom_In;
+                    }                    
+
+                    if (sides == Side.None)
                     {
                         var position = GetDockedPosition(dockable);
 
@@ -195,6 +208,11 @@ namespace DockToWindow
                             SetDockedPosition(dockable, null);
                             Debug.WriteLine("undocked");
                         }
+                    }
+                    else
+                    {
+                        SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Bottom - dockable.Top), sides));
+                        PositionDockedWindows();
                     }
                 }
             }
@@ -223,7 +241,7 @@ namespace DockToWindow
             => Math.Abs(other_r.Top - r.Bottom) < closeDist;
 
         public static bool TopCloseToBottom(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-            => Math.Abs(other_r.Top - r.Bottom) < closeDist;
+            => Math.Abs(other_r.Bottom - r.Top) < closeDist;
 
         public static bool LeftCloseToRight(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
          => Math.Abs(other_r.Right - r.Left) < closeDist;
