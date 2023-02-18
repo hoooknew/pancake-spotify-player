@@ -128,7 +128,7 @@ namespace DockToWindow
         #endregion
 
         [Flags]
-        public enum Side
+        public enum DockedTo
         {
             None = 0,
             Top_Out = 1,
@@ -143,7 +143,7 @@ namespace DockToWindow
 
         const double DEFAULT_SNAP_DISTANCE = 20;
 
-        private record DockedPosition(Point offset, Side sides);
+        private record DockedPosition(Point offset, DockedTo dockedTo);
 
         private Window _main;
         readonly double _snapDistance;
@@ -233,25 +233,25 @@ namespace DockToWindow
                 double top;
                 double left;
 
-                if (position.sides.HasFlag(Side.Top_Out))
+                if (position.dockedTo.HasFlag(DockedTo.Top_Out))
                     top = mainSize.Top - dockedSize.Height;
-                else if (position.sides.HasFlag(Side.Bottom_Out))
+                else if (position.dockedTo.HasFlag(DockedTo.Bottom_Out))
                     top = mainSize.Top + mainSize.Height;
-                else if (position.sides.HasFlag(Side.Top_In))
+                else if (position.dockedTo.HasFlag(DockedTo.Top_In))
                     top = _main.Top;
-                else if (position.sides.HasFlag(Side.Bottom_In))
+                else if (position.dockedTo.HasFlag(DockedTo.Bottom_In))
                     top = _main.Top + (mainSize.Height - dockedSize.Height);
                 else
                     top = _main.Top + position.offset.Y;
 
 
-                if (position.sides.HasFlag(Side.Left_Out))
+                if (position.dockedTo.HasFlag(DockedTo.Left_Out))
                     left = _main.Left - dockedSize.Width;
-                else if (position.sides.HasFlag(Side.Right_Out))
+                else if (position.dockedTo.HasFlag(DockedTo.Right_Out))
                     left = _main.Left + mainSize.Width;
-                else if (position.sides.HasFlag(Side.Left_In))
+                else if (position.dockedTo.HasFlag(DockedTo.Left_In))
                     left = _main.Left;
-                else if (position.sides.HasFlag(Side.Right_In))
+                else if (position.dockedTo.HasFlag(DockedTo.Right_In))
                     left = _main.Left + (mainSize.Width - dockedSize.Width);
                 else
                     left = _main.Left + position.offset.X;
@@ -272,37 +272,37 @@ namespace DockToWindow
                     var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
                     var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
 
-                    var sides = Side.None;
+                    var dockTo = DockedTo.None;
 
                     if (dockableSize.BottomCloseToTop(mainSize, SnapDistance) &&
                         dockableSize.HasHorizontalOverlap(mainSize))
-                        sides = Side.Top_Out;
+                        dockTo = DockedTo.Top_Out;
                     else if (dockableSize.TopCloseToBottom(mainSize, SnapDistance) &&
                         dockableSize.HasHorizontalOverlap(mainSize))
-                        sides = Side.Bottom_Out;
+                        dockTo = DockedTo.Bottom_Out;
                     else if (dockableSize.LeftCloseToRight(mainSize, SnapDistance) &&
                         dockableSize.HasVerticalOverlap(mainSize))
-                        sides = Side.Right_Out;
+                        dockTo = DockedTo.Right_Out;
                     else if (dockableSize.RightCloseToLeft(mainSize, SnapDistance) &&
                         dockableSize.HasVerticalOverlap(mainSize))
-                        sides = Side.Left_Out;
+                        dockTo = DockedTo.Left_Out;
 
-                    if (sides.HasFlag(Side.Top_Out) || sides.HasFlag(Side.Bottom_Out))
+                    if (dockTo.HasFlag(DockedTo.Top_Out) || dockTo.HasFlag(DockedTo.Bottom_Out))
                     {
                         if (dockableSize.LeftCloseToLeft(mainSize, SnapDistance))
-                            sides |= Side.Left_In;
+                            dockTo |= DockedTo.Left_In;
                         else if (dockableSize.RightCloseToRight(mainSize, SnapDistance))
-                            sides |= Side.Right_In;
+                            dockTo |= DockedTo.Right_In;
                     }
-                    else if (sides.HasFlag(Side.Left_Out) || sides.HasFlag(Side.Right_Out))
+                    else if (dockTo.HasFlag(DockedTo.Left_Out) || dockTo.HasFlag(DockedTo.Right_Out))
                     {
                         if (dockableSize.TopCloseToTop(mainSize, SnapDistance))
-                            sides |= Side.Top_In;
+                            dockTo |= DockedTo.Top_In;
                         else if (dockableSize.BottomCloseToBottom(mainSize, SnapDistance))
-                            sides |= Side.Bottom_In;
+                            dockTo |= DockedTo.Bottom_In;
                     }
 
-                    if (sides == Side.None)
+                    if (dockTo == DockedTo.None)
                     {
                         var position = GetDockedPosition(dockable);
 
@@ -314,7 +314,7 @@ namespace DockToWindow
                     }
                     else
                     {
-                        SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), sides));
+                        SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
                         PositionDockedWindows();
                     }
                 }
