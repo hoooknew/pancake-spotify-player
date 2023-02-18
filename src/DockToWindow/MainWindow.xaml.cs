@@ -32,14 +32,19 @@ namespace DockToWindow
         {
             this.Top = 1000;
             this.Left = 100;
+            this.Width = 600;
+            this.Height = 200;
             this.Topmost = true;
 
             _dw = new DockableWindows(this);
+            _dw.AllowTop = _dw.AllowBottom = _dw.AllowRight = _dw.AllowLeft = false;
 
             this.MouseRightButtonUp += MainWindow_MouseRightButtonUp;
 
             var dockable = new DockableWindow();
             dockable.Topmost = true;
+            dockable.Width = 300;
+            dockable.Height = 100;
 
             _dw.AddDockable(dockable);
             dockable.Show();

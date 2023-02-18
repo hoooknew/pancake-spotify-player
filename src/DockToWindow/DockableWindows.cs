@@ -151,6 +151,10 @@ namespace DockToWindow
         private Dictionary<Window, DockedPosition> _dockedWindows;
 
         public double SnapDistance => _snapDistance;
+        public bool AllowTop { get; set; } = true;
+        public bool AllowBottom { get; set; } = true;
+        public bool AllowLeft { get; set; } = true;
+        public bool AllowRight { get; set; } = true;
 
         public DockableWindows(Window main, double snapDistance = DEFAULT_SNAP_DISTANCE)
         {
@@ -274,16 +278,24 @@ namespace DockToWindow
 
                     var dockTo = DockedTo.None;
 
-                    if (dockableSize.BottomCloseToTop(mainSize, SnapDistance) &&
+                    if (
+                        AllowTop &&
+                        dockableSize.BottomCloseToTop(mainSize, SnapDistance) &&
                         dockableSize.HasHorizontalOverlap(mainSize))
                         dockTo = DockedTo.Top_Out;
-                    else if (dockableSize.TopCloseToBottom(mainSize, SnapDistance) &&
+                    else if (
+                        AllowBottom &&
+                        dockableSize.TopCloseToBottom(mainSize, SnapDistance) &&
                         dockableSize.HasHorizontalOverlap(mainSize))
                         dockTo = DockedTo.Bottom_Out;
-                    else if (dockableSize.LeftCloseToRight(mainSize, SnapDistance) &&
+                    else if (
+                        AllowRight &&
+                        dockableSize.LeftCloseToRight(mainSize, SnapDistance) &&
                         dockableSize.HasVerticalOverlap(mainSize))
                         dockTo = DockedTo.Right_Out;
-                    else if (dockableSize.RightCloseToLeft(mainSize, SnapDistance) &&
+                    else if (
+                        AllowLeft &&
+                        dockableSize.RightCloseToLeft(mainSize, SnapDistance) &&
                         dockableSize.HasVerticalOverlap(mainSize))
                         dockTo = DockedTo.Left_Out;
 
