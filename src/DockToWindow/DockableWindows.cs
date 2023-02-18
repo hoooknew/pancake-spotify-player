@@ -15,6 +15,100 @@ namespace DockToWindow
 {
     internal class DockableWindows : IDisposable
     {
+        #region NativeMethods
+        private class NativeMethods
+        {
+            #region Constants
+            public static readonly int WM_EXITSIZEMOVE = 0x232;
+            #endregion
+
+            [DllImport("dwmapi.dll")]
+            public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
+
+            public struct RECT
+            {
+                public int Left;
+                public int Top;
+                public int Right;
+                public int Bottom;
+
+                public bool BottomCloseToTop(NativeMethods.RECT other_r, double closeDist)
+               => Math.Abs(other_r.Top - this.Bottom) < closeDist;
+
+                public bool TopCloseToBottom(NativeMethods.RECT other_r, double closeDist)
+                    => Math.Abs(other_r.Bottom - this.Top) < closeDist;
+
+                public bool LeftCloseToRight(NativeMethods.RECT other_r, double closeDist)
+                    => Math.Abs(other_r.Right - this.Left) < closeDist;
+
+                public bool RightCloseToLeft(NativeMethods.RECT other_r, double closeDist)
+                    => Math.Abs(other_r.Left - this.Right) < closeDist;
+
+                public bool RightCloseToRight(NativeMethods.RECT other_r, double closeDist)
+                    => Math.Abs(other_r.Right - this.Right) < closeDist;
+
+                public bool LeftCloseToLeft(NativeMethods.RECT other_r, double closeDist)
+                    => Math.Abs(other_r.Left - this.Left) < closeDist;
+
+                public bool BottomCloseToBottom(NativeMethods.RECT other_r, double closeDist)
+                    => Math.Abs(other_r.Bottom - this.Bottom) < closeDist;
+
+                public bool TopCloseToTop(NativeMethods.RECT other_r, double closeDist)
+                    => Math.Abs(other_r.Top - this.Top) < closeDist;
+
+
+                public double Width
+                    => this.Right - this.Left;
+                public double Height
+                    => this.Bottom - this.Top;
+
+
+                public bool HasHorizontalOverlap(NativeMethods.RECT other_r)
+                    => (this.Left >= other_r.Left && this.Left <= other_r.Right) ||
+                       (this.Right >= other_r.Left && this.Right <= other_r.Right);
+
+                public bool HasVerticalOverlap(NativeMethods.RECT other_r)
+                   => (this.Top >= other_r.Top && this.Top <= other_r.Bottom) ||
+                      (this.Bottom >= other_r.Top && this.Bottom <= other_r.Bottom);
+            }
+
+            [Flags]
+            private enum DwmWindowAttribute : uint
+            {
+                DWMWA_NCRENDERING_ENABLED = 1,
+                DWMWA_NCRENDERING_POLICY,
+                DWMWA_TRANSITIONS_FORCEDISABLED,
+                DWMWA_ALLOW_NCPAINT,
+                DWMWA_CAPTION_BUTTON_BOUNDS,
+                DWMWA_NONCLIENT_RTL_LAYOUT,
+                DWMWA_FORCE_ICONIC_REPRESENTATION,
+                DWMWA_FLIP3D_POLICY,
+                DWMWA_EXTENDED_FRAME_BOUNDS,
+                DWMWA_HAS_ICONIC_BITMAP,
+                DWMWA_DISALLOW_PEEK,
+                DWMWA_EXCLUDED_FROM_PEEK,
+                DWMWA_CLOAK,
+                DWMWA_CLOAKED,
+                DWMWA_FREEZE_REPRESENTATION,
+                DWMWA_LAST
+            }
+
+            public static NativeMethods.RECT GetExtendedFrameBounds(Window w)
+                => NativeMethods.GetExtendedFrameBounds(DockableWindows.GetHandle(w));
+
+            // The wpf sizes includes transparent space around the window. This function returns a
+            // rectangle that describes the visual area painted much better.
+            public static RECT GetExtendedFrameBounds(IntPtr hWnd)
+            {
+                int size = Marshal.SizeOf(typeof(RECT));
+                DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out RECT rect, size);
+
+                return rect;
+            }
+
+        }
+        #endregion
+
         #region Handle Attached Property
         public static IntPtr GetHandle(DependencyObject obj)
         {
@@ -129,36 +223,36 @@ namespace DockToWindow
 
         private void PositionDockedWindows()
         {
-            var mainSize = _main.GetWindowSize();
+            var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
 
             foreach (var docked in _dockedWindows.Keys)
             {
-                var dockedSize = docked.GetWindowSize();
+                var dockedSize = NativeMethods.GetExtendedFrameBounds(docked);
 
                 var position = _dockedWindows[docked];
                 double top;
                 double left;
 
                 if (position.sides.HasFlag(Side.Top_Out))
-                    top = mainSize.Top - dockedSize.Height();
+                    top = mainSize.Top - dockedSize.Height;
                 else if (position.sides.HasFlag(Side.Bottom_Out))
-                    top = mainSize.Top + mainSize.Height();
+                    top = mainSize.Top + mainSize.Height;
                 else if (position.sides.HasFlag(Side.Top_In))
                     top = _main.Top;
                 else if (position.sides.HasFlag(Side.Bottom_In))
-                    top = _main.Top + (mainSize.Height() - dockedSize.Height());
+                    top = _main.Top + (mainSize.Height - dockedSize.Height);
                 else
                     top = _main.Top + position.offset.Y;
 
 
                 if (position.sides.HasFlag(Side.Left_Out))
-                    left = _main.Left - dockedSize.Width();
+                    left = _main.Left - dockedSize.Width;
                 else if (position.sides.HasFlag(Side.Right_Out))
-                    left = _main.Left + mainSize.Width();
+                    left = _main.Left + mainSize.Width;
                 else if (position.sides.HasFlag(Side.Left_In))
                     left = _main.Left;
                 else if (position.sides.HasFlag(Side.Right_In))
-                    left = _main.Left + (mainSize.Width() - dockedSize.Width());
+                    left = _main.Left + (mainSize.Width - dockedSize.Width);
                 else
                     left = _main.Left + position.offset.X;
 
@@ -175,8 +269,8 @@ namespace DockToWindow
 
                 if (dockable != null)
                 {
-                    var mainSize = _main.GetWindowSize();
-                    var dockableSize = dockable.GetWindowSize();
+                    var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
+                    var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
 
                     var sides = Side.None;
 
@@ -242,50 +336,5 @@ namespace DockToWindow
             foreach (var dw in _dockable.ToList())
                 RemoveDockable(dw);
         }
-    }
-
-    internal static class DockableWindows_Extensions
-    {
-        public static bool BottomCloseToTop(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-            => Math.Abs(other_r.Top - r.Bottom) < closeDist;
-
-        public static bool TopCloseToBottom(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-            => Math.Abs(other_r.Bottom - r.Top) < closeDist;
-
-        public static bool LeftCloseToRight(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-         => Math.Abs(other_r.Right - r.Left) < closeDist;
-
-        public static bool RightCloseToLeft(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-            => Math.Abs(other_r.Left - r.Right) < closeDist;
-
-        public static bool RightCloseToRight(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-            => Math.Abs(other_r.Right - r.Right) < closeDist;
-
-        public static bool LeftCloseToLeft(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-        => Math.Abs(other_r.Left - r.Left) < closeDist;
-
-        public static bool BottomCloseToBottom(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-            => Math.Abs(other_r.Bottom - r.Bottom) < closeDist;
-
-        public static bool TopCloseToTop(this NativeMethods.RECT r, NativeMethods.RECT other_r, double closeDist)
-            => Math.Abs(other_r.Top - r.Top) < closeDist;
-
-
-        public static double Width(this NativeMethods.RECT r) => r.Right - r.Left;
-        public static double Height(this NativeMethods.RECT r) => r.Bottom - r.Top;
-
-
-        public static bool HasHorizontalOverlap(this NativeMethods.RECT r, NativeMethods.RECT other_r)
-            => (r.Left >= other_r.Left && r.Left <= other_r.Right) ||
-               (r.Right >= other_r.Left && r.Right <= other_r.Right);
-
-        public static bool HasVerticalOverlap(this NativeMethods.RECT r, NativeMethods.RECT other_r)
-           => (r.Top >= other_r.Top && r.Top <= other_r.Bottom) ||
-              (r.Bottom >= other_r.Top && r.Bottom <= other_r.Bottom);
-
-
-        public static NativeMethods.RECT GetWindowSize(this Window w)
-            => NativeMethods.GetExtendedFrameBounds(DockableWindows.GetHandle(w));
-
     }
 }
