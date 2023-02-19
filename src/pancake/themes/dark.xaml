@@ -12,7 +12,7 @@
     <!--Spotify Green-->
     <Color x:Key="AccentColor">#FF1ED760</Color>
     <SolidColorBrush x:Key="TextForegroundBrush" Color="White" options:Freeze="True"/>
-    <SolidColorBrush x:Key="AltTextForegroundBrush" Color="#444444" options:Freeze="True"/>
+    <SolidColorBrush x:Key="AltTextForegroundBrush" Color="#666666" options:Freeze="True"/>
     <SolidColorBrush x:Key="AltTextForegroundBrush.MouseOver" Color="#909090" options:Freeze="True"/>
     
     <SolidColorBrush x:Key="DefaultBorderBrush" Color="#444444" options:Freeze="True"/>
