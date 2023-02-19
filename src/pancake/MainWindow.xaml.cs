@@ -18,23 +18,23 @@ namespace pancake
     {
         readonly ILogger<MainWindow> _logger;
         private readonly IAuthentication _auth;
-        private readonly IAPI _clientFactory;
+        private readonly IAPI _api;
         readonly IPlayerModel _model;
         bool _commandExecuting = false;
 
-        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IAPI clientFactory)
+        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
 
             _logger = logging.Create<MainWindow>();
             _auth = auth;
-            _clientFactory = clientFactory;
-            _clientFactory.ApiError += _model_ApiError;
+            _api = api;
+            _api.Error += _api_Error;
             _model = model;
         }
 
-        private void _model_ApiError(object? sender, ApiErrorEventArgs e)
+        private void _api_Error(object? sender, ApiErrorEventArgs e)
         {
             _model.SignOut();
             _auth.SaveToken(null);
@@ -54,7 +54,7 @@ namespace pancake
                 token = _auth.LoadToken();
 
                 if (token != null)
-                    _clientFactory.SetToken(token);
+                    _api.SetToken(token);
             }
             else
                 token = null;
@@ -99,7 +99,7 @@ namespace pancake
             var token = await _auth.Login();
             _auth.SaveToken(token);
             if (token != null)
-                _clientFactory.SetToken(token);
+                _api.SetToken(token);
         }
 
         private void SettingsCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)

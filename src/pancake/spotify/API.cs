@@ -14,7 +14,7 @@ namespace pancake.spotify
 {
     public interface IAPI
     {
-        event EventHandler<ApiErrorEventArgs>? ApiError;
+        event EventHandler<ApiErrorEventArgs>? Error;
         event PropertyChangedEventHandler? PropertyChanged;
 
         void SetToken(object? token);
@@ -31,7 +31,7 @@ namespace pancake.spotify
 
     public class API : IAPI, INotifyPropertyChanged
     {
-        public event EventHandler<ApiErrorEventArgs>? ApiError;
+        public event EventHandler<ApiErrorEventArgs>? Error;
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly IAuthentication _auth;
@@ -139,7 +139,7 @@ namespace pancake.spotify
 
         public void HandleAPIError(Exception e)
         {
-            ApiError?.Invoke(this, new ApiErrorEventArgs(e));            
+            Error?.Invoke(this, new ApiErrorEventArgs(e));            
         }
     }
 }

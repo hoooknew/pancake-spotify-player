@@ -70,7 +70,7 @@ namespace pancake.models
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly IConfig _config;
-        private readonly IAPI _clientFactory;
+        private readonly IAPI _api;
         private ISpotifyClient? _client = null;
 
         private RepeatingRun _statusRefresher;
@@ -89,7 +89,7 @@ namespace pancake.models
         private readonly ILogger _timingLog;
         private readonly ILogger _commandsLog;
 
-        public PlayerModel(IConfig config, IAPI clientFactory, ILogging logging)
+        public PlayerModel(IConfig config, IAPI api, ILogging logging)
         {
             _config = config;
             REFRESH_DELAY = _config.RefreshDelayMS;
@@ -98,8 +98,8 @@ namespace pancake.models
             _timingLog = logging.Create("pancake.playermodel.timing");
             _commandsLog = logging.Create("pancake.playermodel.commands");
 
-            _clientFactory = clientFactory;
-            _clientFactory.PropertyChanged += _clientFactory_PropertyChanged;
+            _api = api;
+            _api.PropertyChanged += _clientFactory_PropertyChanged;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
 
             _statusRefresher = new RepeatingRun(_RepeatedlyRefreshState, REFRESH_DELAY);
@@ -109,7 +109,7 @@ namespace pancake.models
         private CurrentlyPlayingContext? Context { get => _context ?? PrevContext; set => _context = value; }
         private CurrentlyPlayingContext? PrevContext { get; set; }
 
-        public bool NeedToken => !_clientFactory.HasToken;
+        public bool NeedToken => !_api.HasToken;
 
         public string Title
             => Context.GetTrack()?.Name ?? Context.GetEpisode()?.Name ?? "";
@@ -158,7 +158,7 @@ namespace pancake.models
             => Context.GetTrack()?.DurationMs ?? Context.GetEpisode()?.DurationMs ?? 0;
         public IPlayableItem? CurrentlyPlaying => Context?.Item;
         public bool ClientAvailable
-            => _clientFactory.ClientAvailable;
+            => _api.ClientAvailable;
 
         public bool EnableControls
         {
@@ -177,9 +177,9 @@ namespace pancake.models
             {
                 _statusRefresher.Stop();
 
-                if (_clientFactory.HasToken)
+                if (_api.HasToken)
                 {
-                    _client = _clientFactory.CreateClient();
+                    _client = _api.CreateClient();
 
                     await _statusRefresher.Invoke();
                     _statusRefresher.Start();
@@ -197,7 +197,7 @@ namespace pancake.models
 
         public async Task<bool> PlayPause()
         {
-            return await _clientFactory.TryApiCall(async () =>
+            return await _api.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"play/pause {DateTime.Now.ToString("mm:ss.fff")}");
 
@@ -212,7 +212,7 @@ namespace pancake.models
         }
         public async Task<bool> SkipNext()
         {
-            return await _clientFactory.TryApiCall(async () =>
+            return await _api.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation("skip next");
 
@@ -224,7 +224,7 @@ namespace pancake.models
         }
         public async Task<bool> SkipPrevious()
         {
-            return await _clientFactory.TryApiCall(async () =>
+            return await _api.TryApiCall(async () =>
             {
                 if (Position < 3000)
                 {
@@ -247,7 +247,7 @@ namespace pancake.models
         }
         public async Task<bool> ToggleShuffle()
         {
-            return await _clientFactory.TryApiCall(async () =>
+            return await _api.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"toggle shuffle: {IsShuffleOn}");
 
@@ -257,7 +257,7 @@ namespace pancake.models
         }
         public async Task<bool> ToggleRepeat()
         {
-            return await _clientFactory.TryApiCall(async () =>
+            return await _api.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"toggle repeat: {RepeatState}");
 
@@ -282,7 +282,7 @@ namespace pancake.models
         }
         public async Task<bool> ToggleFavorite()
         {
-            return await _clientFactory.TryApiCall(async () =>
+            return await _api.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"toggle favorite: {IsFavorite}");
 
@@ -310,13 +310,13 @@ namespace pancake.models
             _commandsLog.LogInformation("sign out");
 
             _statusRefresher.Stop();
-            _clientFactory.SetToken(null);
+            _api.SetToken(null);
         }
 
 
         private async Task _RepeatedlyRefreshState(CancellationToken cancelToken)
         {
-            await _clientFactory.TryApiCall(async () =>
+            await _api.TryApiCall(async () =>
             {
                 try
                 {
@@ -325,7 +325,7 @@ namespace pancake.models
                 catch (APIException e) when
                     (e.Message == "Player command failed: No active device found")
                 {
-                    _clientFactory.ClientAvailable = false;
+                    _api.ClientAvailable = false;
                 }
             });
         }
@@ -355,7 +355,7 @@ namespace pancake.models
                     PrevContext = Context ?? PrevContext;
                     Context = newContext;
 
-                    _clientFactory.ClientAvailable = newContext != null;
+                    _api.ClientAvailable = newContext != null;
 
                     var changed = ChangedState.Compare(PrevContext, newContext);
 
