@@ -63,7 +63,7 @@ namespace pancake.tests.models
         }
 
         [Fact]
-        public void time_is_stopped_when_always_paused()
+        public async void time_is_stopped_when_always_paused()
         {
             var final = PlayingContext(cpc =>
             {
@@ -94,14 +94,14 @@ namespace pancake.tests.models
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
 
-            model.SetToken(new object());
+            await model.SetToken(new object());
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);
         }
 
         [Fact]
-        public void time_stops_when_paused()
+        public async void time_stops_when_paused()
         {
             var final = PlayingContext(cpc =>
             {
@@ -135,7 +135,7 @@ namespace pancake.tests.models
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
 
-            model.SetToken(new object());
+            await model.SetToken(new object());
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);            
@@ -173,7 +173,7 @@ namespace pancake.tests.models
             var factory = ClientFactory(client);
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            model.SetToken(new object());
+            await model.SetToken(new object());
             
             await Task.Delay(1000);
             await model.PlayPause();

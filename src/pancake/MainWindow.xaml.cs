@@ -46,7 +46,7 @@ namespace pancake
             });
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             object? token;
             if (_auth.TokenAvailable())
@@ -54,7 +54,7 @@ namespace pancake
                 token = _auth.LoadToken();
 
                 if (token != null)
-                    _model.SetToken(token);
+                    await _model.SetToken(token);
             }
             else
                 token = null;
@@ -99,7 +99,7 @@ namespace pancake
             var token = await _auth.Login();
             _auth.SaveToken(token);
             if (token != null)
-                _model.SetToken(token);
+                await _model.SetToken(token);
         }
 
         private void SettingsCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
