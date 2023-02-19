@@ -12,7 +12,40 @@ using System.Threading.Tasks;
 
 namespace pancake.models
 {
-    public class PlayerModel : IDisposable, INotifyPropertyChanged
+    public interface IPlayerModel
+    {
+        event EventHandler<ApiErrorEventArgs>? ApiError;
+        event PropertyChangedEventHandler? PropertyChanged;
+
+        bool ClientAvailable { get; }
+        bool NeedToken { get; }
+        bool EnableControls { get; set; }
+
+        IPlayableItem? CurrentlyPlaying { get; }
+        string Title { get; }
+        IEnumerable<LinkableObject> Artists { get; }                
+        int Duration { get; }
+        int Position { get; }
+        bool IsPlaying { get; }
+        bool? IsFavorite { get; set; }        
+        bool IsShuffleOn { get; }                
+        string RepeatState { get; }
+
+        Task SetToken(object token);
+
+        Task<bool> PlayPause();               
+        Task<bool> SkipNext();
+        Task<bool> SkipPrevious();
+        Task<bool> ToggleFavorite();
+        Task<bool> ToggleRepeat();
+        Task<bool> ToggleShuffle();
+
+        void SignOut();
+
+        void Dispose();
+    }
+
+    public class PlayerModel : IDisposable, INotifyPropertyChanged, IPlayerModel
     {
         private record ChangedState(bool Track = false, bool PlayPause = false, bool Shuffle = false, bool Repeat = false, bool Position = false)
         {
@@ -384,6 +417,10 @@ namespace pancake.models
 
                     _stateLog.LogInformation($"Now: {DateTime.Now.ToString("mm:ss.fff")}, {Title}, {String.Join(", ", Artists.Select(r => r.Name))} : {Position.MSasTimeSpan()} / {Duration.MSasTimeSpan()}, IsPlaying: {IsPlaying}");
                     _stateLog.LogInformation(changed.ToString());
+
+                    if (changed.Track)
+                        _OnPropertyChanged(nameof(CurrentlyPlaying));
+
                     return changed;
 
                 }

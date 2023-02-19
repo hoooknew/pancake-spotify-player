@@ -38,7 +38,7 @@ namespace pancake
                 .AddSingleton(typeof(ILogging), typeof(Logging))
                 .AddSingleton(typeof(IAuthentication), typeof(Authentication))
                 .AddSingleton(typeof(IClientFactory), typeof(ClientFactory))
-                .AddTransient<PlayerModel>()
+                .AddSingleton(typeof(IPlayerModel), typeof(PlayerModel))
                 .AddSingleton<MainWindow>();
         }
 
@@ -56,6 +56,9 @@ namespace pancake
 
         protected override async void OnExit(ExitEventArgs e)
         {
+            (Host?.Services.GetService(typeof(MainWindow)) as IDisposable)?.Dispose();
+            (Host?.Services.GetService(typeof(IPlayerModel)) as IDisposable)?.Dispose();
+
             await Host!.StopAsync();
             base.OnExit(e);
         }
@@ -84,7 +87,7 @@ namespace pancake
 #if DEBUG
         public static void SaveDefaultTemplate()
         {
-            var control = Application.Current.FindResource(MenuItem.SubmenuHeaderTemplateKey);
+            var control = Current.FindResource(MenuItem.SubmenuHeaderTemplateKey);
             var sw = new System.IO.StringWriter();
             System.Windows.Markup.XamlWriter.Save(control, sw);
             Clipboard.SetText(sw.ToString());

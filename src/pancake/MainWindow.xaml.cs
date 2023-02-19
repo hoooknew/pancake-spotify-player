@@ -4,6 +4,7 @@ using pancake.models;
 using pancake.ui;
 using pancake.ui.controls;
 using SpotifyAPI.Web;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,10 +17,10 @@ namespace pancake
     {
         readonly ILogger<MainWindow> _logger;
         private readonly IAuthentication _auth;
-        readonly PlayerModel _model;
+        readonly IPlayerModel _model;
         bool _commandExecuting = false;
 
-        public MainWindow(ILogging logging, IAuthentication auth, PlayerModel model)
+        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
@@ -150,7 +151,7 @@ namespace pancake
                         Settings.Instance.UiScale = uiScale;
                         Settings.Instance.Save();
                     }
-                }                
+                }
             }
         }
 
