@@ -50,7 +50,7 @@ namespace pancake.tests.models
 
             var factory = new Mock<IClientFactory>();
             factory.Setup(r => r.CreateClient()).Returns(client.Object);
-            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
+            factory.Setup(r => r.HasToken).Returns(true);
 
             return factory;
         }
@@ -94,7 +94,8 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-                        
+            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
+
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);
@@ -134,7 +135,8 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            
+            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
+
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);            
@@ -172,7 +174,8 @@ namespace pancake.tests.models
             var factory = ClientFactory(client);
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            
+            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
+
             await Task.Delay(1000);
             await model.PlayPause();
             await Task.Delay(10_000);
