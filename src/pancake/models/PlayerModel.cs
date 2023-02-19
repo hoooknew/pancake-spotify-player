@@ -14,7 +14,6 @@ namespace pancake.models
 {
     public interface IPlayerModel
     {
-        event EventHandler<ApiErrorEventArgs>? ApiError;
         event PropertyChangedEventHandler? PropertyChanged;
 
         bool ClientAvailable { get; }
@@ -23,15 +22,15 @@ namespace pancake.models
 
         IPlayableItem? CurrentlyPlaying { get; }
         string Title { get; }
-        IEnumerable<LinkableObject> Artists { get; }                
+        IEnumerable<LinkableObject> Artists { get; }
         int Duration { get; }
         int Position { get; }
         bool IsPlaying { get; }
-        bool? IsFavorite { get; set; }        
-        bool IsShuffleOn { get; }                
+        bool? IsFavorite { get; set; }
+        bool IsShuffleOn { get; }
         string RepeatState { get; }
 
-        Task<bool> PlayPause();               
+        Task<bool> PlayPause();
         Task<bool> SkipNext();
         Task<bool> SkipPrevious();
         Task<bool> ToggleFavorite();
@@ -69,7 +68,6 @@ namespace pancake.models
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        public event EventHandler<ApiErrorEventArgs>? ApiError;
 
         private readonly IConfig _config;
         private readonly IClientFactory _clientFactory;
@@ -86,7 +84,6 @@ namespace pancake.models
         private int _positionMs = 0;
         private bool? _isFavorite = null;
         private bool _enableControls = true;
-        private bool _clientAvailable = true;
 
         private readonly ILogger _stateLog;
         private readonly ILogger _timingLog;
@@ -102,17 +99,18 @@ namespace pancake.models
             _commandsLog = logging.Create("pancake.playermodel.commands");
 
             _clientFactory = clientFactory;
-            _clientFactory.TokenChanged += _clientFactory_TokenChanged;
+            _clientFactory.PropertyChanged += _clientFactory_PropertyChanged;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
 
             _statusRefresher = new RepeatingRun(_RepeatedlyRefreshState, REFRESH_DELAY);
-        }        
+        }
+
 
         private CurrentlyPlayingContext? Context { get => _context ?? PrevContext; set => _context = value; }
         private CurrentlyPlayingContext? PrevContext { get; set; }
 
         public bool NeedToken => !_clientFactory.HasToken;
-        
+
         public string Title
             => Context.GetTrack()?.Name ?? Context.GetEpisode()?.Name ?? "";
         public IEnumerable<LinkableObject> Artists
@@ -160,17 +158,7 @@ namespace pancake.models
             => Context.GetTrack()?.DurationMs ?? Context.GetEpisode()?.DurationMs ?? 0;
         public IPlayableItem? CurrentlyPlaying => Context?.Item;
         public bool ClientAvailable
-        {
-            get => _clientAvailable;
-            private set
-            {
-                if (_clientAvailable != value)
-                {
-                    _clientAvailable = value;
-                    _OnPropertyChanged(nameof(ClientAvailable));
-                }
-            }
-        }
+            => _clientFactory.ClientAvailable;
 
         public bool EnableControls
         {
@@ -183,28 +171,33 @@ namespace pancake.models
         }
 
 
-        private async void _clientFactory_TokenChanged(object? sender, EventArgs e)
+        private async void _clientFactory_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            _statusRefresher.Stop();            
-
-            if (_clientFactory.HasToken)
+            if (e.PropertyName == nameof(ClientFactory.HasToken))
             {
-                _client = _clientFactory.CreateClient();
+                _statusRefresher.Stop();
 
-                await _statusRefresher.Invoke();
-                _statusRefresher.Start();
-            }
-            else
-            {
-                _client = null;
-            }
+                if (_clientFactory.HasToken)
+                {
+                    _client = _clientFactory.CreateClient();
 
-            _OnPropertyChanged(nameof(NeedToken));
-        }        
+                    await _statusRefresher.Invoke();
+                    _statusRefresher.Start();
+                }
+                else
+                {
+                    _client = null;
+                }
+
+                _OnPropertyChanged(nameof(NeedToken));
+            }
+            else if (e.PropertyName == nameof(ClientFactory.ClientAvailable))
+                _OnPropertyChanged(nameof(ClientAvailable));
+        }
 
         public async Task<bool> PlayPause()
         {
-            return await _TryApiCall(async () =>
+            return await _clientFactory.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"play/pause {DateTime.Now.ToString("mm:ss.fff")}");
 
@@ -219,7 +212,7 @@ namespace pancake.models
         }
         public async Task<bool> SkipNext()
         {
-            return await _TryApiCall(async () =>
+            return await _clientFactory.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation("skip next");
 
@@ -231,7 +224,7 @@ namespace pancake.models
         }
         public async Task<bool> SkipPrevious()
         {
-            return await _TryApiCall(async () =>
+            return await _clientFactory.TryApiCall(async () =>
             {
                 if (Position < 3000)
                 {
@@ -254,7 +247,7 @@ namespace pancake.models
         }
         public async Task<bool> ToggleShuffle()
         {
-            return await _TryApiCall(async () =>
+            return await _clientFactory.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"toggle shuffle: {IsShuffleOn}");
 
@@ -264,7 +257,7 @@ namespace pancake.models
         }
         public async Task<bool> ToggleRepeat()
         {
-            return await _TryApiCall(async () =>
+            return await _clientFactory.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"toggle repeat: {RepeatState}");
 
@@ -289,7 +282,7 @@ namespace pancake.models
         }
         public async Task<bool> ToggleFavorite()
         {
-            return await _TryApiCall(async () =>
+            return await _clientFactory.TryApiCall(async () =>
             {
                 _commandsLog.LogInformation($"toggle favorite: {IsFavorite}");
 
@@ -323,7 +316,7 @@ namespace pancake.models
 
         private async Task _RepeatedlyRefreshState(CancellationToken cancelToken)
         {
-            await _TryApiCall(async () =>
+            await _clientFactory.TryApiCall(async () =>
             {
                 try
                 {
@@ -332,7 +325,7 @@ namespace pancake.models
                 catch (APIException e) when
                     (e.Message == "Player command failed: No active device found")
                 {
-                    ClientAvailable = false;
+                    _clientFactory.ClientAvailable = false;
                 }
             });
         }
@@ -362,7 +355,7 @@ namespace pancake.models
                     PrevContext = Context ?? PrevContext;
                     Context = newContext;
 
-                    ClientAvailable = newContext != null;
+                    _clientFactory.ClientAvailable = newContext != null;
 
                     var changed = ChangedState.Compare(PrevContext, newContext);
 
@@ -466,76 +459,8 @@ namespace pancake.models
             }
         }
 
-        private async Task<bool> _TryApiCall(Func<Task> a)
-        {
-            try
-            {
-                int retriesLeft = 3;
-                while (retriesLeft > 0)
-                {
-                    try
-                    {
-                        await a();
-
-                        ClientAvailable = true;
-
-                        return true;
-                    }
-                    catch (APITooManyRequestsException e)
-                    {
-                        await Task.Delay(e.RetryAfter);
-                    }
-                    catch (APIException e) when (e.Message == "Player command failed: Restriction violated")
-                    {
-                        //retry
-                    }
-                    catch (APIException e) when
-                        (e.Message == "Service unavailable")
-                    {
-                        //fail silently
-                        break;
-                    }
-                    catch (APIException e) when
-                        (e.Message == "Player command failed: No active device found")
-                    {
-                        ClientAvailable = false;
-                        break;
-                    }
-                    catch (HttpRequestException e) when
-                        (e.Message == "No such host is known. (api.spotify.com:443)")
-                    {
-                        //should we have a no connection state?
-                        break;
-                    }
-                    /* the client blew up on some ssl exception at some point, 
-                     * but I didn't record the exception type. This is where it
-                     * should be handled. */
-                    //catch(HttpException) 
-                    //{
-
-                    //}
-
-                    retriesLeft--;
-                }
-
-                return false;
-            }
-            catch (APIException e) when (e is not APITooManyRequestsException)
-            {
-                //_dispatcher.Invoke(() => _HandleAPIError(e));
-                _HandleAPIError(e);
-                return false;
-            }
-        }
-        private void _HandleAPIError(Exception e)
-        {
-            _OnApiError(e);
-        }
-
         private void _OnPropertyChanged(string propertyName)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        private void _OnApiError(Exception e) =>
-            ApiError?.Invoke(this, new ApiErrorEventArgs(e));
 
         public void Dispose()
         {

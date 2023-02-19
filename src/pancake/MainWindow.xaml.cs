@@ -30,8 +30,8 @@ namespace pancake
             _logger = logging.Create<MainWindow>();
             _auth = auth;
             _clientFactory = clientFactory;
+            _clientFactory.ApiError += _model_ApiError;
             _model = model;
-            _model.ApiError += _model_ApiError;
         }
 
         private void _model_ApiError(object? sender, ApiErrorEventArgs e)
@@ -102,7 +102,7 @@ namespace pancake
                 _clientFactory.SetToken(token);
         }
 
-        private async void SettingsCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+        private void SettingsCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
             if (e.Command == SettingsCommands.ChangeTheme)
             {

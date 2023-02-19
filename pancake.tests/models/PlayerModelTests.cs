@@ -8,6 +8,7 @@ using pancake.ui.controls;
 using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -94,7 +95,7 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IClientFactory.HasToken)));
 
             Thread.Sleep(5_500);
             model.Dispose();
@@ -135,7 +136,7 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IClientFactory.HasToken)));
 
             Thread.Sleep(5_500);
             model.Dispose();
@@ -174,7 +175,7 @@ namespace pancake.tests.models
             var factory = ClientFactory(client);
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IClientFactory.HasToken)));
 
             await Task.Delay(1000);
             await model.PlayPause();
