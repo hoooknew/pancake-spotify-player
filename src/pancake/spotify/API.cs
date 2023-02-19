@@ -24,7 +24,7 @@ namespace pancake.spotify
 
         ISpotifyClient CreateClient();
 
-        Task<bool> TryApiCall(Func<Task> a);
+        Task<bool> TryApiCall(Func<ISpotifyClient, Task> a);
 
         void HandleAPIError(Exception e);
     }
@@ -46,6 +46,7 @@ namespace pancake.spotify
         public void SetToken(object? token)
         {
             _token = token;
+            _client = null;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasToken)));
         }
 
@@ -75,7 +76,16 @@ namespace pancake.spotify
             }
         }
 
-        public async Task<bool> TryApiCall(Func<Task> a)
+        private ISpotifyClient? _client = null;
+        private ISpotifyClient GetClient()
+        {
+            if (_client == null)
+                _client = CreateClient();
+
+            return _client;
+        }
+
+        public async Task<bool> TryApiCall(Func<ISpotifyClient, Task> func)
         {
             try
             {
@@ -84,7 +94,7 @@ namespace pancake.spotify
                 {
                     try
                     {
-                        await a();
+                        await func(GetClient());
 
                         ClientAvailable = true;
 

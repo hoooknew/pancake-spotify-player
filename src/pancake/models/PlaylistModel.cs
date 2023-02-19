@@ -83,20 +83,18 @@ namespace pancake.models
 
         private async Task _RepeatedlyRefreshQueue(CancellationToken cancelToken)
         {
-            //await _TryApiCall(async () =>
-            //{
-            //    try
-            //    {
-            //        await _RefreshState(cancelToken);
-            //    }
-            //    catch (APIException e) when
-            //        (e.Message == "Player command failed: No active device found")
-            //    {
-            //        ClientAvailable = false;
-            //    }
-            //});
-
-            await Task.FromResult(0);
+            await _api.TryApiCall(async client =>
+            {
+                try
+                {
+                    //await _RefreshState(client, cancelToken);
+                }
+                catch (APIException e) when
+                    (e.Message == "Player command failed: No active device found")
+                {
+                    _api.ClientAvailable = false;
+                }
+            });
         }
 
         private void ChangePlaying(IPlayableItem? currentlyPlaying)

@@ -71,7 +71,6 @@ namespace pancake.models
 
         private readonly IConfig _config;
         private readonly IAPI _api;
-        private ISpotifyClient? _client = null;
 
         private RepeatingRun _statusRefresher;
 
@@ -179,14 +178,8 @@ namespace pancake.models
 
                 if (_api.HasToken)
                 {
-                    _client = _api.CreateClient();
-
                     await _statusRefresher.Invoke();
                     _statusRefresher.Start();
-                }
-                else
-                {
-                    _client = null;
                 }
 
                 _OnPropertyChanged(nameof(NeedToken));
@@ -197,49 +190,49 @@ namespace pancake.models
 
         public async Task<bool> PlayPause()
         {
-            return await _api.TryApiCall(async () =>
+            return await _api.TryApiCall(async client =>
             {
                 _commandsLog.LogInformation($"play/pause {DateTime.Now.ToString("mm:ss.fff")}");
 
                 var prev = IsPlaying;
                 if (IsPlaying)
-                    await _client!.Player.PausePlayback();
+                    await client!.Player.PausePlayback();
                 else
-                    await _client!.Player.ResumePlayback();
+                    await client!.Player.ResumePlayback();
 
-                await RefreshStateUntil(r => r.PlayPause);
+                await RefreshStateUntil(client, r => r.PlayPause);
             });
         }
         public async Task<bool> SkipNext()
         {
-            return await _api.TryApiCall(async () =>
+            return await _api.TryApiCall(async client =>
             {
                 _commandsLog.LogInformation("skip next");
 
                 _statusRefresher.Stop();
-                await _client!.Player.SkipNext();
-                await RefreshStateUntil(r => r.Track);
+                await client!.Player.SkipNext();
+                await RefreshStateUntil(client, r => r.Track);
                 _statusRefresher.Start();
             });
         }
         public async Task<bool> SkipPrevious()
         {
-            return await _api.TryApiCall(async () =>
+            return await _api.TryApiCall(async client =>
             {
                 if (Position < 3000)
                 {
                     _commandsLog.LogInformation("skip prev");
 
-                    await _client!.Player.SkipPrevious();
-                    await RefreshStateUntil(r => r.Track);
+                    await client!.Player.SkipPrevious();
+                    await RefreshStateUntil(client, r => r.Track);
                 }
                 else
                 {
                     _commandsLog.LogInformation("skip prev/seek");
 
                     _statusRefresher.Stop();
-                    await _client!.Player.SeekTo(new PlayerSeekToRequest(0));
-                    await RefreshStateUntil(r => r.Position);
+                    await client!.Player.SeekTo(new PlayerSeekToRequest(0));
+                    await RefreshStateUntil(client, r => r.Position);
                     _statusRefresher.Start();
                 }
 
@@ -247,17 +240,17 @@ namespace pancake.models
         }
         public async Task<bool> ToggleShuffle()
         {
-            return await _api.TryApiCall(async () =>
+            return await _api.TryApiCall(async client =>
             {
                 _commandsLog.LogInformation($"toggle shuffle: {IsShuffleOn}");
 
-                await _client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
-                await RefreshStateUntil(r => r.Shuffle);
+                await client!.Player.SetShuffle(new PlayerShuffleRequest(!IsShuffleOn));
+                await RefreshStateUntil(client, r => r.Shuffle);
             });
         }
         public async Task<bool> ToggleRepeat()
         {
-            return await _api.TryApiCall(async () =>
+            return await _api.TryApiCall(async client =>
             {
                 _commandsLog.LogInformation($"toggle repeat: {RepeatState}");
 
@@ -276,13 +269,13 @@ namespace pancake.models
                         break;
                 }
 
-                await _client!.Player.SetRepeat(new PlayerSetRepeatRequest(nextState));
-                await RefreshStateUntil(r => r.Repeat);
+                await client!.Player.SetRepeat(new PlayerSetRepeatRequest(nextState));
+                await RefreshStateUntil(client, r => r.Repeat);
             });
         }
         public async Task<bool> ToggleFavorite()
         {
-            return await _api.TryApiCall(async () =>
+            return await _api.TryApiCall(async client =>
             {
                 _commandsLog.LogInformation($"toggle favorite: {IsFavorite}");
 
@@ -292,13 +285,13 @@ namespace pancake.models
                 {
                     if (IsFavorite ?? false)
                     {
-                        var result = await _client!.Library.RemoveTracks(new LibraryRemoveTracksRequest(new string[] { id }));
+                        var result = await client!.Library.RemoveTracks(new LibraryRemoveTracksRequest(new string[] { id }));
                         if (result)
                             IsFavorite = false;
                     }
                     else
                     {
-                        var result = await _client!.Library.SaveTracks(new LibrarySaveTracksRequest(new string[] { id }));
+                        var result = await client!.Library.SaveTracks(new LibrarySaveTracksRequest(new string[] { id }));
                         if (result)
                             IsFavorite = true;
                     }
@@ -316,11 +309,11 @@ namespace pancake.models
 
         private async Task _RepeatedlyRefreshState(CancellationToken cancelToken)
         {
-            await _api.TryApiCall(async () =>
+            await _api.TryApiCall(async client =>
             {
                 try
                 {
-                    await _RefreshState(cancelToken);
+                    await _RefreshState(client, cancelToken);
                 }
                 catch (APIException e) when
                     (e.Message == "Player command failed: No active device found")
@@ -329,11 +322,11 @@ namespace pancake.models
                 }
             });
         }
-        private async Task<bool> RefreshStateUntil(Func<ChangedState, bool> stateChanged)
+        private async Task<bool> RefreshStateUntil(ISpotifyClient client, Func<ChangedState, bool> stateChanged)
         {
             await Task.Delay(250);
             for (int i = 0; i < 3; i++)
-                if (stateChanged(await _RefreshState()))
+                if (stateChanged(await _RefreshState(client)))
                     return true;
                 else
                 {
@@ -343,14 +336,14 @@ namespace pancake.models
 
             return false;
         }
-        private async Task<ChangedState> _RefreshState(CancellationToken cancelToken = default(CancellationToken))
+        private async Task<ChangedState> _RefreshState(ISpotifyClient client, CancellationToken cancelToken = default(CancellationToken))
         {
             if (await _refreshLock.WaitAsync(0))
             {
                 _stateLog.LogInformation("enter writer");
                 try
                 {
-                    var newContext = await _client!.Player.GetCurrentPlayback(cancelToken);
+                    var newContext = await client!.Player.GetCurrentPlayback(cancelToken);
 
                     PrevContext = Context ?? PrevContext;
                     Context = newContext;
@@ -365,7 +358,7 @@ namespace pancake.models
                         {
                             if (Context?.Item != null)
                             {
-                                var isFavs = await _client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { Context!.Item!.GetItemId()! }));
+                                var isFavs = await client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { Context!.Item!.GetItemId()! }));
                                 IsFavorite = isFavs.All(r => r);
                             }
                             else
@@ -441,14 +434,15 @@ namespace pancake.models
         }
 
 
-        private static void _SongTick(object? state)
+        private async static void _SongTick(object? state)
         {
             if (state is PlayerModel player)
             {
                 if (player.Position + 1000 > player.Duration)
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    player._RefreshState();
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    await player._api.TryApiCall(async client =>
+                    {
+                        await player._RefreshState(client);
+                    });
                 else
                 {
                     player.Position = player.Position + 1000;
