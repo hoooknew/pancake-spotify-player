@@ -43,7 +43,7 @@ namespace pancake.tests.models
             return cpc;
         }
 
-        private static Mock<IAPI> ClientFactory(Action<Mock<ISpotifyClient>> edit)
+        private static Mock<IAPI> API(Action<Mock<ISpotifyClient>> edit)
         {
             var client = new Mock<ISpotifyClient>();
 
@@ -56,7 +56,7 @@ namespace pancake.tests.models
             return factory;
         }
 
-        private static Mock<IAPI> ClientFactory(SpotifyClientFake fake)
+        private static Mock<IAPI> API(SpotifyClientFake fake)
         {
             var factory = new Mock<IAPI>();
             factory.Setup(r => r.CreateClient()).Returns(fake);
@@ -73,7 +73,7 @@ namespace pancake.tests.models
                 cpc.ProgressMs = 5 * 1_000;
             });
 
-            var factory = ClientFactory(client =>
+            var factory = API(client =>
                 {
                     client
                         .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
@@ -111,7 +111,7 @@ namespace pancake.tests.models
                 cpc.ProgressMs = 11 * 1_000;
             });
 
-            var factory = ClientFactory(client =>
+            var factory = API(client =>
             {
                 client
                     .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
@@ -172,7 +172,7 @@ namespace pancake.tests.models
                     Debug.WriteLine($"isplaying:{isPlaying}");
                 });
 
-            var factory = ClientFactory(client);
+            var factory = API(client);
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
             factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IAPI.HasToken)));

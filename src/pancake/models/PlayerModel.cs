@@ -99,7 +99,7 @@ namespace pancake.models
             _commandsLog = logging.Create("pancake.playermodel.commands");
 
             _api = api;
-            _api.PropertyChanged += _clientFactory_PropertyChanged;
+            _api.PropertyChanged += _api_PropertyChanged;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
 
             _statusRefresher = new RepeatingRun(_RepeatedlyRefreshState, REFRESH_DELAY);
@@ -171,7 +171,7 @@ namespace pancake.models
         }
 
 
-        private async void _clientFactory_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private async void _api_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(API.HasToken))
             {

@@ -38,7 +38,7 @@ namespace pancake.models
         public PlaylistModel(IPlayerModel playerModel, IConfig config, IAPI api, ILogging logging)
         {
             _api = api;
-            _api.PropertyChanged += _clientFactory_PropertyChanged;
+            _api.PropertyChanged += _api_PropertyChanged;
 
             _playerModel = playerModel;
             _playerModel.PropertyChanged += _playerModel_PropertyChanged;
@@ -51,7 +51,7 @@ namespace pancake.models
             _queueRefresher = new RepeatingRun(_RepeatedlyRefreshQueue, config.RefreshDelayMS);
         }
 
-        private async void _clientFactory_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private async void _api_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(API.HasToken))
             {
@@ -108,7 +108,7 @@ namespace pancake.models
 
         public void Dispose()
         {
-            _api.PropertyChanged -= _clientFactory_PropertyChanged;
+            _api.PropertyChanged -= _api_PropertyChanged;
             _playerModel.PropertyChanged -= _playerModel_PropertyChanged;
         }
     }
