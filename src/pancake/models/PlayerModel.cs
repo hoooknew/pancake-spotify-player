@@ -31,8 +31,6 @@ namespace pancake.models
         bool IsShuffleOn { get; }                
         string RepeatState { get; }
 
-        Task SetToken(object token);
-
         Task<bool> PlayPause();               
         Task<bool> SkipNext();
         Task<bool> SkipPrevious();
@@ -104,24 +102,17 @@ namespace pancake.models
             _commandsLog = logging.Create("pancake.playermodel.commands");
 
             _clientFactory = clientFactory;
+            _clientFactory.TokenChanged += _clientFactory_TokenChanged;
             _trackTimer = new Timer(new TimerCallback(_SongTick), this, Timeout.Infinite, Timeout.Infinite);
 
             _statusRefresher = new RepeatingRun(_RepeatedlyRefreshState, REFRESH_DELAY);
-        }
+        }        
 
         private CurrentlyPlayingContext? Context { get => _context ?? PrevContext; set => _context = value; }
         private CurrentlyPlayingContext? PrevContext { get; set; }
 
-        private bool _needToken = true;
-        public bool NeedToken
-        {
-            get => _needToken;
-            private set
-            {
-                _needToken = value;
-                _OnPropertyChanged(nameof(NeedToken));
-            }
-        }
+        public bool NeedToken => !_clientFactory.HasToken;
+        
         public string Title
             => Context.GetTrack()?.Name ?? Context.GetEpisode()?.Name ?? "";
         public IEnumerable<LinkableObject> Artists
@@ -191,16 +182,25 @@ namespace pancake.models
             }
         }
 
-        public async Task SetToken(object token)
+
+        private async void _clientFactory_TokenChanged(object? sender, EventArgs e)
         {
-            _statusRefresher.Stop();
+            _statusRefresher.Stop();            
 
-            _client = _clientFactory.CreateClient(token);
-            NeedToken = false;
+            if (_clientFactory.HasToken)
+            {
+                _client = _clientFactory.CreateClient();
 
-            await _statusRefresher.Invoke();
-            _statusRefresher.Start();
-        }
+                await _statusRefresher.Invoke();
+                _statusRefresher.Start();
+            }
+            else
+            {
+                _client = null;
+            }
+
+            _OnPropertyChanged(nameof(NeedToken));
+        }        
 
         public async Task<bool> PlayPause()
         {
@@ -317,7 +317,7 @@ namespace pancake.models
             _commandsLog.LogInformation("sign out");
 
             _statusRefresher.Stop();
-            NeedToken = true;
+            _clientFactory.SetToken(null);
         }
 
 

@@ -28,14 +28,14 @@ namespace pancake.models
                 this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Playing)));
             }
         }
-        //will change when the currently playing track changes OR when the user changes the queue in spotify
-        //how often should we check for queue changes?
         public ObservableCollection<IPlayableItem> Queued { get; private set; }
 
         public PlaylistModel(IPlayerModel playerModel, IConfig config, IClientFactory clientFactory, ILogging logging)
         {
             _playerModel = playerModel;
             _playerModel.PropertyChanged += PlayerModel_PropertyChanged;
+
+            //clientFactory.
 
             Played = new ObservableCollection<IPlayableItem>();
             Queued = new ObservableCollection<IPlayableItem>();

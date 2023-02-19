@@ -49,7 +49,8 @@ namespace pancake.tests.models
             edit(client);
 
             var factory = new Mock<IClientFactory>();
-            factory.Setup(r => r.CreateClient(It.IsAny<object>())).Returns(client.Object);
+            factory.Setup(r => r.CreateClient()).Returns(client.Object);
+            factory.Raise(cf => cf.TokenChanged += null, EventArgs.Empty);
 
             return factory;
         }
@@ -57,13 +58,13 @@ namespace pancake.tests.models
         private static Mock<IClientFactory> ClientFactory(SpotifyClientFake fake)
         {
             var factory = new Mock<IClientFactory>();
-            factory.Setup(r => r.CreateClient(It.IsAny<object>())).Returns(fake);
+            factory.Setup(r => r.CreateClient()).Returns(fake);
 
             return factory;
         }
 
         [Fact]
-        public async void time_is_stopped_when_always_paused()
+        public void time_is_stopped_when_always_paused()
         {
             var final = PlayingContext(cpc =>
             {
@@ -72,20 +73,20 @@ namespace pancake.tests.models
             });
 
             var factory = ClientFactory(client =>
-            {
-                client
-                    .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final);
+                {
+                    client
+                        .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final);
 
-                client
-                    .Setup(r => r.Library.CheckTracks(It.IsAny<LibraryCheckTracksRequest>(), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(new List<bool>() { false });
-            });
+                    client
+                        .Setup(r => r.Library.CheckTracks(It.IsAny<LibraryCheckTracksRequest>(), It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<bool>() { false });
+                });                
 
 
             var config = new Mock<IConfig>();
@@ -93,15 +94,14 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-
-            await model.SetToken(new object());
+                        
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);
         }
 
         [Fact]
-        public async void time_stops_when_paused()
+        public void time_stops_when_paused()
         {
             var final = PlayingContext(cpc =>
             {
@@ -134,8 +134,7 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-
-            await model.SetToken(new object());
+            
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);            
@@ -173,7 +172,6 @@ namespace pancake.tests.models
             var factory = ClientFactory(client);
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            await model.SetToken(new object());
             
             await Task.Delay(1000);
             await model.PlayPause();

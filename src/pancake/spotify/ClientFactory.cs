@@ -11,25 +11,48 @@ namespace pancake.spotify
 {
     public interface IClientFactory
     {
-        ISpotifyClient CreateClient(object token);
+        event EventHandler? TokenChanged;
+
+        void SetToken(object? token);
+
+        bool HasToken { get; }
+
+        ISpotifyClient CreateClient();
     }
 
     public class ClientFactory : IClientFactory
     {
+        public event EventHandler? TokenChanged;
+
         private readonly IAuthentication _auth;
+        private object? _token;
 
         public ClientFactory(IAuthentication auth) 
         {
             _auth = auth;
         }
-        public ISpotifyClient CreateClient(object token)
+
+        public void SetToken(object? token)
         {
-            var authenticator = _auth.CreateAuthenticator(token);
+            _token = token;
+            TokenChanged?.Invoke(this, EventArgs.Empty);
+        }
 
-            var config = SpotifyClientConfig.CreateDefault()
-            .WithAuthenticator(authenticator);
+        public bool HasToken => _token != null;
 
-            return new SpotifyClient(config);
+        public ISpotifyClient CreateClient()
+        {
+            if (_token == null)
+                throw new ArgumentException("no token set.");
+            else
+            {
+                var authenticator = _auth.CreateAuthenticator(_token);
+
+                var config = SpotifyClientConfig.CreateDefault()
+                .WithAuthenticator(authenticator);
+
+                return new SpotifyClient(config);
+            }
         }
     }
 }
