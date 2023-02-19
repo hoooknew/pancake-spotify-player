@@ -70,7 +70,7 @@ namespace pancake.models
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly IConfig _config;
-        private readonly IClientFactory _clientFactory;
+        private readonly IAPI _clientFactory;
         private ISpotifyClient? _client = null;
 
         private RepeatingRun _statusRefresher;
@@ -89,7 +89,7 @@ namespace pancake.models
         private readonly ILogger _timingLog;
         private readonly ILogger _commandsLog;
 
-        public PlayerModel(IConfig config, IClientFactory clientFactory, ILogging logging)
+        public PlayerModel(IConfig config, IAPI clientFactory, ILogging logging)
         {
             _config = config;
             REFRESH_DELAY = _config.RefreshDelayMS;
@@ -173,7 +173,7 @@ namespace pancake.models
 
         private async void _clientFactory_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ClientFactory.HasToken))
+            if (e.PropertyName == nameof(API.HasToken))
             {
                 _statusRefresher.Stop();
 
@@ -191,7 +191,7 @@ namespace pancake.models
 
                 _OnPropertyChanged(nameof(NeedToken));
             }
-            else if (e.PropertyName == nameof(ClientFactory.ClientAvailable))
+            else if (e.PropertyName == nameof(API.ClientAvailable))
                 _OnPropertyChanged(nameof(ClientAvailable));
         }
 

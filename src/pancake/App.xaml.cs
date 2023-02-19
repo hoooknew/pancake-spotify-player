@@ -37,7 +37,7 @@ namespace pancake
                 .AddSingleton(typeof(IConfig), typeof(Config))
                 .AddSingleton(typeof(ILogging), typeof(Logging))
                 .AddSingleton(typeof(IAuthentication), typeof(Authentication))
-                .AddSingleton(typeof(IClientFactory), typeof(ClientFactory))
+                .AddSingleton(typeof(IAPI), typeof(API))
                 .AddSingleton(typeof(IPlayerModel), typeof(PlayerModel))
                 .AddSingleton<MainWindow>();
         }

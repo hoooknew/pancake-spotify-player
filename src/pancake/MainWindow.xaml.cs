@@ -18,11 +18,11 @@ namespace pancake
     {
         readonly ILogger<MainWindow> _logger;
         private readonly IAuthentication _auth;
-        private readonly IClientFactory _clientFactory;
+        private readonly IAPI _clientFactory;
         readonly IPlayerModel _model;
         bool _commandExecuting = false;
 
-        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IClientFactory clientFactory)
+        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IAPI clientFactory)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;

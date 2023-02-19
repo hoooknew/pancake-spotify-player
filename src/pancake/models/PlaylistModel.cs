@@ -17,7 +17,7 @@ namespace pancake.models
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly IPlayerModel _playerModel;
-        private readonly IClientFactory _clientFactory;
+        private readonly IAPI _clientFactory;
         public IPlayableItem? _playing;
         private ISpotifyClient? _client = null;
 
@@ -35,7 +35,7 @@ namespace pancake.models
         }
         public ObservableCollection<IPlayableItem> Queued { get; private set; }
 
-        public PlaylistModel(IPlayerModel playerModel, IConfig config, IClientFactory clientFactory, ILogging logging)
+        public PlaylistModel(IPlayerModel playerModel, IConfig config, IAPI clientFactory, ILogging logging)
         {
             _clientFactory = clientFactory;
             _clientFactory.PropertyChanged += _clientFactory_PropertyChanged;
@@ -53,7 +53,7 @@ namespace pancake.models
 
         private async void _clientFactory_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ClientFactory.HasToken))
+            if (e.PropertyName == nameof(API.HasToken))
             {
                 _queueRefresher.Stop();
 

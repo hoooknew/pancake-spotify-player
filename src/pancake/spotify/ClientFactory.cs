@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace pancake.spotify
 {
-    public interface IClientFactory
+    public interface IAPI
     {
         event EventHandler<ApiErrorEventArgs>? ApiError;
         event PropertyChangedEventHandler? PropertyChanged;
@@ -29,7 +29,7 @@ namespace pancake.spotify
         void HandleAPIError(Exception e);
     }
 
-    public class ClientFactory : IClientFactory, INotifyPropertyChanged
+    public class API : IAPI, INotifyPropertyChanged
     {
         public event EventHandler<ApiErrorEventArgs>? ApiError;
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -38,7 +38,7 @@ namespace pancake.spotify
         private object? _token;
         private bool _clientAvailable = false;
 
-        public ClientFactory(IAuthentication auth) 
+        public API(IAuthentication auth) 
         {
             _auth = auth;
         }

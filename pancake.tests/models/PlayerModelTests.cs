@@ -43,22 +43,22 @@ namespace pancake.tests.models
             return cpc;
         }
 
-        private static Mock<IClientFactory> ClientFactory(Action<Mock<ISpotifyClient>> edit)
+        private static Mock<IAPI> ClientFactory(Action<Mock<ISpotifyClient>> edit)
         {
             var client = new Mock<ISpotifyClient>();
 
             edit(client);
 
-            var factory = new Mock<IClientFactory>();
+            var factory = new Mock<IAPI>();
             factory.Setup(r => r.CreateClient()).Returns(client.Object);
             factory.Setup(r => r.HasToken).Returns(true);
 
             return factory;
         }
 
-        private static Mock<IClientFactory> ClientFactory(SpotifyClientFake fake)
+        private static Mock<IAPI> ClientFactory(SpotifyClientFake fake)
         {
-            var factory = new Mock<IClientFactory>();
+            var factory = new Mock<IAPI>();
             factory.Setup(r => r.CreateClient()).Returns(fake);
 
             return factory;
@@ -95,7 +95,7 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IClientFactory.HasToken)));
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IAPI.HasToken)));
 
             Thread.Sleep(5_500);
             model.Dispose();
@@ -136,7 +136,7 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IClientFactory.HasToken)));
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IAPI.HasToken)));
 
             Thread.Sleep(5_500);
             model.Dispose();
@@ -175,7 +175,7 @@ namespace pancake.tests.models
             var factory = ClientFactory(client);
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IClientFactory.HasToken)));
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IAPI.HasToken)));
 
             await Task.Delay(1000);
             await model.PlayPause();
