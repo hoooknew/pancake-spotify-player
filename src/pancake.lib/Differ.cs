@@ -253,7 +253,7 @@ namespace pancake.lib
             throw new Exception("Should never get here");
         }
 
-        protected static void BuildModificationData<T>(ModificationData<T> A, ModificationData<T> B)
+        protected static void BuildModificationData(ModificationData<T> A, ModificationData<T> B)
         {
             int N = A.HashedPieces!.Length;
             int M = B.HashedPieces!.Length;
@@ -263,7 +263,7 @@ namespace pancake.lib
             BuildModificationData(A, 0, N, B, 0, M, forwardDiagonal, reverseDiagonal);
         }
 
-        private static void BuildModificationData<T>
+        private static void BuildModificationData
             (ModificationData<T> A,
              int startA,
              int endA,
@@ -316,7 +316,7 @@ namespace pancake.lib
             }
         }
 
-        private static void BuildPieceHashes<T>(IDictionary<string, int> pieceHash, ModificationData<T> data, Func<T, string> getChunk)
+        private static void BuildPieceHashes(IDictionary<string, int> pieceHash, ModificationData<T> data, Func<T, string> getChunk)
         {
             var pieces = data.RawData?.Select(r => getChunk(r)).ToArray() ?? emptyStringArray;
 

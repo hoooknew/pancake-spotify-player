@@ -11,7 +11,18 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <ItemsControl/>
             <Image Source="{Binding Playing.Image.Url}"/>
-            <ItemsControl/>
+            <ItemsControl ItemsSource="{Binding Queued}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Image Source="{Binding Image.Url}" Width="80"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </StackPanel>
     </Grid>
 </ctrl:BaseWindow>

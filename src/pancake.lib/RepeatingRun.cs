@@ -52,7 +52,9 @@ public class RepeatingRun
 
         Stop();
 
-        await _task(_cancel.Token);
+        var cancel = new CancellationTokenSource();
+
+        await _task(cancel.Token);
 
         if (isRunning)
             Start();

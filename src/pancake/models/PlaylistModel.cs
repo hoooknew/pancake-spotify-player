@@ -95,15 +95,15 @@ namespace pancake.models
 
         private async Task _RepeatedlyRefreshQueue(CancellationToken cancelToken = default(CancellationToken))
         {
-            //await _api.TryApiCall(async client =>
-            //{
-            //    var response = await client.Player.GetQueue(cancelToken);
-            //    var queue = response.Queue.Select(r => new PlayableItemModel(r)).ToList();
+            await _api.TryApiCall(async client =>
+            {
+                var response = await client.Player.GetQueue(cancelToken);
+                var queue = response.Queue.Select(r => new PlayableItemModel(r)).Take(4).ToList();
 
-            //    Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
-            //});
+                Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
+            });
 
-            await Task.Delay(0);
+            //await Task.Delay(0);
         }
 
         private async Task RefreshPlayed(CancellationToken cancelToken = default(CancellationToken))

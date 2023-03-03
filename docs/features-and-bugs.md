@@ -75,3 +75,4 @@
 - [ ] prevent multiple copies of the app from opening?
 - [ ] can I prevent the downloaded msi from being blocked my windows for free?
 - [ ] handle the bad gateway error without signing the user out?
+- [ ] the queue in the playlist model crashes because I'm updating the list contents on a background thread.
