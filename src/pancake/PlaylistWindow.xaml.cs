@@ -1,4 +1,5 @@
-﻿using System;
+﻿using pancake.ui.controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,18 +16,13 @@ using System.Windows.Shapes;
 namespace pancake
 {
     /// <summary>
-    /// Interaction logic for TestWindow.xaml
+    /// Interaction logic for PlaylistWindow.xaml
     /// </summary>
-    public partial class TestWindow : Window
+    public partial class PlaylistWindow : BaseWindow
     {
-        public TestWindow()
+        public PlaylistWindow()
         {
             InitializeComponent();
-        }
-
-        private void Run_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
         }
     }
 }

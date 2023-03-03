@@ -14,13 +14,14 @@ using System.Windows.Controls;
 
 namespace pancake
 {
-    public partial class MainWindow : BaseWindow
+    public partial class MainWindow : BaseWindow, IDisposable
     {
         readonly ILogger<MainWindow> _logger;
         private readonly IAuthentication _auth;
         private readonly IAPI _api;
         readonly IPlayerModel _model;
         bool _commandExecuting = false;
+        readonly DockableWindows _dockable;
 
         public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
         {
@@ -32,6 +33,13 @@ namespace pancake
             _api = api;
             _api.Error += _api_Error;
             _model = model;
+            
+            _dockable = new DockableWindows(this);
+
+            var playlist = new PlaylistWindow();
+            playlist.Width = this.Width;
+            playlist.Show();            
+            _dockable.DockWindowTo(playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary);
         }
 
         private void _api_Error(object? sender, ApiErrorEventArgs e)
@@ -157,6 +165,11 @@ namespace pancake
         private void OpenInSpotify_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
             Spotify.Open(e.Parameter);
+        }
+
+        public void Dispose()
+        {
+            _dockable.Dispose();
         }
     }
 }

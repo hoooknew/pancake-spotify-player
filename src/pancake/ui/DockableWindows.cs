@@ -122,7 +122,7 @@ internal class DockableWindows : IDisposable
     #endregion
 
     [Flags]
-    private enum DockedTo
+    public enum DockedTo
     {
         None = 0,
 
@@ -203,6 +203,18 @@ internal class DockableWindows : IDisposable
 
         if (_dockedWindows.ContainsKey(w))
             _dockedWindows.Remove(w);
+    }
+
+    public void DockWindowTo(Window dockable, DockedTo dockTo)
+    {
+        if (!_dockable.Contains(dockable))
+            AddDockable(dockable);
+
+        var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
+        var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
+
+        SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
+        PositionDockedWindows();
     }
 
 
