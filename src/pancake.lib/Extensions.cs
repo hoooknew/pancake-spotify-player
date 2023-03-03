@@ -10,9 +10,12 @@ namespace pancake.lib
 {
     public static class Extensions
     {
-        public static string? GetItemId(this IPlayableItem? item) => item switch { FullTrack f => f.Id, FullEpisode e => e.Id, _ => null };
-        public static FullTrack? GetTrack(this CurrentlyPlayingContext? context) => context?.Item as FullTrack;
-        public static FullEpisode? GetEpisode(this CurrentlyPlayingContext? context) => context?.Item as FullEpisode;
+        public static string? ItemId(this IPlayableItem? item) => item switch { FullTrack f => f.Id, FullEpisode e => e.Id, _ => null };
+        public static FullTrack? Track(this CurrentlyPlayingContext? context) => context?.Item as FullTrack;
+        public static FullEpisode? Episode(this CurrentlyPlayingContext? context) => context?.Item as FullEpisode;
+
+        public static FullTrack? Track(this IPlayableItem item) => item as FullTrack;
+        public static FullEpisode? Episode(this IPlayableItem item) => item as FullEpisode;
 
         public static void CallWithShell(this Uri uri)
         {

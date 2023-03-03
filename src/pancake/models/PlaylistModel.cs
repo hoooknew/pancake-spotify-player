@@ -23,17 +23,17 @@ namespace pancake.models
 
         private RepeatingRun _queueRefresher;
 
-        public ObservableCollection<IPlayableItem> Played { get; private set; }
-        public IPlayableItem? Playing 
-        { 
-            get => _playing; 
+        public ObservableCollection<PlayableItemModel> Played { get; private set; }
+        public IPlayableItem? Playing
+        {
+            get => _playing;
             private set
             {
-                _playing= value;
+                _playing = value;
                 this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Playing)));
             }
         }
-        public ObservableCollection<IPlayableItem> Queued { get; private set; }
+        public ObservableCollection<PlayableItemModel> Queued { get; private set; }
 
         public PlaylistModel(IPlayerModel playerModel, IConfig config, IAPI api, ILogging logging)
         {
@@ -44,8 +44,8 @@ namespace pancake.models
             _playerModel.PropertyChanged += _playerModel_PropertyChanged;
 
 
-            Played = new ObservableCollection<IPlayableItem>();
-            Queued = new ObservableCollection<IPlayableItem>();
+            Played = new ObservableCollection<PlayableItemModel>();
+            Queued = new ObservableCollection<PlayableItemModel>();
             Playing = null;
 
             _queueRefresher = new RepeatingRun(_RepeatedlyRefreshQueue, config.RefreshDelayMS);
@@ -71,37 +71,51 @@ namespace pancake.models
             }
         }
 
-        private void _playerModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private async void _playerModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            switch(e.PropertyName)
+            switch (e.PropertyName)
             {
                 case nameof(PlayerModel.CurrentlyPlaying):
-                    ChangePlaying(_playerModel.CurrentlyPlaying);
+                    await ChangePlaying(_playerModel.CurrentlyPlaying);
                     break;
             }
         }
 
-        private async Task _RepeatedlyRefreshQueue(CancellationToken cancelToken)
+        private async Task RefreshQueue(CancellationToken cancelToken = default(CancellationToken))
+        {
+            await _queueRefresher.Invoke();
+        }
+
+        private async Task _RepeatedlyRefreshQueue(CancellationToken cancelToken = default(CancellationToken))
         {
             await _api.TryApiCall(async client =>
             {
-                try
-                {
-                    //await _RefreshState(client, cancelToken);
-                }
-                catch (APIException e) when
-                    (e.Message == "Player command failed: No active device found")
-                {
-                    _api.ClientAvailable = false;
-                }
+                var response = await client.Player.GetQueue(cancelToken);
+                var queue = response.Queue.Select(r => new PlayableItemModel(r)).ToList();
+
+                Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
             });
         }
 
-        private void ChangePlaying(IPlayableItem? currentlyPlaying)
+        private async Task RefreshPlayed(CancellationToken cancelToken = default(CancellationToken))
+        {
+            await _api.TryApiCall(async client =>
+            {
+                var played = new List<PlayableItemModel>();
+
+                var response = await client.Player.GetRecentlyPlayed(cancelToken);                
+                if (response != null && response.Items != null)
+                    played = response.Items.Select(r => r.Track).OfType<IPlayableItem>().Select(r => new PlayableItemModel(r)).ToList();
+
+                Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Played, played, r => r.Id);
+            });
+        }
+
+        private async Task ChangePlaying(IPlayableItem? currentlyPlaying)
         {
             Playing = currentlyPlaying;
-            //update played
-            //update Queued
+            await RefreshPlayed();
+            await RefreshQueue();
         }
 
         public void Dispose()

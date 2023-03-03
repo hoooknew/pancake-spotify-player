@@ -58,7 +58,7 @@ namespace pancake.models
                 else
                 {
                     return new ChangedState(
-                        Track: oldContext!.Item?.GetItemId() != newContext!.Item?.GetItemId(),
+                        Track: oldContext!.Item?.ItemId() != newContext!.Item?.ItemId(),
                         PlayPause: oldContext.IsPlaying != newContext.IsPlaying,
                         Shuffle: oldContext.ShuffleState != newContext.ShuffleState,
                         Repeat: oldContext.RepeatState != newContext.RepeatState,
@@ -111,13 +111,13 @@ namespace pancake.models
         public bool NeedToken => !_api.HasToken;
 
         public string Title
-            => Context.GetTrack()?.Name ?? Context.GetEpisode()?.Name ?? "";
+            => Context.Track()?.Name ?? Context.Episode()?.Name ?? "";
         public IEnumerable<LinkableObject> Artists
         {
             get
             {
-                var track = Context.GetTrack();
-                var episode = Context.GetEpisode();
+                var track = Context.Track();
+                var episode = Context.Episode();
                 if (track != null)
                     return track.Artists.Select(r => (LinkableObject)r);
                 else if (episode != null)
@@ -154,7 +154,7 @@ namespace pancake.models
             }
         }
         public int Duration
-            => Context.GetTrack()?.DurationMs ?? Context.GetEpisode()?.DurationMs ?? 0;
+            => Context.Track()?.DurationMs ?? Context.Episode()?.DurationMs ?? 0;
         public IPlayableItem? CurrentlyPlaying => Context?.Item;
         public bool ClientAvailable
             => _api.ClientAvailable;
@@ -279,7 +279,7 @@ namespace pancake.models
             {
                 _commandsLog.LogInformation($"toggle favorite: {IsFavorite}");
 
-                string? id = Context?.Item?.GetItemId();
+                string? id = Context?.Item?.ItemId();
 
                 if (id != null)
                 {
@@ -358,7 +358,7 @@ namespace pancake.models
                         {
                             if (Context?.Item != null)
                             {
-                                var isFavs = await client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { Context!.Item!.GetItemId()! }));
+                                var isFavs = await client.Library.CheckTracks(new LibraryCheckTracksRequest(new string[] { Context!.Item!.ItemId()! }));
                                 IsFavorite = isFavs.All(r => r);
                             }
                             else
