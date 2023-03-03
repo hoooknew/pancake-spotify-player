@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "autonotify", "autonotify", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4ADDAE02-89F6-4AB8-A450-211B6C82BE0D}"
 	ProjectSection(SolutionItems) = preProject
+		attrib.md = attrib.md
 		docs\building-in-actions.md = docs\building-in-actions.md
 		docs\features-and-bugs.md = docs\features-and-bugs.md
 		docs\logging.md = docs\logging.md
