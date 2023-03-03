@@ -1,4 +1,5 @@
-﻿using pancake.ui.controls;
+﻿using pancake.models;
+using pancake.ui.controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,11 @@ namespace pancake
     /// </summary>
     public partial class PlaylistWindow : BaseWindow
     {
-        public PlaylistWindow()
+        public PlaylistWindow(IPlaylistModel model)
         {
             InitializeComponent();
+
+            this.DataContext = model;
         }
     }
 }

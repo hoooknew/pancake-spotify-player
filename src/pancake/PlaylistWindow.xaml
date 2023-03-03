@@ -6,8 +6,12 @@
         xmlns:local="clr-namespace:pancake"
         xmlns:ctrl="clr-namespace:pancake.ui.controls"
         mc:Ignorable="d"
-        Title="PlaylistWindow" Height="70" Width="300">
+        Title="PlaylistWindow" Height="120" Width="300">
     <Grid>
-        
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <ItemsControl/>
+            <Image Source="{Binding Playing.Image.Url}"/>
+            <ItemsControl/>
+        </StackPanel>
     </Grid>
 </ctrl:BaseWindow>

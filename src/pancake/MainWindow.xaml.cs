@@ -22,8 +22,9 @@ namespace pancake
         readonly IPlayerModel _model;
         bool _commandExecuting = false;
         readonly DockableWindows _dockable;
+        readonly PlaylistWindow _playlist;
 
-        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
+        public MainWindow(PlaylistWindow playlist, ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
@@ -36,10 +37,10 @@ namespace pancake
             
             _dockable = new DockableWindows(this);
 
-            var playlist = new PlaylistWindow();
-            playlist.Width = this.Width;
-            playlist.Show();            
-            _dockable.DockWindowTo(playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary);
+            _playlist = playlist;
+            _playlist.Width = this.Width;
+            _playlist.Show();            
+            _dockable.DockWindowTo(_playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary);
         }
 
         private void _api_Error(object? sender, ApiErrorEventArgs e)

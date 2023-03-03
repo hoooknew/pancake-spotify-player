@@ -39,7 +39,9 @@ namespace pancake
                 .AddSingleton(typeof(IAuthentication), typeof(Authentication))
                 .AddSingleton(typeof(IAPI), typeof(API))
                 .AddSingleton(typeof(IPlayerModel), typeof(PlayerModel))
-                .AddSingleton<MainWindow>();
+                .AddSingleton(typeof(IPlaylistModel), typeof(PlaylistModel))
+                .AddSingleton<MainWindow>()
+                .AddSingleton<PlaylistWindow>();
         }
 
         protected async override void OnStartup(StartupEventArgs e)

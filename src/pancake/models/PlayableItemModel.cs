@@ -45,7 +45,7 @@ namespace pancake.models
             => images.Where(r => r.Width <= 300).OrderByDescending(r => r.Width).FirstOrDefault() ?? images.First();
 
 
-        public Image? Image
+        public Image Image
             => _item switch
             {
                 FullTrack track => PickImage(track.Album.Images),
