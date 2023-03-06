@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using pancake.lib;
 using pancake.models;
 using pancake.spotify;
+using pancake.ui;
 using System;
 using System.Data;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace pancake
                 .AddSingleton<App>(this)
                 .AddSingleton(typeof(IConfig), typeof(Config))
                 .AddSingleton(typeof(ILogging), typeof(Logging))
+                .AddSingleton(typeof(IDispatchProvider), new DispatchProvider(this.Dispatcher))
                 .AddSingleton(typeof(IAuthentication), typeof(Authentication))
                 .AddSingleton(typeof(IAPI), typeof(API))
                 .AddSingleton(typeof(IPlayerModel), typeof(PlayerModel))

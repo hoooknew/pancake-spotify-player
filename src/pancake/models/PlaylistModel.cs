@@ -1,5 +1,7 @@
-﻿using pancake.lib;
+﻿using Microsoft.Extensions.Logging;
+using pancake.lib;
 using pancake.spotify;
+using pancake.ui;
 using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
@@ -29,6 +31,8 @@ namespace pancake.models
         private ISpotifyClient? _client = null;
 
         private RepeatingRun _queueRefresher;
+        private readonly IDispatchProvider _dispatch;
+        private readonly ILogger _log;
 
         public ObservableCollection<PlayableItemModel> Played { get; private set; }
         public PlayableItemModel? Playing
@@ -42,14 +46,17 @@ namespace pancake.models
         }
         public ObservableCollection<PlayableItemModel> Queued { get; private set; }
 
-        public PlaylistModel(IPlayerModel playerModel, IConfig config, IAPI api, ILogging logging)
+        public PlaylistModel(IPlayerModel playerModel, IConfig config, IDispatchProvider dispatch, IAPI api, ILogging logging)
         {
+            _log = logging.Create<PlaylistModel>();
+
             _api = api;
             _api.PropertyChanged += _api_PropertyChanged;
 
             _playerModel = playerModel;
             _playerModel.PropertyChanged += _playerModel_PropertyChanged;
 
+            _dispatch = dispatch;
 
             Played = new ObservableCollection<PlayableItemModel>();
             Queued = new ObservableCollection<PlayableItemModel>();
@@ -100,7 +107,12 @@ namespace pancake.models
                 var response = await client.Player.GetQueue(cancelToken);
                 var queue = response.Queue.Select(r => new PlayableItemModel(r)).Take(4).ToList();
 
-                Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
+                _log.LogInformation("queue data updated. num items:{0}", response.Queue.Count());
+
+                _dispatch.Invoke(() =>
+                {
+                    Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
+                });
             });
 
             //await Task.Delay(0);
