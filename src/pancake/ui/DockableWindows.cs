@@ -18,6 +18,9 @@ internal class DockableWindows : IDisposable
         [DllImport("dwmapi.dll")]
         public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
 
+        [DllImport("User32.dll")]
+        public static extern uint GetDpiForWindow(IntPtr hwnd);
+
         public struct RECT
         {
             public int Left;
@@ -63,6 +66,17 @@ internal class DockableWindows : IDisposable
             public bool HasVerticalOverlap(NativeMethods.RECT other_r)
                => (this.Top >= other_r.Top && this.Top <= other_r.Bottom) ||
                   (this.Bottom >= other_r.Top && this.Bottom <= other_r.Bottom);
+
+            public RECT Scale(decimal factor)
+            {
+                RECT scaled = new RECT();
+                scaled.Left = (int)Math.Floor(Left * factor);
+                scaled.Right = (int)Math.Floor(Right * factor);
+                scaled.Top = (int)Math.Floor(Top * factor);
+                scaled.Bottom = (int)Math.Floor(Bottom * factor);
+
+                return scaled;
+            }
         }
 
         [Flags]
@@ -96,6 +110,10 @@ internal class DockableWindows : IDisposable
             // https://github.com/StrongCod3r/SnapWindow/blob/master/WpfExample/WinApi.cs#L44
             int size = Marshal.SizeOf(typeof(RECT));
             DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out RECT rect, size);
+
+            decimal dpiScale = GetDpiForWindow(hWnd) / 96;
+            if (dpiScale > 0)
+                rect =  rect.Scale(1 / dpiScale);
 
             return rect;
         }
