@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -12,7 +13,10 @@ internal class DockableWindows : IDisposable
     private class NativeMethods
     {
         #region Constants
-        public static readonly int WM_EXITSIZEMOVE = 0x232;
+        public const int WM_EXITSIZEMOVE = 0x232;
+        public const int WM_ENTERSIZEMOVE = 0x231;
+        public const int WM_SIZE = 0x0005;
+
         #endregion
 
         [DllImport("dwmapi.dll")]
@@ -113,7 +117,7 @@ internal class DockableWindows : IDisposable
 
             decimal dpiScale = GetDpiForWindow(hWnd) / 96;
             if (dpiScale > 0)
-                rect =  rect.Scale(1 / dpiScale);
+                rect = rect.Scale(1 / dpiScale);
 
             return rect;
         }
@@ -173,8 +177,8 @@ internal class DockableWindows : IDisposable
     public DockableWindows(Window main, double snapDistance = DEFAULT_SNAP_DISTANCE)
     {
         _main = main;
-        _main.LocationChanged += MainWindow_SizeOrLocationChanged;
-        _main.SizeChanged += MainWindow_SizeOrLocationChanged;
+        _main.LocationChanged += MainWindow_LocationChanged;
+        AddHook(_main, Main_WndProc);
 
         _snapDistance = snapDistance;
 
@@ -182,21 +186,28 @@ internal class DockableWindows : IDisposable
         _dockedWindows = new Dictionary<Window, DockedPosition>();
     }
 
+    void AddHook(Window w, HwndSourceHook callback)
+    {
+        if (w.IsLoaded)
+        {
+            var h = GetHandle(w);
+            HwndSource source = HwndSource.FromHwnd(h);
+            source.AddHook(callback);
+        }
+        else
+            w.Loaded += (s, e) => AddHook(w, callback);
+
+    }
+
+    void RemoveHook(Window w, HwndSourceHook callback)
+    {
+        var h = GetHandle(w);
+        HwndSource source = HwndSource.FromHwnd(h);
+        source.RemoveHook(callback);
+    }
+
     public void AddDockable(Window w)
     {
-        void AddHook(Window w, HwndSourceHook callback)
-        {
-            if (w.IsLoaded)
-            {
-                var h = GetHandle(w);
-                HwndSource source = HwndSource.FromHwnd(h);
-                source.AddHook(callback);
-            }
-            else
-                w.Loaded += (s, e) => AddHook(w, callback);
-
-        }
-
         if (!_dockable.Contains(w))
         {
             _dockable.Add(w);
@@ -206,12 +217,7 @@ internal class DockableWindows : IDisposable
     }
     public void RemoveDockable(Window w)
     {
-        void RemoveHook(Window w, HwndSourceHook callback)
-        {
-            var h = GetHandle(w);
-            HwndSource source = HwndSource.FromHwnd(h);
-            source.RemoveHook(callback);
-        }
+
 
         if (_dockable.Contains(w))
         {
@@ -291,34 +297,58 @@ internal class DockableWindows : IDisposable
         }
     }
 
+
+    private IntPtr Main_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        switch (msg)
+        {            
+            case NativeMethods.WM_SIZE:
+                PositionDockedWindows();
+                break;
+        }
+
+        return IntPtr.Zero;
+    }
+
     private IntPtr Dockable_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         // https://github.com/StrongCod3r/SnapWindow/blob/master/WpfExample/SnapWindow.cs#L23
-        if (msg == NativeMethods.WM_EXITSIZEMOVE)
+
+        switch (msg)
         {
-            Window? dockable = GetDockableWithHandle(hwnd);
-
-            if (dockable != null)
-            {
-                var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
-                var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
-
-                DockedTo dockTo = GetPrimaryDock(mainSize, dockableSize);
-                dockTo |= GetSeconadryDock(mainSize, dockableSize, dockTo);
-
-                if (dockTo == DockedTo.None)
+            case NativeMethods.WM_EXITSIZEMOVE:
                 {
-                    if (GetDockedPosition(dockable) != null)
-                        SetDockedPosition(dockable, null);
+                    Window? dockable = GetDockableWithHandle(hwnd);
+                    if (dockable != null)
+                    {
+                        var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
+                        var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
+
+                        DockedTo dockTo = GetPrimaryDock(mainSize, dockableSize);
+                        dockTo |= GetSeconadryDock(mainSize, dockableSize, dockTo);
+
+                        if (dockTo == DockedTo.None)
+                        {
+                            if (GetDockedPosition(dockable) != null)
+                                SetDockedPosition(dockable, null);
+                        }
+                        else
+                        {
+                            SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
+                            PositionDockedWindows();
+                        }
+                    }
                 }
-                else
+                break;
+
+            case NativeMethods.WM_SIZE:
                 {
-                    SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
-                    PositionDockedWindows();
+                    Window? dockable = GetDockableWithHandle(hwnd);
+                    if (dockable != null && _dockedWindows.ContainsKey(dockable))
+                        PositionDockedWindows();
                 }
-            }
+                break;
         }
-
         return IntPtr.Zero;
     }
 
@@ -388,15 +418,15 @@ internal class DockableWindows : IDisposable
         return DockedTo.None;
     }
 
-    private void MainWindow_SizeOrLocationChanged(object? sender, EventArgs e)
+    private void MainWindow_LocationChanged(object? sender, EventArgs e)
     {
         PositionDockedWindows();
     }
 
     public void Dispose()
     {
-        _main.LocationChanged -= MainWindow_SizeOrLocationChanged;
-        _main.SizeChanged -= MainWindow_SizeOrLocationChanged;
+        _main.LocationChanged -= MainWindow_LocationChanged;
+        RemoveHook(_main, Main_WndProc);
 
         foreach (var dw in _dockable.ToList())
             RemoveDockable(dw);

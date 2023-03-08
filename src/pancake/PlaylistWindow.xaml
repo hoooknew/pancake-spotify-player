@@ -4,25 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pancake"
+        xmlns:lib="clr-namespace:pancake.lib;assembly=pancake.lib"
         xmlns:ctrl="clr-namespace:pancake.ui.controls"
         mc:Ignorable="d"
+        SizeToContent="Height"
         Title="PlaylistWindow" Height="120" Width="300">
-    <Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <ItemsControl/>
-            <Image Source="{Binding Playing.Image.Url}"/>
-            <ItemsControl ItemsSource="{Binding Queued}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Image Source="{Binding Image.Url}" Width="80"/>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </StackPanel>
-    </Grid>
+    <Border BorderBrush="{DynamicResource DefaultBorderBrush}" BorderThickness="1">
+        <Border.LayoutTransform>
+            <ScaleTransform 
+                ScaleX="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}" 
+                ScaleY="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"/>
+        </Border.LayoutTransform>
+
+        <Grid>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <ItemsControl/>
+                <Image Source="{Binding Playing.Image.Url}" Height="118"/>
+                <ItemsControl ItemsSource="{Binding Queued}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Image.Url}" Height="94" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+    </Border>
 </ctrl:BaseWindow>
