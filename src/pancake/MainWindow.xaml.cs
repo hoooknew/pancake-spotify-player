@@ -27,6 +27,7 @@ namespace pancake
         public MainWindow(PlaylistWindow playlist, ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
         {
             InitializeComponent();
+
             this.Loaded += MainWindow_Loaded;
 
             _logger = logging.Create<MainWindow>();
@@ -34,11 +35,10 @@ namespace pancake
             _api = api;
             _api.Error += _api_Error;
             _model = model;
-            
+
             _dockable = new DockableWindows(this);
-            
+
             _playlist = playlist;
-            //_playlist.SizeChanged += (s, e) => Debug.Write($"\nplaylist window size changed {_playlist.Width}\n\n");
             _dockable.DockWindowTo(_playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary | DockableWindows.DockedTo.Right_Secondary);
             _playlist.Show();
         }
@@ -170,7 +170,7 @@ namespace pancake
 
         public void Dispose()
         {
-            _dockable.Dispose();
+            _dockable?.Dispose();
         }
     }
 }
