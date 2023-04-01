@@ -178,23 +178,13 @@ internal class DockableWindows : IDisposable
     {
         _main = main;
         _main.LocationChanged += MainWindow_LocationChanged;
-        _main.Loaded += _main_IsVisibleChanged;
-        AddHook(_main, Main_WndProc);
+        _main.SizeChanged += MainWindow_LocationChanged;        
 
         _snapDistance = snapDistance;
 
         _dockable = new List<Window>();
         _dockedWindows = new Dictionary<Window, DockedPosition>();
-    }
-
-    private void _main_IsVisibleChanged(object sender, EventArgs e)
-    {
-        if (_main.IsVisible)
-        {
-            _main.Loaded -= _main_IsVisibleChanged;
-            PositionDockedWindows();
-        }
-    }
+    }    
 
     void AddHook(Window w, HwndSourceHook callback)
     {
@@ -283,15 +273,15 @@ internal class DockableWindows : IDisposable
             double width = docked.Width;
             double height = docked.Height;
 
-            if (position.dockedTo.HasFlag(DockedTo.Top_Primary))
-                top = mainSize.Top - dockedSize.Height;
-            else if (position.dockedTo.HasFlag(DockedTo.Bottom_Primary))
-                top = mainSize.Top + mainSize.Height;
-            else if (position.dockedTo.HasFlag(DockedTo.Top_Secondary) && position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
+            if (position.dockedTo.HasFlag(DockedTo.Top_Secondary) && position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
             {
                 top = _main.Top;
                 height = _main.Height;
-            }
+            }            
+            else if (position.dockedTo.HasFlag(DockedTo.Bottom_Primary))
+                top = mainSize.Top + mainSize.Height;
+            else if (position.dockedTo.HasFlag(DockedTo.Top_Primary))
+                top = mainSize.Top - dockedSize.Height;
             else if (position.dockedTo.HasFlag(DockedTo.Top_Secondary))
                 top = _main.Top;
             else if (position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
@@ -299,16 +289,16 @@ internal class DockableWindows : IDisposable
             else
                 top = _main.Top + position.offset.Y;
 
-
-            if (position.dockedTo.HasFlag(DockedTo.Left_Primary))
-                left = _main.Left - dockedSize.Width;
-            else if (position.dockedTo.HasFlag(DockedTo.Right_Primary))
-                left = _main.Left + mainSize.Width;
-            else if (position.dockedTo.HasFlag(DockedTo.Left_Secondary) && position.dockedTo.HasFlag(DockedTo.Right_Secondary))
+            
+            if (position.dockedTo.HasFlag(DockedTo.Left_Secondary) && position.dockedTo.HasFlag(DockedTo.Right_Secondary))
             {
                 left = _main.Left;
                 width = _main.Width;
             }
+            else if (position.dockedTo.HasFlag(DockedTo.Left_Primary))
+                left = _main.Left - dockedSize.Width;
+            else if (position.dockedTo.HasFlag(DockedTo.Right_Primary))
+                left = _main.Left + mainSize.Width;
             else if (position.dockedTo.HasFlag(DockedTo.Left_Secondary))
                 left = _main.Left;
             else if (position.dockedTo.HasFlag(DockedTo.Right_Secondary))
@@ -321,19 +311,6 @@ internal class DockableWindows : IDisposable
             docked.Width = width;
             docked.Height = height;
         }
-    }
-
-
-    private IntPtr Main_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-    {
-        switch (msg)
-        {            
-            case NativeMethods.WM_SIZE:
-                PositionDockedWindows();
-                break;
-        }
-
-        return IntPtr.Zero;
     }
 
     private IntPtr Dockable_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
@@ -442,7 +419,7 @@ internal class DockableWindows : IDisposable
     public void Dispose()
     {
         _main.LocationChanged -= MainWindow_LocationChanged;
-        RemoveHook(_main, Main_WndProc);
+        _main.SizeChanged -= MainWindow_LocationChanged;        
 
         foreach (var dw in _dockable.ToList())
             RemoveDockable(dw);
