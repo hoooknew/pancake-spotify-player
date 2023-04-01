@@ -32,16 +32,19 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: "6.0.x"
-        
+
     - name: Add MSBuild
       uses: microsoft/setup-msbuild@v1.1
       with: 
         # 17.4 is required for the source code generator to work.
         vs-version: '[17.4'
 
-    - name: dotnet publish
-      run: dotnet publish -p:PublishProfile=FolderProfile -p:EnableWindowsTargeting=true
-        
+    - name: Restore
+      run: MSBuild  ${{ env.Solution_Path }} /t:Restore
+      
+    - name: Build
+      run: MSBuild  ${{ env.Solution_Path }} /p:Configuration=Release /p:Version=${{ inputs.version-num }}        
+
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
