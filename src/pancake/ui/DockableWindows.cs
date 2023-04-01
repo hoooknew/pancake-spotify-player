@@ -203,7 +203,7 @@ internal class DockableWindows : IDisposable
     {
         var h = GetHandle(w);
         HwndSource source = HwndSource.FromHwnd(h);
-        source.RemoveHook(callback);
+        source?.RemoveHook(callback);
     }
 
     public void AddDockable(Window w)
