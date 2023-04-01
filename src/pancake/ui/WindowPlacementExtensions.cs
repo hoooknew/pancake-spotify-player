@@ -30,12 +30,12 @@ namespace pancake.ui
                 var newValue = e.NewValue as string;
                 if (string.IsNullOrEmpty(newValue))
                 {
-                    w.Loaded -= LoadPosition;
+                    w.IsVisibleChanged -= LoadPosition;
                     w.Closing -= SavePosition;
                 }
                 else
                 {
-                    w.Loaded += LoadPosition;
+                    w.IsVisibleChanged += LoadPosition;
                     w.Closing += SavePosition;                    
                 }
             }
@@ -52,7 +52,7 @@ namespace pancake.ui
             }
         }  
 
-        private static void LoadPosition(object? sender, EventArgs e)
+        private static void LoadPosition(object? sender, DependencyPropertyChangedEventArgs e)
         {
             if (sender is Window w && GetSave(w) is string settingName)
             {
