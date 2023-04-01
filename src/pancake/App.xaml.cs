@@ -54,8 +54,14 @@ namespace pancake
 
             var mainWindow = Host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
+            mainWindow.Closed += MainWindow_Closed;
 
             base.OnStartup(e);
+        }
+
+        private void MainWindow_Closed(object? sender, EventArgs e)
+        {
+            this.Shutdown();
         }
 
         protected override async void OnExit(ExitEventArgs e)
