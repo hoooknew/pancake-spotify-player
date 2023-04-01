@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "autonotify", "autonotify", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4ADDAE02-89F6-4AB8-A450-211B6C82BE0D}"
 	ProjectSection(SolutionItems) = preProject
+		attrib.md = attrib.md
 		docs\building-in-actions.md = docs\building-in-actions.md
 		docs\features-and-bugs.md = docs\features-and-bugs.md
 		docs\logging.md = docs\logging.md
@@ -28,7 +29,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{4ADDAE02-8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake", "src\pancake\pancake.csproj", "{EC43D118-73F4-43EF-898B-1B1A292D66AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pancake.tests", "pancake.tests\pancake.tests.csproj", "{DCD84A82-2B43-4CDB-9C15-A0979011B480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake.tests", "src\pancake.tests\pancake.tests.csproj", "{6644FBE4-E511-43C6-B3BF-F81CE8DB14E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pancake.lib.tests", "src\pancake.lib.tests\pancake.lib.tests.csproj", "{5DADB29B-2000-4149-A51C-C3D3DC78E904}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +55,14 @@ Global
 		{EC43D118-73F4-43EF-898B-1B1A292D66AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC43D118-73F4-43EF-898B-1B1A292D66AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC43D118-73F4-43EF-898B-1B1A292D66AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCD84A82-2B43-4CDB-9C15-A0979011B480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCD84A82-2B43-4CDB-9C15-A0979011B480}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCD84A82-2B43-4CDB-9C15-A0979011B480}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCD84A82-2B43-4CDB-9C15-A0979011B480}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6644FBE4-E511-43C6-B3BF-F81CE8DB14E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6644FBE4-E511-43C6-B3BF-F81CE8DB14E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6644FBE4-E511-43C6-B3BF-F81CE8DB14E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6644FBE4-E511-43C6-B3BF-F81CE8DB14E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DADB29B-2000-4149-A51C-C3D3DC78E904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DADB29B-2000-4149-A51C-C3D3DC78E904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DADB29B-2000-4149-A51C-C3D3DC78E904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DADB29B-2000-4149-A51C-C3D3DC78E904}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

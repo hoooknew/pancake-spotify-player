@@ -8,6 +8,7 @@ using pancake.ui.controls;
 using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -42,22 +43,23 @@ namespace pancake.tests.models
             return cpc;
         }
 
-        private static Mock<IClientFactory> ClientFactory(Action<Mock<ISpotifyClient>> edit)
+        private static Mock<IAPI> API(Action<Mock<ISpotifyClient>> edit)
         {
             var client = new Mock<ISpotifyClient>();
 
             edit(client);
 
-            var factory = new Mock<IClientFactory>();
-            factory.Setup(r => r.CreateClient(It.IsAny<object>())).Returns(client.Object);
+            var factory = new Mock<IAPI>();
+            factory.Setup(r => r.CreateClient()).Returns(client.Object);
+            factory.Setup(r => r.HasToken).Returns(true);
 
             return factory;
         }
 
-        private static Mock<IClientFactory> ClientFactory(SpotifyClientFake fake)
+        private static Mock<IAPI> API(SpotifyClientFake fake)
         {
-            var factory = new Mock<IClientFactory>();
-            factory.Setup(r => r.CreateClient(It.IsAny<object>())).Returns(fake);
+            var factory = new Mock<IAPI>();
+            factory.Setup(r => r.CreateClient()).Returns(fake);
 
             return factory;
         }
@@ -71,21 +73,21 @@ namespace pancake.tests.models
                 cpc.ProgressMs = 5 * 1_000;
             });
 
-            var factory = ClientFactory(client =>
-            {
-                client
-                    .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final)
-                    .ReturnsAsync(final);
+            var factory = API(client =>
+                {
+                    client
+                        .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final)
+                        .ReturnsAsync(final);
 
-                client
-                    .Setup(r => r.Library.CheckTracks(It.IsAny<LibraryCheckTracksRequest>(), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(new List<bool>() { false });
-            });
+                    client
+                        .Setup(r => r.Library.CheckTracks(It.IsAny<LibraryCheckTracksRequest>(), It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(new List<bool>() { false });
+                });                
 
 
             var config = new Mock<IConfig>();
@@ -93,8 +95,8 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IAPI.HasToken)));
 
-            model.SetToken(new object());
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);
@@ -109,7 +111,7 @@ namespace pancake.tests.models
                 cpc.ProgressMs = 11 * 1_000;
             });
 
-            var factory = ClientFactory(client =>
+            var factory = API(client =>
             {
                 client
                     .SetupSequence(r => r.Player.GetCurrentPlayback(It.IsAny<CancellationToken>()))
@@ -134,8 +136,8 @@ namespace pancake.tests.models
 
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IAPI.HasToken)));
 
-            model.SetToken(new object());
             Thread.Sleep(5_500);
             model.Dispose();
             Assert.True(!model.IsPlaying && model.Position == final.ProgressMs);            
@@ -170,11 +172,11 @@ namespace pancake.tests.models
                     Debug.WriteLine($"isplaying:{isPlaying}");
                 });
 
-            var factory = ClientFactory(client);
+            var factory = API(client);
 
             var model = new PlayerModel(config.Object, factory.Object, new DebugLogging());
-            model.SetToken(new object());
-            
+            factory.Raise(cf => cf.PropertyChanged += null, new PropertyChangedEventArgs(nameof(IAPI.HasToken)));
+
             await Task.Delay(1000);
             await model.PlayPause();
             await Task.Delay(10_000);

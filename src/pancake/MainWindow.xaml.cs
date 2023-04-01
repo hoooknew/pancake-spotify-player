@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using pancake.lib;
 using pancake.models;
+using pancake.spotify;
 using pancake.ui;
 using pancake.ui.controls;
 using SpotifyAPI.Web;
+using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,34 +18,32 @@ namespace pancake
     {
         readonly ILogger<MainWindow> _logger;
         private readonly IAuthentication _auth;
-        readonly PlayerModel _model;
+        private readonly IAPI _api;
+        readonly IPlayerModel _model;
         bool _commandExecuting = false;
 
-        public MainWindow(ILogging logging, IAuthentication auth, PlayerModel model)
+        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
         {
             InitializeComponent();
             this.Loaded += MainWindow_Loaded;
 
             _logger = logging.Create<MainWindow>();
             _auth = auth;
+            _api = api;
+            _api.Error += _api_Error;
             _model = model;
-            _model.ApiError += _model_ApiError;
         }
 
-        private void _model_ApiError(object? sender, ApiErrorEventArgs e)
+        private void _api_Error(object? sender, ApiErrorEventArgs e)
         {
-            //is this on a worker thread? does it need to be invoked?
-            this.Dispatcher.Invoke(() =>
-            {
-                this._model.SignOut();
-                _auth.SaveToken(null);
+            _model.SignOut();
+            _auth.SaveToken(null);
 
-                if (!(e.Exception is APIUnauthorizedException))
-                {
-                    _logger.LogError(e.Exception, "api error: {0}", e.Exception.Message);
-                    MessageBox.Show(e.Exception.Message);
-                }
-            });
+            if (!(e.Exception is APIUnauthorizedException))
+            {
+                _logger.LogError(e.Exception, "api error: {0}", e.Exception.Message);
+                MessageBox.Show(e.Exception.Message);
+            }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -54,7 +54,7 @@ namespace pancake
                 token = _auth.LoadToken();
 
                 if (token != null)
-                    _model.SetToken(token);
+                    _api.SetToken(token);
             }
             else
                 token = null;
@@ -99,7 +99,7 @@ namespace pancake
             var token = await _auth.Login();
             _auth.SaveToken(token);
             if (token != null)
-                _model.SetToken(token);
+                _api.SetToken(token);
         }
 
         private void SettingsCommand_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
@@ -150,7 +150,7 @@ namespace pancake
                         Settings.Instance.UiScale = uiScale;
                         Settings.Instance.Save();
                     }
-                }                
+                }
             }
         }
 

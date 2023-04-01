@@ -72,7 +72,7 @@ namespace pancake.ui.controls
 
         private void _title_text_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (this.DataContext is PlayerModel model && model.CurrentlyPlaying != null)
+            if (this.DataContext is IPlayerModel model && model.CurrentlyPlaying != null)
                 PlayerCommands.OpenInSpotify.Execute(model.CurrentlyPlaying, this);
         }
 
