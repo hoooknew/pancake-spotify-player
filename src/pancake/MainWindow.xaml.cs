@@ -36,11 +36,11 @@ namespace pancake
             _model = model;
             
             _dockable = new DockableWindows(this);
-
+            
             _playlist = playlist;
-            _playlist.Width = this.Width;
-            _playlist.Show();            
-            _dockable.DockWindowTo(_playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary);
+            //_playlist.SizeChanged += (s, e) => Debug.Write($"\nplaylist window size changed {_playlist.Width}\n\n");
+            _dockable.DockWindowTo(_playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary | DockableWindows.DockedTo.Right_Secondary);
+            _playlist.Show();
         }
 
         private void _api_Error(object? sender, ApiErrorEventArgs e)

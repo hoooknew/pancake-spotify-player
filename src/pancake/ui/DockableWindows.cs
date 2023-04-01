@@ -178,6 +178,7 @@ internal class DockableWindows : IDisposable
     {
         _main = main;
         _main.LocationChanged += MainWindow_LocationChanged;
+        _main.Loaded += _main_IsVisibleChanged;
         AddHook(_main, Main_WndProc);
 
         _snapDistance = snapDistance;
@@ -186,13 +187,23 @@ internal class DockableWindows : IDisposable
         _dockedWindows = new Dictionary<Window, DockedPosition>();
     }
 
+    private void _main_IsVisibleChanged(object sender, EventArgs e)
+    {
+        if (_main.IsVisible)
+        {
+            _main.Loaded -= _main_IsVisibleChanged;
+            PositionDockedWindows();
+        }
+    }
+
     void AddHook(Window w, HwndSourceHook callback)
     {
         if (w.IsLoaded)
         {
             var h = GetHandle(w);
             HwndSource source = HwndSource.FromHwnd(h);
-            source.AddHook(callback);
+            if (source != null)
+                source.AddHook(callback);
         }
         else
             w.Loaded += (s, e) => AddHook(w, callback);
@@ -238,7 +249,8 @@ internal class DockableWindows : IDisposable
         var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
 
         SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
-        PositionDockedWindows();
+        if (_main.IsLoaded && _main.IsVisible)
+            PositionDockedWindows();
     }
 
 
@@ -268,11 +280,18 @@ internal class DockableWindows : IDisposable
             var position = _dockedWindows[docked];
             double top;
             double left;
+            double width = docked.Width;
+            double height = docked.Height;
 
             if (position.dockedTo.HasFlag(DockedTo.Top_Primary))
                 top = mainSize.Top - dockedSize.Height;
             else if (position.dockedTo.HasFlag(DockedTo.Bottom_Primary))
                 top = mainSize.Top + mainSize.Height;
+            else if (position.dockedTo.HasFlag(DockedTo.Top_Secondary) && position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
+            {
+                top = _main.Top;
+                height = _main.Height;
+            }
             else if (position.dockedTo.HasFlag(DockedTo.Top_Secondary))
                 top = _main.Top;
             else if (position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
@@ -285,6 +304,11 @@ internal class DockableWindows : IDisposable
                 left = _main.Left - dockedSize.Width;
             else if (position.dockedTo.HasFlag(DockedTo.Right_Primary))
                 left = _main.Left + mainSize.Width;
+            else if (position.dockedTo.HasFlag(DockedTo.Left_Secondary) && position.dockedTo.HasFlag(DockedTo.Right_Secondary))
+            {
+                left = _main.Left;
+                width = _main.Width;
+            }
             else if (position.dockedTo.HasFlag(DockedTo.Left_Secondary))
                 left = _main.Left;
             else if (position.dockedTo.HasFlag(DockedTo.Right_Secondary))
@@ -294,6 +318,8 @@ internal class DockableWindows : IDisposable
 
             docked.Top = top;
             docked.Left = left;
+            docked.Width = width;
+            docked.Height = height;
         }
     }
 
@@ -387,12 +413,7 @@ internal class DockableWindows : IDisposable
             var right = dockableSize.Dist_RightToRight(mainSize);
 
             if (left <= SnapDistance && right <= SnapDistance)
-            {
-                if (left <= right)
-                    return DockedTo.Left_Secondary;
-                else
-                    return DockedTo.Right_Secondary;
-            }
+                return DockedTo.Left_Secondary | DockedTo.Right_Secondary;
             else if (left <= SnapDistance)
                 return DockedTo.Left_Secondary;
             else if (right <= SnapDistance)
@@ -403,12 +424,7 @@ internal class DockableWindows : IDisposable
             var top = dockableSize.Dist_TopToTop(mainSize);
             var bottom = dockableSize.Dist_BottomToBottom(mainSize);
             if (top <= SnapDistance && bottom <= SnapDistance)
-            {
-                if (top <= bottom)
-                    return DockedTo.Top_Secondary;
-                else
-                    return DockedTo.Bottom_Secondary;
-            }
+                return DockedTo.Top_Secondary | DockedTo.Bottom_Secondary;
             else if (top <= SnapDistance)
                 return DockedTo.Top_Secondary;
             else if (bottom <= SnapDistance)
