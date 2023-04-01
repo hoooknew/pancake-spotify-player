@@ -31,7 +31,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake", "src\pancake\panc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake.tests", "src\pancake.tests\pancake.tests.csproj", "{6644FBE4-E511-43C6-B3BF-F81CE8DB14E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pancake.lib.tests", "src\pancake.lib.tests\pancake.lib.tests.csproj", "{5DADB29B-2000-4149-A51C-C3D3DC78E904}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pancake.lib.tests", "src\pancake.lib.tests\pancake.lib.tests.csproj", "{5DADB29B-2000-4149-A51C-C3D3DC78E904}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{0801E081-732B-4B89-8618-69F27D37C0DF}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\cd.yaml = .github\workflows\cd.yaml
+		.github\workflows\ci-reusable.yaml = .github\workflows\ci-reusable.yaml
+		.github\workflows\ci.yaml = .github\workflows\ci.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "installer", "installer", "{50416232-D800-4639-BE16-8032633A93F1}"
+	ProjectSection(SolutionItems) = preProject
+		src\installer\installer.aip = src\installer\installer.aip
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +83,8 @@ Global
 		{249F8718-7057-419A-8B51-8A2DF25DD309} = {1586D8F4-289D-4281-8E9A-5D97E7E72B7E}
 		{3E5CBAD4-1FC1-445B-8A51-5510ACCACBFE} = {1586D8F4-289D-4281-8E9A-5D97E7E72B7E}
 		{4ADDAE02-89F6-4AB8-A450-211B6C82BE0D} = {F033E4EB-5FDD-4240-9062-6E88A06DA47A}
+		{0801E081-732B-4B89-8618-69F27D37C0DF} = {F033E4EB-5FDD-4240-9062-6E88A06DA47A}
+		{50416232-D800-4639-BE16-8032633A93F1} = {F033E4EB-5FDD-4240-9062-6E88A06DA47A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B4C517D4-B0C2-46E8-BCA8-C4B3E3C413B1}

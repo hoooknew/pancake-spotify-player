@@ -32,18 +32,6 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: "7.0.x"
-        
-    #- name: Add MSBuild
-    #  uses: microsoft/setup-msbuild@v1.1
-    #  with: 
-    #    # 17.4 is required for the source code generator to work.
-    #    vs-version: '[17.4'
-
-    #- name: Restore
-    #  run: MSBuild  ${{ env.Solution_Path }} /t:Restore
-      
-    #- name: Build
-    #  run: MSBuild  ${{ env.Solution_Path }} /p:Configuration=Release /p:Version=${{ inputs.version-num }}
 
     - name: dotnet build
       run: dotnet build -p:Configuration=Release -p:Version=${{ inputs.version-num }}
@@ -53,5 +41,3 @@ jobs:
       with:
         name: ${{ inputs.bin-artifact }}
         path: src/pancake/bin/
-        
-

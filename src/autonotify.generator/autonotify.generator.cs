@@ -59,11 +59,13 @@ namespace AutoNotify.Generator
             }
 
             // group the fields by class, and generate the source
+#pragma warning disable RS1024 // Symbols should be compared for equality. changing this causes errors.
             foreach (IGrouping<INamedTypeSymbol, IFieldSymbol> group in fieldSymbols.GroupBy(f => f.ContainingType))
             {
                 string classSource = ProcessClass(group.Key, group.ToList(), attributeSymbol, notifySymbol, context);
                 context.AddSource($"{group.Key.Name}_autoNotify.cs", SourceText.From(classSource, Encoding.UTF8));
             }
+#pragma warning restore RS1024 // Symbols should be compared for equality
         }
 
         private string ProcessClass(INamedTypeSymbol classSymbol, List<IFieldSymbol> fields, ISymbol attributeSymbol, ISymbol notifySymbol, GeneratorExecutionContext context)
@@ -84,6 +86,7 @@ namespace {namespaceName}
         partial void OnPropertyChanged(string propertyName);");
 
             // if the class doesn't implement INotifyPropertyChanged already, add it
+#pragma warning disable RS1024 // Symbols should be compared for equality. changing this causes errors.
             if (!classSymbol.Interfaces.Contains(notifySymbol))
             {
                 source.Append(@"
@@ -91,6 +94,7 @@ namespace {namespaceName}
 
 ");
             }
+#pragma warning restore RS1024 // Symbols should be compared for equality
 
             // create properties for each field 
             foreach (IFieldSymbol fieldSymbol in fields)
