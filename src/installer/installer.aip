@@ -41,105 +41,112 @@
     <ROW Directory="APPDIR" Directory_Parent="TARGETDIR" DefaultDir="APPDIR:." IsPseudoRoot="1"/>
     <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
-    <ROW Directory="browser_Dir" Directory_Parent="rumtimes_Dir" DefaultDir="browser"/>
+    <ROW Directory="browser_Dir" Directory_Parent="runtimes_Dir" DefaultDir="browser"/>
+    <ROW Directory="lib_2_Dir" Directory_Parent="win_Dir" DefaultDir="lib"/>
     <ROW Directory="lib_Dir" Directory_Parent="browser_Dir" DefaultDir="lib"/>
+    <ROW Directory="net6.0_2_Dir" Directory_Parent="lib_2_Dir" DefaultDir="net6.0"/>
     <ROW Directory="net6.0_Dir" Directory_Parent="lib_Dir" DefaultDir="net6.0"/>
-    <ROW Directory="rumtimes_Dir" Directory_Parent="APPDIR" DefaultDir="runtimes"/>
+    <ROW Directory="runtimes_Dir" Directory_Parent="APPDIR" DefaultDir="runtimes"/>
+    <ROW Directory="win_Dir" Directory_Parent="runtimes_Dir" DefaultDir="win"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
     <ROW Component="AI_INSTALLPERUSER" ComponentId="{8883573E-5BE5-479A-A5D6-DAB9F98B99E5}" Directory_="APPDIR" Attributes="4" KeyPath="AI_INSTALLPERUSER" Options="1"/>
     <ROW Component="APPDIR" ComponentId="{8A062CA9-17CB-4F14-9C3F-6EE236D1FB51}" Directory_="APPDIR" Attributes="0"/>
-    <ROW Component="EmbedIO.dll" ComponentId="{8DD2394C-631D-4D2D-95CB-CD157813A5DD}" Directory_="APPDIR" Attributes="0" KeyPath="EmbedIO.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{0A05D081-C5BF-4F74-AF74-4B13AA350C26}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{C2FB50C5-3B68-4750-94E5-1BB25CF4A100}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{C77CF20E-6052-4537-BDCB-C8E3308FBB1C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{2DB2C8D0-3A67-42AF-BA19-50282247BD2E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{66E5AA53-673B-4D89-A92F-B155E2248684}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{C741F8CB-3ED2-4C9C-A6C7-6D20CC5040A3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{FE319090-CBBD-4F9B-A7B9-6D0291B426EB}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
-    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{B5377A79-67E9-4529-A72B-14596847CD1D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
-    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{22A4507C-5081-48CB-AFDC-7ECCCE4CBBF6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.DependencyInjection.dll" ComponentId="{42DCB2A8-E83A-46DA-A92B-D2C45E5E36A2}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
-    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{9EEAF38A-5BF8-4956-9F08-F0CAD7832A8B}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{C0552548-6890-43FC-8DC9-48E2052843A5}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
-    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{0E9BEECA-537F-42AA-B51C-B918FBE4E6DA}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
-    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{5EB4FF61-A05F-4198-9156-F8D0F5A02489}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{8D382C5E-4F50-4CA2-889D-6332555057F9}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{4A5C98F2-BB5B-4891-90E9-6E4F7373BD98}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{2CAC604E-977E-4278-A75D-CE3B686AD55D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{1EFF2265-F364-469B-98A1-ACAC328A41AE}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{66322C7C-4648-471F-8FB9-2ED2039E2358}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{360A6D53-83B3-4384-82FA-CCD568E4537F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{EFB3F8E0-AE5C-4C5C-847B-F7598F3F5EA8}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
-    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{1E72C91E-6FC6-47AD-AC80-C89A0DAA79B4}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
-    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{2A5BEE02-69CD-4477-81C8-7B9BC6F24C28}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
-    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{98C56777-1E84-4229-B5EC-679EA8380688}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
-    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{2E18D042-19BE-4D8A-92F9-64B68F88B662}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
-    <ROW Component="Newtonsoft.Json.dll" ComponentId="{5DB5E04F-4BDA-4548-A90B-BB5098A82EF4}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
+    <ROW Component="EmbedIO.dll" ComponentId="{1009E805-FCE7-414C-A1E1-3E82B8F65442}" Directory_="APPDIR" Attributes="0" KeyPath="EmbedIO.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{A05C2235-DBEF-4102-A295-8395D5291B35}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{66A9C093-1F6B-4B0F-94ED-F61584E27C6E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{00DE5FB6-4E9D-499E-BD20-DDCB32E4C091}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" ComponentId="{6E177DF2-2A7B-47EB-BAE0-070C7AFAB54C}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.FileExtensions.dll" ComponentId="{5D5D7145-A5D6-4DBB-9917-673F1FC33457}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.Json.dll" ComponentId="{3799C922-CC23-47E8-9B6B-337FB013E078}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.UserSecrets.dll" ComponentId="{57A18F47-EDCA-4802-B4B0-AC8D64AB7326}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
+    <ROW Component="Microsoft.Extensions.Configuration.dll" ComponentId="{2256E27A-49EF-4D21-9657-B55E799EAD8F}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.Abstractions.dll" ComponentId="{B652D563-6D5E-43B6-8105-C121CE68B6B6}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.DependencyInjection.dll" ComponentId="{94BA339D-8754-4F1D-B2D9-D1CA1AEBC6FC}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.DependencyInjection.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Abstractions.dll" ComponentId="{AA95E798-D630-49A6-BBA9-00DC7484A253}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.FileProviders.Physical.dll" ComponentId="{17C27EA4-EB98-4017-B221-AE38B2E6FD22}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileProviders.Physical.dll"/>
+    <ROW Component="Microsoft.Extensions.FileSystemGlobbing.dll" ComponentId="{FA6A8B0B-5F21-4054-B262-5C066DB00EDF}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.Abstractions.dll" ComponentId="{F4754CE8-1B5D-4C9B-A098-22CEA0DA057D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Hosting.dll" ComponentId="{78D190F4-1248-442E-8F54-51B7037D372E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Hosting.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Abstractions.dll" ComponentId="{4988F9DD-5F7A-4474-817F-4E7098FDAE5A}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Abstractions.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Configuration.dll" ComponentId="{6192EDB4-286E-4FFA-BD52-81779C7CC7C3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Console.dll" ComponentId="{03782BBE-9BF6-4F6A-8870-49DC03A0DD97}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Console.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.Debug.dll" ComponentId="{2CF52ECB-7994-4A46-8518-82F95857ED9E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.Debug.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventLog.dll" ComponentId="{CDF69E53-58C2-47D1-A34A-9152A6770EA3}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.EventSource.dll" ComponentId="{3942E648-EAEE-441A-A576-05BC157FAC19}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.EventSource.dll"/>
+    <ROW Component="Microsoft.Extensions.Logging.dll" ComponentId="{951208D4-932F-4A73-A0BC-675ED4F65D10}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Logging.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.ConfigurationExtensions.dll" ComponentId="{377340F6-CD11-4FC5-8FD5-B1104C887531}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
+    <ROW Component="Microsoft.Extensions.Options.dll" ComponentId="{4A36C6F6-81E7-40B2-A696-23222C46085D}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Options.dll"/>
+    <ROW Component="Microsoft.Extensions.Primitives.dll" ComponentId="{7451560C-9338-477F-A281-DE98B7136C49}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Primitives.dll"/>
+    <ROW Component="Newtonsoft.Json.dll" ComponentId="{7C44DA8A-C64B-4E32-8332-EB908360A014}" Directory_="APPDIR" Attributes="0" KeyPath="Newtonsoft.Json.dll"/>
     <ROW Component="ProductInformation" ComponentId="{6F8B03DC-E519-494A-8492-25D2229AE3E8}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
-    <ROW Component="SHORTCUTDIR" ComponentId="{BB05BC4E-8C87-4057-A79D-A8F1931E9EFC}" Directory_="SHORTCUTDIR" Attributes="0"/>
-    <ROW Component="SpotifyAPI.Web.Auth.dll" ComponentId="{E512304A-67B5-4B61-81F7-6F4279FE036B}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.Auth.dll"/>
-    <ROW Component="SpotifyAPI.Web.dll" ComponentId="{5A73699D-0CAF-4476-B59D-03D750C25438}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.dll"/>
-    <ROW Component="Swan.Lite.dll" ComponentId="{8C8E2E96-FB6C-4132-A72E-406DCAEA5584}" Directory_="APPDIR" Attributes="0" KeyPath="Swan.Lite.dll"/>
-    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{F23FE574-C3D2-482B-973B-9C26AFA244B6}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
-    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{CC186EDE-A340-4F54-A77E-CDDE559C46CB}" Directory_="net6.0_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
-    <ROW Component="System.Text.Encodings.Web.dll_1" ComponentId="{B7ECBBCE-8375-43AE-AA4A-279898610A90}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_1"/>
-    <ROW Component="System.Text.Json.dll" ComponentId="{00772D2C-968E-47F7-8C11-29D8F905FD9C}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
-    <ROW Component="appsettings.json" ComponentId="{74010B85-D1D2-41FB-B5DB-640DF91C121B}" Directory_="APPDIR" Attributes="0" KeyPath="appsettings.json" Type="0"/>
-    <ROW Component="autonotify.dll" ComponentId="{2688C147-B6E1-4DBC-9E34-93B56079CE42}" Directory_="APPDIR" Attributes="0" KeyPath="autonotify.dll"/>
-    <ROW Component="pancake.dll" ComponentId="{E7CF82C7-358E-4D4A-9CAB-EACCE5D88DC2}" Directory_="APPDIR" Attributes="0" KeyPath="pancake.dll"/>
-    <ROW Component="pancake.exe" ComponentId="{14771260-94D6-421C-9639-7A9D96E5D6FF}" Directory_="APPDIR" Attributes="256" KeyPath="pancake.exe"/>
-    <ROW Component="pancake.lib.dll" ComponentId="{75B04047-5F4D-4393-9AEE-11EEB08D45CC}" Directory_="APPDIR" Attributes="0" KeyPath="pancake.lib.dll"/>
+    <ROW Component="SHORTCUTDIR" ComponentId="{375E12C9-1E07-40B3-A3B0-04283EC1B3F5}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="SpotifyAPI.Web.Auth.dll" ComponentId="{02D03531-A8C6-4B32-A441-181000A648C7}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.Auth.dll"/>
+    <ROW Component="SpotifyAPI.Web.dll" ComponentId="{5BB42644-0848-432B-ABDB-B9623D1DD714}" Directory_="APPDIR" Attributes="0" KeyPath="SpotifyAPI.Web.dll"/>
+    <ROW Component="Swan.Lite.dll" ComponentId="{58260CE7-5670-4606-A224-B996A8C91D30}" Directory_="APPDIR" Attributes="0" KeyPath="Swan.Lite.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.Messages.dll" ComponentId="{98574752-9DF9-4AB1-8802-D1DCC23CB7E3}" Directory_="net6.0_2_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.Messages.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll" ComponentId="{84900930-C396-44D5-A7E1-FF610DF0F99E}" Directory_="net6.0_2_Dir" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll"/>
+    <ROW Component="System.Diagnostics.EventLog.dll_3" ComponentId="{62397C00-08E8-48D6-8425-0DADCB925503}" Directory_="APPDIR" Attributes="0" KeyPath="System.Diagnostics.EventLog.dll_3"/>
+    <ROW Component="System.Text.Encodings.Web.dll" ComponentId="{442BA589-11E2-406D-8628-80E998F629A5}" Directory_="net6.0_Dir" Attributes="0" KeyPath="System.Text.Encodings.Web.dll"/>
+    <ROW Component="System.Text.Encodings.Web.dll_2" ComponentId="{E0304B7B-DE0C-405F-95FD-6738847DFAA0}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Encodings.Web.dll_2"/>
+    <ROW Component="System.Text.Json.dll" ComponentId="{C3E66919-688F-4DEA-8D7E-C22D7197FC0E}" Directory_="APPDIR" Attributes="0" KeyPath="System.Text.Json.dll"/>
+    <ROW Component="appsettings.json_1" ComponentId="{B1A3A0AC-23A0-4673-BD89-6FAFBEBCC39F}" Directory_="APPDIR" Attributes="0" KeyPath="appsettings.json" Type="0"/>
+    <ROW Component="autonotify.dll_1" ComponentId="{95D2A52A-7401-4D18-8487-75C3CF674F8B}" Directory_="APPDIR" Attributes="0" KeyPath="autonotify.dll"/>
+    <ROW Component="pancake.dll" ComponentId="{76E1A2C0-E40B-4482-AA3F-1286461BE326}" Directory_="APPDIR" Attributes="0" KeyPath="pancake.dll"/>
+    <ROW Component="pancake.exe_1" ComponentId="{317540FD-C4E9-4422-9BBA-C1DCEB7E8E8E}" Directory_="APPDIR" Attributes="256" KeyPath="pancake.exe"/>
+    <ROW Component="pancake.lib.dll_1" ComponentId="{E2BA14B1-724F-45C6-AE14-48233848FBB7}" Directory_="APPDIR" Attributes="0" KeyPath="pancake.lib.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatsComponent">
     <ROW Feature="MainFeature" Title="MainFeature" Description="Description" Display="1" Level="1" Directory_="APPDIR" Attributes="0"/>
     <ATTRIBUTE name="CurrentFeature" value="MainFeature"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFilesComponent">
-    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll" SelfReg="false"/>
-    <ROW File="appsettings.json" Component_="appsettings.json" FileName="APPSET~1.JSO|appsettings.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\appsettings.json" SelfReg="false"/>
-    <ROW File="autonotify.dll" Component_="autonotify.dll" FileName="AUTONO~1.DLL|autonotify.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\autonotify.dll" SelfReg="false"/>
-    <ROW File="autonotify.pdb" Component_="autonotify.dll" FileName="AUTONO~1.PDB|autonotify.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\autonotify.pdb" SelfReg="false"/>
-    <ROW File="EmbedIO.dll" Component_="EmbedIO.dll" FileName="EmbedIO.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\EmbedIO.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~1.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICROS~2.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICROS~6.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICROS~7.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICROS~8.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Options.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
-    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Newtonsoft.Json.dll" SelfReg="false"/>
-    <ROW File="pancake.deps.json" Component_="appsettings.json" FileName="PANCAK~1.JSO|pancake.deps.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.deps.json" SelfReg="false"/>
-    <ROW File="pancake.dll" Component_="pancake.dll" FileName="pancake.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.dll" SelfReg="false"/>
-    <ROW File="pancake.exe" Component_="pancake.exe" FileName="pancake.exe" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.exe" SelfReg="false" DigSign="true"/>
-    <ROW File="pancake.lib.dll" Component_="pancake.lib.dll" FileName="PANCAK~1.DLL|pancake.lib.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.lib.dll" SelfReg="false"/>
-    <ROW File="pancake.lib.pdb" Component_="pancake.lib.dll" FileName="PANCAK~1.PDB|pancake.lib.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.lib.pdb" SelfReg="false"/>
-    <ROW File="pancake.pdb" Component_="pancake.exe" FileName="pancake.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.pdb" SelfReg="false"/>
-    <ROW File="pancake.runtimeconfig.json" Component_="appsettings.json" FileName="PANCAK~2.JSO|pancake.runtimeconfig.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\pancake.runtimeconfig.json" SelfReg="false"/>
-    <ROW File="SpotifyAPI.Web.Auth.dll" Component_="SpotifyAPI.Web.Auth.dll" FileName="SPOTIF~1.DLL|SpotifyAPI.Web.Auth.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\SpotifyAPI.Web.Auth.dll" SelfReg="false"/>
-    <ROW File="SpotifyAPI.Web.dll" Component_="SpotifyAPI.Web.dll" FileName="SPOTIF~2.DLL|SpotifyAPI.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\SpotifyAPI.Web.dll" SelfReg="false"/>
-    <ROW File="Swan.Lite.dll" Component_="Swan.Lite.dll" FileName="SWANLI~1.DLL|Swan.Lite.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Swan.Lite.dll" SelfReg="false"/>
-    <ROW File="System.Text.Encodings.Web.dll_1" Component_="System.Text.Encodings.Web.dll_1" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Encodings.Web.dll" SelfReg="false"/>
-    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~2.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Json.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~24.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
-    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
-    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTEM~3.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="appsettings.json" Component_="appsettings.json_1" FileName="APPSET~1.JSO|appsettings.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\appsettings.json" SelfReg="false"/>
+    <ROW File="autonotify.dll" Component_="autonotify.dll_1" FileName="AUTONO~1.DLL|autonotify.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\autonotify.dll" SelfReg="false"/>
+    <ROW File="autonotify.pdb" Component_="autonotify.dll_1" FileName="AUTONO~1.PDB|autonotify.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\autonotify.pdb" SelfReg="false"/>
+    <ROW File="EmbedIO.dll" Component_="EmbedIO.dll" FileName="EmbedIO.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\EmbedIO.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Abstractions.dll" Component_="Microsoft.Extensions.Configuration.Abstractions.dll" FileName="MICROS~1.DLL|Microsoft.Extensions.Configuration.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Binder.dll" Component_="Microsoft.Extensions.Configuration.Binder.dll" FileName="MICROS~2.DLL|Microsoft.Extensions.Configuration.Binder.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.Binder.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.CommandLine.dll" Component_="Microsoft.Extensions.Configuration.CommandLine.dll" FileName="MICROS~3.DLL|Microsoft.Extensions.Configuration.CommandLine.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.CommandLine.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.dll" Component_="Microsoft.Extensions.Configuration.dll" FileName="MICROS~4.DLL|Microsoft.Extensions.Configuration.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll" FileName="MICROS~5.DLL|Microsoft.Extensions.Configuration.EnvironmentVariables.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.EnvironmentVariables.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.FileExtensions.dll" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll" FileName="MICROS~6.DLL|Microsoft.Extensions.Configuration.FileExtensions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.FileExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.Json.dll" Component_="Microsoft.Extensions.Configuration.Json.dll" FileName="MICROS~7.DLL|Microsoft.Extensions.Configuration.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.Json.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Configuration.UserSecrets.dll" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll" FileName="MICROS~8.DLL|Microsoft.Extensions.Configuration.UserSecrets.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Configuration.UserSecrets.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.Abstractions.dll" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll" FileName="MICROS~9.DLL|Microsoft.Extensions.DependencyInjection.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.DependencyInjection.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.DependencyInjection.dll" Component_="Microsoft.Extensions.DependencyInjection.dll" FileName="MICRO~10.DLL|Microsoft.Extensions.DependencyInjection.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.DependencyInjection.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Abstractions.dll" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll" FileName="MICRO~11.DLL|Microsoft.Extensions.FileProviders.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.FileProviders.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileProviders.Physical.dll" Component_="Microsoft.Extensions.FileProviders.Physical.dll" FileName="MICRO~12.DLL|Microsoft.Extensions.FileProviders.Physical.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.FileProviders.Physical.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.FileSystemGlobbing.dll" Component_="Microsoft.Extensions.FileSystemGlobbing.dll" FileName="MICRO~13.DLL|Microsoft.Extensions.FileSystemGlobbing.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.FileSystemGlobbing.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.Abstractions.dll" Component_="Microsoft.Extensions.Hosting.Abstractions.dll" FileName="MICRO~14.DLL|Microsoft.Extensions.Hosting.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Hosting.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Hosting.dll" Component_="Microsoft.Extensions.Hosting.dll" FileName="MICRO~15.DLL|Microsoft.Extensions.Hosting.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Hosting.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Abstractions.dll" Component_="Microsoft.Extensions.Logging.Abstractions.dll" FileName="MICRO~16.DLL|Microsoft.Extensions.Logging.Abstractions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Logging.Abstractions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Configuration.dll" Component_="Microsoft.Extensions.Logging.Configuration.dll" FileName="MICRO~17.DLL|Microsoft.Extensions.Logging.Configuration.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Logging.Configuration.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Console.dll" Component_="Microsoft.Extensions.Logging.Console.dll" FileName="MICRO~18.DLL|Microsoft.Extensions.Logging.Console.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Logging.Console.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.Debug.dll" Component_="Microsoft.Extensions.Logging.Debug.dll" FileName="MICRO~19.DLL|Microsoft.Extensions.Logging.Debug.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Logging.Debug.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.dll" Component_="Microsoft.Extensions.Logging.dll" FileName="MICRO~20.DLL|Microsoft.Extensions.Logging.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Logging.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventLog.dll" Component_="Microsoft.Extensions.Logging.EventLog.dll" FileName="MICRO~21.DLL|Microsoft.Extensions.Logging.EventLog.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Logging.EventLog.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Logging.EventSource.dll" Component_="Microsoft.Extensions.Logging.EventSource.dll" FileName="MICRO~22.DLL|Microsoft.Extensions.Logging.EventSource.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Logging.EventSource.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.ConfigurationExtensions.dll" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll" FileName="MICRO~23.DLL|Microsoft.Extensions.Options.ConfigurationExtensions.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Options.ConfigurationExtensions.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Options.dll" Component_="Microsoft.Extensions.Options.dll" FileName="MICRO~24.DLL|Microsoft.Extensions.Options.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Options.dll" SelfReg="false"/>
+    <ROW File="Microsoft.Extensions.Primitives.dll" Component_="Microsoft.Extensions.Primitives.dll" FileName="MICRO~25.DLL|Microsoft.Extensions.Primitives.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Microsoft.Extensions.Primitives.dll" SelfReg="false"/>
+    <ROW File="Newtonsoft.Json.dll" Component_="Newtonsoft.Json.dll" FileName="NEWTON~1.DLL|Newtonsoft.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Newtonsoft.Json.dll" SelfReg="false"/>
+    <ROW File="pancake.deps.json" Component_="appsettings.json_1" FileName="PANCAK~1.JSO|pancake.deps.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\pancake.deps.json" SelfReg="false"/>
+    <ROW File="pancake.dll" Component_="pancake.dll" FileName="pancake.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\pancake.dll" SelfReg="false"/>
+    <ROW File="pancake.exe" Component_="pancake.exe_1" FileName="pancake.exe" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\pancake.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="pancake.lib.dll" Component_="pancake.lib.dll_1" FileName="PANCAK~1.DLL|pancake.lib.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\pancake.lib.dll" SelfReg="false"/>
+    <ROW File="pancake.lib.pdb" Component_="pancake.lib.dll_1" FileName="PANCAK~1.PDB|pancake.lib.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\pancake.lib.pdb" SelfReg="false"/>
+    <ROW File="pancake.pdb" Component_="pancake.exe_1" FileName="pancake.pdb" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\pancake.pdb" SelfReg="false"/>
+    <ROW File="pancake.runtimeconfig.json" Component_="appsettings.json_1" FileName="PANCAK~2.JSO|pancake.runtimeconfig.json" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\pancake.runtimeconfig.json" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll" Component_="System.Text.Encodings.Web.dll" FileName="SYSTEM~1.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll" Component_="System.Diagnostics.EventLog.dll" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.Messages.dll" Component_="System.Diagnostics.EventLog.Messages.dll" FileName="SYSTEM~2.DLL|System.Diagnostics.EventLog.Messages.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\runtimes\win\lib\net6.0\System.Diagnostics.EventLog.Messages.dll" SelfReg="false"/>
+    <ROW File="SpotifyAPI.Web.Auth.dll" Component_="SpotifyAPI.Web.Auth.dll" FileName="SPOTIF~1.DLL|SpotifyAPI.Web.Auth.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\SpotifyAPI.Web.Auth.dll" SelfReg="false"/>
+    <ROW File="SpotifyAPI.Web.dll" Component_="SpotifyAPI.Web.dll" FileName="SPOTIF~2.DLL|SpotifyAPI.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\SpotifyAPI.Web.dll" SelfReg="false"/>
+    <ROW File="Swan.Lite.dll" Component_="Swan.Lite.dll" FileName="SWANLI~1.DLL|Swan.Lite.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\Swan.Lite.dll" SelfReg="false"/>
+    <ROW File="System.Diagnostics.EventLog.dll_3" Component_="System.Diagnostics.EventLog.dll_3" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\System.Diagnostics.EventLog.dll" SelfReg="false"/>
+    <ROW File="System.Text.Encodings.Web.dll_2" Component_="System.Text.Encodings.Web.dll_2" FileName="SYSTEM~2.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\System.Text.Encodings.Web.dll" SelfReg="false"/>
+    <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~3.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\publish\System.Text.Json.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
     <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1"/>
@@ -232,47 +239,49 @@
   <COMPONENT cid="caphyon.advinst.msicomp.MsiFeatCompsComponent">
     <ROW Feature_="MainFeature" Component_="APPDIR"/>
     <ROW Feature_="MainFeature" Component_="ProductInformation"/>
-    <ROW Feature_="MainFeature" Component_="appsettings.json"/>
-    <ROW Feature_="MainFeature" Component_="autonotify.dll"/>
     <ROW Feature_="MainFeature" Component_="EmbedIO.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Abstractions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Binder.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.CommandLine.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.EnvironmentVariables.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.FileExtensions.dll"/>
+    <ROW Feature_="MainFeature" Component_="AI_INSTALLPERUSER"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjection.Abstractions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.DependencyInjection.dll"/>
-    <ROW Feature_="MainFeature" Component_="AI_INSTALLPERUSER"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Abstractions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileProviders.Physical.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.FileSystemGlobbing.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.Abstractions.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Abstractions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Configuration.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Console.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Debug.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventLog.dll"/>
+    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventSource.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.ConfigurationExtensions.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Options.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
     <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Primitives.dll"/>
     <ROW Feature_="MainFeature" Component_="Newtonsoft.Json.dll"/>
     <ROW Feature_="MainFeature" Component_="pancake.dll"/>
-    <ROW Feature_="MainFeature" Component_="pancake.exe"/>
-    <ROW Feature_="MainFeature" Component_="pancake.lib.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.Messages.dll"/>
     <ROW Feature_="MainFeature" Component_="SpotifyAPI.Web.Auth.dll"/>
     <ROW Feature_="MainFeature" Component_="SpotifyAPI.Web.dll"/>
     <ROW Feature_="MainFeature" Component_="Swan.Lite.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll_3"/>
+    <ROW Feature_="MainFeature" Component_="System.Text.Encodings.Web.dll_2"/>
     <ROW Feature_="MainFeature" Component_="System.Text.Json.dll"/>
+    <ROW Feature_="MainFeature" Component_="appsettings.json_1"/>
+    <ROW Feature_="MainFeature" Component_="autonotify.dll_1"/>
+    <ROW Feature_="MainFeature" Component_="pancake.exe_1"/>
+    <ROW Feature_="MainFeature" Component_="pancake.lib.dll_1"/>
     <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.CommandLine.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Configuration.UserSecrets.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.Abstractions.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Hosting.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.Console.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventLog.dll"/>
-    <ROW Feature_="MainFeature" Component_="Microsoft.Extensions.Logging.EventSource.dll"/>
-    <ROW Feature_="MainFeature" Component_="System.Diagnostics.EventLog.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="pancake.exe" SourcePath="..\..\media\pancake.ico" Index="0"/>
@@ -319,7 +328,7 @@
     <ROW Registry="Version" Root="-1" Key="Software\[Manufacturer]\[ProductName]" Name="Version" Value="[ProductVersion]" Component_="ProductInformation"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
-    <ROW Shortcut="PancakePlayer" Directory_="SHORTCUTDIR" Name="PANCAK~1|Pancake Player" Component_="pancake.exe" Target="[#pancake.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
+    <ROW Shortcut="PancakePlayer" Directory_="SHORTCUTDIR" Name="PANCAK~1|Pancake Player" Component_="pancake.exe_1" Target="[#pancake.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="APPDIR"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiThemeComponent">
     <ATTRIBUTE name="UsedTheme" value="classic"/>
