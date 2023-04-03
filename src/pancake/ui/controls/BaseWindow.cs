@@ -9,6 +9,8 @@ namespace pancake.ui.controls
     public partial class BaseWindow : Window
     {
         bool ResizeInProcess = false;
+
+        public event EventHandler Resized;
         
 
         public BaseWindow()
@@ -73,6 +75,8 @@ namespace pancake.ui.controls
                 ResizeInProcess = false; ;
                 senderRect.ReleaseMouseCapture();
                 e.Handled = true;
+
+                this.Resized?.Invoke(this, EventArgs.Empty);
             }
         }
         private void ResizingLeft_Window(object sender, MouseEventArgs e)
