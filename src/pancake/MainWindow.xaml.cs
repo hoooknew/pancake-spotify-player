@@ -43,6 +43,17 @@ namespace pancake
             _playlist.Show();
         }
 
+        protected override void OnActivated(EventArgs e)
+        {
+            if (_playlist != null)
+            {
+                //this makes the playlist visible if it's behind another window and the main window is activated.
+                _playlist.Topmost = true;
+                _playlist.Topmost = false;                
+            }
+            base.OnActivated(e);
+        }
+
         private void _api_Error(object? sender, ApiErrorEventArgs e)
         {
             _model.SignOut();
