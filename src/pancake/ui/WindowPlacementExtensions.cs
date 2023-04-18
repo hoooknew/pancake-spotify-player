@@ -14,6 +14,8 @@ namespace pancake.ui
     /// <seealso cref="https://github.com/danielchalmers/DesktopClock"/>
     public static class WindowPlacement
     {        
+        private record WindowPlacementData(NativeMethods.WINDOWPLACEMENT location, DockableWindows.DockedPosition? docking);
+
         public static string GetSave(DependencyObject obj)
             => (string)obj.GetValue(SaveProperty);
 
@@ -66,24 +68,32 @@ namespace pancake.ui
         {
             var hwnd = new WindowInteropHelper(w).EnsureHandle();
 
-            var wp = new NativeMethods.WINDOWPLACEMENT();
-            NativeMethods.GetWindowPlacement(hwnd, ref wp);
+            var location = new NativeMethods.WINDOWPLACEMENT();
+            NativeMethods.GetWindowPlacement(hwnd, ref location);
 
-            return JsonConvert.SerializeObject(wp);
+            var data = new WindowPlacementData(location, DockableWindows.GetDockedPosition(w));
+
+            return JsonConvert.SerializeObject(data);
         }
 
         private static bool SetWindowPlacement(Window w, string? data)
         {
             if (data != null)
             {
-                var wp = JsonConvert.DeserializeObject<NativeMethods.WINDOWPLACEMENT>(data);
+                var wp = JsonConvert.DeserializeObject<WindowPlacementData>(data)!;
 
                 var hwnd = new WindowInteropHelper(w).EnsureHandle();
 
-                return NativeMethods.SetWindowPlacement(hwnd, ref wp);
+                var location = wp.location;
+
+                if (NativeMethods.SetWindowPlacement(hwnd, ref location))
+                {
+                    DockableWindows.SetDockedPosition(w, wp.docking);
+                    return true;
+                }
             }
-            else
-                return false;
+
+            return false;
         }
 
         #region NativeMethods
