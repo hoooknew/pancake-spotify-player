@@ -5,7 +5,7 @@
 
 - [x] create another window that is dockable to the top of the main window that has a horizontal stack of the albums in the playlist
     - [ ] it should show past, current, and future
-    - [ ] should clicking on the items do anything? maybe change tracks or open the track details in spotify?
+    - [x] should clicking on the items do anything? maybe change tracks or open the track details in spotify?
 
 
 - [x] add a settings right click that creates a user settings json in the app data folder

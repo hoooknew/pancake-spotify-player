@@ -33,6 +33,8 @@ namespace pancake.models
                 _ => throw new ArgumentException()
             };
 
+        public IPlayableItem Item => _item;
+
         public IEnumerable<LinkableObject> Artists            
             => _item switch 
             { 

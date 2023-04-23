@@ -2,19 +2,8 @@
 using pancake.models;
 using pancake.ui.controls;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace pancake
 {
@@ -45,7 +34,7 @@ namespace pancake
         private void SetQueuedLength()
         {
             var availableWidth = _root.ActualWidth - (_stackPanel.ActualWidth - _queued.ActualWidth);
-            
+
             double minWidth = QUEUED_HEIGHT * Settings.Instance.UiScale;
             double itemWidth;
             if (_playlistModel.Queued.Count > 0)
@@ -54,6 +43,16 @@ namespace pancake
                 itemWidth = minWidth;
 
             _playlistModel.QueuedLength = Math.Max(4, (int)Math.Ceiling(availableWidth / itemWidth));
+        }
+
+        private void _queued_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var dataContext = (e.OriginalSource as FrameworkElement)?.DataContext;
+
+            if (dataContext is PlayableItemModel pli)
+                Spotify.Open(pli.Item);
+            else if (dataContext is PlaylistModel pl && pl.Playing != null)
+                Spotify.Open(pl.Playing.Item);
         }
     }
 }

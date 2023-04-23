@@ -10,6 +10,7 @@
         xmlns:ui="clr-namespace:pancake.ui"
         ui:WindowPlacement.Save="PlaylistPlacement"
         SizeToContent="Height"
+        MouseDoubleClick="_queued_MouseDoubleClick"
         Title="PlaylistWindow" Height="120" Width="300">
     <Border BorderBrush="{DynamicResource DefaultBorderBrush}" BorderThickness="1">
         <Border.LayoutTransform>
@@ -24,7 +25,7 @@
                 <ItemsControl ItemsSource="{Binding Queued}" x:Name="_queued">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Image.Url}" Height="{x:Static local:PlaylistWindow.QUEUED_HEIGHT}" />
+                            <Image Source="{Binding Image.Url}" Height="{x:Static local:PlaylistWindow.QUEUED_HEIGHT}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
