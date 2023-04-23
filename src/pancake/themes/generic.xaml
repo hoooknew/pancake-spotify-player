@@ -29,15 +29,18 @@
                 <Rectangle x:Name="PART_leftSizeGrip" Style="{StaticResource ResizeGripStyle}"  HorizontalAlignment="Left"/>
                 <Rectangle x:Name="PART_rightSizeGrip" Style="{StaticResource ResizeGripStyle}" HorizontalAlignment="Right"/>
 
-                <ctrl:PathButton x:Name="PART_closeBtn" 
-                                 Grid.ColumnSpan="3" 
-                                 PathData="{DynamicResource geo_close}" 
-                                 Style="{DynamicResource buttonStyle}"
-                                 Width="10"
-                                 Height="10" 
-                                 Margin="0,4,4,0"
-                                 VerticalAlignment="Top"
-                                 HorizontalAlignment="Right"/>
+                <Border Margin="0,2,2,0" 
+                        Background="{DynamicResource WindowBrush}" 
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right">
+                    <ctrl:PathButton x:Name="PART_closeBtn" 
+                                     Grid.ColumnSpan="3" 
+                                     PathData="{DynamicResource geo_close}" 
+                                     Style="{DynamicResource buttonStyle}"
+                                     Width="10"
+                                     Height="10" 
+                                     Margin="2"/>
+                </Border>
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
