@@ -30,9 +30,9 @@
 - [ ] replace the context menu settings with a dialog
   - [ ] add some hotkeys for some settings?
 
-- [ ] create an option to hide and show the playlist
+- [x] create an option to hide and show the playlist
 - [ ] increase the number of playlist pictures showing when it's made wider
-- [ ] have the location of the playlist window save independently.
+- [x] have the location of the playlist window save independently.
 - [ ] increased the amount of logging to identify and fix the startup token crash
 - [ ] reposition docked windows after zoom.
 

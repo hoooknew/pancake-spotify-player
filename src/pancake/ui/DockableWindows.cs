@@ -223,6 +223,7 @@ internal class DockableWindows : IDisposable
         if (!_dockable.Contains(w))
         {
             _dockable.Add(w);
+            w.IsVisibleChanged += _dockable_IsVisibleChanged;
             w.Closed += (s, e) => RemoveDockable((s as Window)!);
             AddHook(w, Dockable_WndProc);
             if (w is BaseWindow bw)
@@ -230,11 +231,14 @@ internal class DockableWindows : IDisposable
         }
     }
 
+    
+
     public void RemoveDockable(Window w)
     {
         if (_dockable.Contains(w))
         {
             RemoveHook(w, Dockable_WndProc);
+            w.IsVisibleChanged -= _dockable_IsVisibleChanged;
             _dockable.Remove(w);
             if (w is BaseWindow bw)
                 bw.Resized -= _dockable_SizeChanged;
@@ -332,6 +336,12 @@ internal class DockableWindows : IDisposable
     private void _dockable_SizeChanged(object? sender, EventArgs e)
     {
         TryToDock(sender as Window);
+    }
+
+    private void _dockable_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is Window w && w.IsVisible)
+            PositionDockedWindows();
     }
 
     private void Dockable_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)

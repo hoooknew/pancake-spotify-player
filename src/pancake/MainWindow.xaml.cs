@@ -39,8 +39,21 @@ namespace pancake
             _dockable = new DockableWindows(this);
 
             _playlist = playlist;
+            _setupPlaylist();
+        }
+
+        private void _setupPlaylist()
+        {
+            _playlist.Closing += (s, e) =>
+            {
+                e.Cancel = true;
+                _playlist.Hide();
+                Settings.Instance.PlaylistVisible = false;
+            };
             _dockable.DockWindowTo(_playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary | DockableWindows.DockedTo.Right_Secondary);
-            _playlist.Show();
+
+
+            SetPlaylistVisibility();
         }
 
         protected override void OnActivated(EventArgs e)
@@ -49,7 +62,7 @@ namespace pancake
             {
                 //this makes the playlist visible if it's behind another window and the main window is activated.
                 _playlist.Topmost = true;
-                _playlist.Topmost = false;                
+                _playlist.Topmost = false;
             }
             base.OnActivated(e);
         }
@@ -172,6 +185,29 @@ namespace pancake
                     }
                 }
             }
+            else if (e.Command == SettingsCommands.HideShowPlaylist)
+            {
+                Settings.Instance.PlaylistVisible = !Settings.Instance.PlaylistVisible;
+                SetPlaylistVisibility();
+            }
+        }
+
+        private void SetPlaylistVisibility()
+        {
+            if (Settings.Instance.PlaylistVisible)
+                this.ShowPlaylist();
+            else
+                this.HidePlaylist();
+        }
+
+        private void ShowPlaylist()
+        {
+            _playlist.Show();
+        }
+
+        private void HidePlaylist()
+        {
+            _playlist.Hide();
         }
 
         private void OpenInSpotify_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)

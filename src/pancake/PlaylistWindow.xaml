@@ -7,6 +7,8 @@
         xmlns:lib="clr-namespace:pancake.lib;assembly=pancake.lib"
         xmlns:ctrl="clr-namespace:pancake.ui.controls"
         mc:Ignorable="d"
+        xmlns:ui="clr-namespace:pancake.ui"
+        ui:WindowPlacement.Save="PlaylistPlacement"
         SizeToContent="Height"
         Title="PlaylistWindow" Height="120" Width="300">
     <Border BorderBrush="{DynamicResource DefaultBorderBrush}" BorderThickness="1">

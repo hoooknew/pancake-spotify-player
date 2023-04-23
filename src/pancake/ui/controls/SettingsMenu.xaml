@@ -49,6 +49,9 @@
                 <MenuItem Header="Taskbar" 
                           Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" 
                           IsChecked="{Binding TaskbarVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+                <MenuItem Header="Playlist" 
+                          Command="{x:Static ui:SettingsCommands.HideShowPlaylist}" 
+                          IsChecked="{Binding PlaylistVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
             </MenuItem>
             <MenuItem Header="Themes">
                 <MenuItem Header="Light" 

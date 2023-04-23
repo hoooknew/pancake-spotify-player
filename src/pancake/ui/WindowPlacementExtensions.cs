@@ -58,7 +58,7 @@ namespace pancake.ui
         {
             if (sender is Window w && GetSave(w) is string settingName)
             {
-                var data = Settings.Instance.GetValue(settingName) as string;
+                string? data = Settings.Instance.GetValue(settingName) as string;
 
                 SetWindowPlacement(w, data);
             }
