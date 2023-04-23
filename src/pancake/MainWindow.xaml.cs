@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace pancake
 {
@@ -182,6 +183,7 @@ namespace pancake
                     {
                         Settings.Instance.UiScale = uiScale;
                         Settings.Instance.Save();
+                        this.Dispatcher.BeginInvoke(() => _dockable.PositionDockedWindows(), DispatcherPriority.Background);
                     }
                 }
             }

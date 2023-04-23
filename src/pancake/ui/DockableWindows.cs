@@ -263,7 +263,7 @@ internal class DockableWindows : IDisposable
     private Window? GetDockableWithHandle(IntPtr h)
         => _dockable.FirstOrDefault(w => GetHandle(w) == h);
 
-    private void PositionDockedWindows()
+    public void PositionDockedWindows()
     {
         var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
 

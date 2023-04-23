@@ -34,7 +34,7 @@
 - [ ] increase the number of playlist pictures showing when it's made wider
 - [x] have the location of the playlist window save independently.
 - [ ] increased the amount of logging to identify and fix the startup token crash
-- [ ] reposition docked windows after zoom.
+- [x] reposition docked windows after zoom.
 
 # Bugs
 - [ ] prevent multiple copies of the app from opening?
