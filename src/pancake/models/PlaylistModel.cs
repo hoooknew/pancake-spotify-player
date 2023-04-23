@@ -16,8 +16,8 @@ namespace pancake.models
 {
     public interface IPlaylistModel
     {
-        ObservableCollection<PlayableItemModel> Played { get; }
         PlayableItemModel? Playing { get; }
+        int QueuedLength { get; set; }
         ObservableCollection<PlayableItemModel> Queued { get; }
     }
 
@@ -34,7 +34,6 @@ namespace pancake.models
         private readonly IDispatchProvider _dispatch;
         private readonly ILogger _log;
 
-        public ObservableCollection<PlayableItemModel> Played { get; private set; }
         public PlayableItemModel? Playing
         {
             get => _playing;
@@ -45,6 +44,8 @@ namespace pancake.models
             }
         }
         public ObservableCollection<PlayableItemModel> Queued { get; private set; }
+
+        public int QueuedLength { get; set; } = 4;
 
         public PlaylistModel(IPlayerModel playerModel, IConfig config, IDispatchProvider dispatch, IAPI api, ILogging logging)
         {
@@ -58,7 +59,6 @@ namespace pancake.models
 
             _dispatch = dispatch;
 
-            Played = new ObservableCollection<PlayableItemModel>();
             Queued = new ObservableCollection<PlayableItemModel>();
             Playing = null;
 
@@ -105,7 +105,7 @@ namespace pancake.models
             await _api.TryApiCall(async client =>
             {
                 var response = await client.Player.GetQueue(cancelToken);
-                var queue = response.Queue.Select(r => new PlayableItemModel(r)).Take(4).ToList();
+                var queue = response.Queue.Select(r => new PlayableItemModel(r)).Take(QueuedLength).ToList();
 
                 _log.LogInformation("queue data updated. num items:{0}", response.Queue.Count());
 
@@ -113,31 +113,12 @@ namespace pancake.models
                 {
                     Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
                 });
-            });
-
-            //await Task.Delay(0);
-        }
-
-        private async Task RefreshPlayed(CancellationToken cancelToken = default(CancellationToken))
-        {
-            //await _api.TryApiCall(async client =>
-            //{
-            //    var played = new List<PlayableItemModel>();
-
-            //    var response = await client.Player.GetRecentlyPlayed(cancelToken);
-            //    if (response != null && response.Items != null)
-            //        played = response.Items.Select(r => r.Track).OfType<IPlayableItem>().Select(r => new PlayableItemModel(r)).ToList();
-
-            //    Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Played, played, r => r.Id);
-            //});
-
-            await Task.Delay(0);
+            });            
         }
 
         private async Task ChangePlaying(IPlayableItem? currentlyPlaying)
         {
             Playing = currentlyPlaying != null ? new PlayableItemModel(currentlyPlaying) : null;
-            await RefreshPlayed();
             await RefreshQueue();
         }
 

@@ -18,14 +18,13 @@
                 ScaleY="{Binding UiScale, Mode=OneWay, Source={x:Static lib:Settings.Instance}}"/>
         </Border.LayoutTransform>
 
-        <Grid>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <ItemsControl/>
-                <Image Source="{Binding Playing.Image.Url}" Height="118"/>
-                <ItemsControl ItemsSource="{Binding Queued}">
+        <Grid x:Name="_root">
+            <StackPanel x:Name="_stackPanel" Orientation="Horizontal" HorizontalAlignment="Left">
+                <Image Source="{Binding Playing.Image.Url}" Height="{x:Static local:PlaylistWindow.PLAYING_HEIGHT}"/>
+                <ItemsControl ItemsSource="{Binding Queued}" x:Name="_queued">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding Image.Url}" Height="94" />
+                            <Image Source="{Binding Image.Url}" Height="{x:Static local:PlaylistWindow.QUEUED_HEIGHT}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
