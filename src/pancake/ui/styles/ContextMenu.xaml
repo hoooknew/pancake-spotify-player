@@ -700,6 +700,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <ControlTemplate.Resources>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource MP_MenuItemStyle}"/>
+                    </ControlTemplate.Resources>
                     <Border Name="ContextMenuBorder" Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
