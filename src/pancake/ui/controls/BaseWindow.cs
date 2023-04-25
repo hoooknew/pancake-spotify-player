@@ -10,7 +10,7 @@ namespace pancake.ui.controls
     {
         bool ResizeInProcess = false;
 
-        public event EventHandler Resized;
+        public event EventHandler? Resized;
         
 
         public BaseWindow()
