@@ -24,31 +24,20 @@ jobs:
     steps:
     
     - name: Checkout
-      uses: actions/checkout@v2      
+      uses: actions/checkout@v3.5.0
     
     # maybe add nerdbank versioning? https://github.com/AArnott/nbgv
     
     - name: Install .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3.0.3
       with:
-        dotnet-version: "6.0.x"
+        dotnet-version: "7.0.x"
 
-    - name: Add MSBuild
-      uses: microsoft/setup-msbuild@v1.1
-      with: 
-        # 17.4 is required for the source code generator to work.
-        vs-version: '[17.4'
-
-    - name: Restore
-      run: MSBuild  ${{ env.Solution_Path }} /t:Restore
-      
-    - name: Build
-      run: MSBuild  ${{ env.Solution_Path }} /p:Configuration=Release /p:Version=${{ inputs.version-num }}        
-
+    - name: dotnet build
+      run: dotnet build -p:Configuration=Release -p:Version=${{ inputs.version-num }}
+          
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
       with:
         name: ${{ inputs.bin-artifact }}
         path: src/pancake/bin/
-        
-

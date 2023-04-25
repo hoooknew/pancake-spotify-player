@@ -44,6 +44,9 @@ namespace pancake.lib
         private string? _mainWindowPlacement = null;
 
         [AutoNotify]
+        private string? _playlistPlacement = null;
+
+        [AutoNotify]
         private string? _theme = "dark";
 
         [AutoNotify]
@@ -57,6 +60,9 @@ namespace pancake.lib
 
         [AutoNotify]
         private bool _taskbarVisible = true;
+
+        [AutoNotify]
+        private bool _playlistVisible = true;
 
         [AutoNotify]
         private double _uiScale = 1.0;

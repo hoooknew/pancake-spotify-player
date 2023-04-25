@@ -33,6 +33,8 @@ namespace pancake.models
                 _ => throw new ArgumentException()
             };
 
+        public IPlayableItem Item => _item;
+
         public IEnumerable<LinkableObject> Artists            
             => _item switch 
             { 
@@ -45,7 +47,7 @@ namespace pancake.models
             => images.Where(r => r.Width <= 300).OrderByDescending(r => r.Width).FirstOrDefault() ?? images.First();
 
 
-        public Image? Image
+        public Image Image
             => _item switch
             {
                 FullTrack track => PickImage(track.Album.Images),

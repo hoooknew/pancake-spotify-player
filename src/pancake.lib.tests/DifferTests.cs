@@ -32,6 +32,28 @@ namespace pancake.lib.tests
             Assert.Equal(newText, changedText);
         }
 
+        [Fact]
+        public void Add_Inserts()
+        {
+            var oldText = "";
+            var newText = "abcd";
+
+            var changedText = DiffAndApply(oldText, newText);
+
+            Assert.Equal(newText, changedText);
+        }
+
+        [Fact]
+        public void Add_Deletes()
+        {
+            var oldText = "abcd";
+            var newText = "";
+
+            var changedText = DiffAndApply(oldText, newText);
+
+            Assert.Equal(newText, changedText);
+        }
+
 
         [Fact]
         public void Add_To_Beginning()

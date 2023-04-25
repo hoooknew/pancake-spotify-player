@@ -1,5 +1,7 @@
-﻿using System;
+﻿using pancake.ui.controls;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -12,11 +14,17 @@ internal class DockableWindows : IDisposable
     private class NativeMethods
     {
         #region Constants
-        public static readonly int WM_EXITSIZEMOVE = 0x232;
+        public const int WM_EXITSIZEMOVE = 0x232;
+        public const int WM_ENTERSIZEMOVE = 0x231;
+        public const int WM_SIZE = 0x0005;
+
         #endregion
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
+
+        [DllImport("User32.dll")]
+        public static extern uint GetDpiForWindow(IntPtr hwnd);
 
         public struct RECT
         {
@@ -63,6 +71,17 @@ internal class DockableWindows : IDisposable
             public bool HasVerticalOverlap(NativeMethods.RECT other_r)
                => (this.Top >= other_r.Top && this.Top <= other_r.Bottom) ||
                   (this.Bottom >= other_r.Top && this.Bottom <= other_r.Bottom);
+
+            public RECT Scale(decimal factor)
+            {
+                RECT scaled = new RECT();
+                scaled.Left = (int)Math.Floor(Left * factor);
+                scaled.Right = (int)Math.Floor(Right * factor);
+                scaled.Top = (int)Math.Floor(Top * factor);
+                scaled.Bottom = (int)Math.Floor(Bottom * factor);
+
+                return scaled;
+            }
         }
 
         [Flags]
@@ -97,6 +116,10 @@ internal class DockableWindows : IDisposable
             int size = Marshal.SizeOf(typeof(RECT));
             DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out RECT rect, size);
 
+            decimal dpiScale = GetDpiForWindow(hWnd) / 96;
+            if (dpiScale > 0)
+                rect = rect.Scale(1 / dpiScale);
+
             return rect;
         }
 
@@ -121,8 +144,20 @@ internal class DockableWindows : IDisposable
         DependencyProperty.RegisterAttached("Handle", typeof(IntPtr), typeof(DockableWindows), new PropertyMetadata(IntPtr.Zero));
     #endregion
 
+    #region DockedPosition Attached Property
+    public static DockedPosition? GetDockedPosition(DependencyObject obj) => 
+        (DockedPosition)obj.GetValue(DockedPositionProperty);
+    
+    public static void SetDockedPosition(DependencyObject obj, DockedPosition? value) =>
+        obj.SetValue(DockedPositionProperty, value);
+
+    public static readonly DependencyProperty DockedPositionProperty =
+        DependencyProperty.RegisterAttached("DockedPosition", typeof(DockedPosition), typeof(DockableWindows), new PropertyMetadata(null));
+    #endregion
+
+
     [Flags]
-    private enum DockedTo
+    public enum DockedTo
     {
         None = 0,
 
@@ -139,12 +174,11 @@ internal class DockableWindows : IDisposable
 
     const double DEFAULT_SNAP_DISTANCE = 20;
 
-    private record DockedPosition(Point offset, DockedTo dockedTo);
+    public record DockedPosition(Point offset, DockedTo dockedTo);
 
     private Window _main;
     readonly double _snapDistance;
     private List<Window> _dockable;
-    private Dictionary<Window, DockedPosition> _dockedWindows;
 
     public double SnapDistance => _snapDistance;
     public bool AllowTop { get; set; } = true;
@@ -155,141 +189,191 @@ internal class DockableWindows : IDisposable
     public DockableWindows(Window main, double snapDistance = DEFAULT_SNAP_DISTANCE)
     {
         _main = main;
-        _main.LocationChanged += MainWindow_SizeOrLocationChanged;
-        _main.SizeChanged += MainWindow_SizeOrLocationChanged;
+        _main.LocationChanged += MainWindow_LocationChanged;
+        _main.SizeChanged += MainWindow_LocationChanged;        
 
         _snapDistance = snapDistance;
 
         _dockable = new List<Window>();
-        _dockedWindows = new Dictionary<Window, DockedPosition>();
+    }    
+
+    void AddHook(Window w, HwndSourceHook callback)
+    {
+        if (w.IsLoaded)
+        {
+            var h = GetHandle(w);
+            HwndSource source = HwndSource.FromHwnd(h);
+            if (source != null)
+                source.AddHook(callback);
+        }
+        else
+            w.Loaded += (s, e) => AddHook(w, callback);
+
+    }
+
+    void RemoveHook(Window w, HwndSourceHook callback)
+    {
+        var h = GetHandle(w);
+        HwndSource source = HwndSource.FromHwnd(h);
+        source?.RemoveHook(callback);
     }
 
     public void AddDockable(Window w)
     {
-        void AddHook(Window w, HwndSourceHook callback)
-        {
-            if (w.IsLoaded)
-            {
-                var h = GetHandle(w);
-                HwndSource source = HwndSource.FromHwnd(h);
-                source.AddHook(callback);
-            }
-            else
-                w.Loaded += (s, e) => AddHook(w, callback);
-
-        }
-
         if (!_dockable.Contains(w))
         {
             _dockable.Add(w);
+            w.IsVisibleChanged += _dockable_IsVisibleChanged;
             w.Closed += (s, e) => RemoveDockable((s as Window)!);
             AddHook(w, Dockable_WndProc);
+            if (w is BaseWindow bw)
+                bw.Resized += _dockable_SizeChanged;
         }
     }
+
+    
+
     public void RemoveDockable(Window w)
     {
-        void RemoveHook(Window w, HwndSourceHook callback)
-        {
-            var h = GetHandle(w);
-            HwndSource source = HwndSource.FromHwnd(h);
-            source.RemoveHook(callback);
-        }
-
         if (_dockable.Contains(w))
         {
             RemoveHook(w, Dockable_WndProc);
+            w.IsVisibleChanged -= _dockable_IsVisibleChanged;
             _dockable.Remove(w);
+            if (w is BaseWindow bw)
+                bw.Resized -= _dockable_SizeChanged;
         }
 
-        if (_dockedWindows.ContainsKey(w))
-            _dockedWindows.Remove(w);
+        SetDockedPosition(w, null);
     }
 
+    public void DockWindowTo(Window dockable, DockedTo dockTo)
+    {
+        if (!_dockable.Contains(dockable))
+            AddDockable(dockable);
 
-    private DockedPosition? GetDockedPosition(Window dockable)
-    {
-        return _dockedWindows?.GetValueOrDefault(dockable) ?? null;
-    }
-    private void SetDockedPosition(Window dockable, DockedPosition? position)
-    {
-        if (position != null)
-            _dockedWindows[dockable] = position;
-        else
-            _dockedWindows.Remove(dockable);
+        var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
+        var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
+
+        SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
+        if (_main.IsLoaded && _main.IsVisible)
+            PositionDockedWindows();
     }
 
     private Window? GetDockableWithHandle(IntPtr h)
         => _dockable.FirstOrDefault(w => GetHandle(w) == h);
 
-    private void PositionDockedWindows()
+    public void PositionDockedWindows()
     {
         var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
 
-        foreach (var docked in _dockedWindows.Keys)
+        foreach (var docked in _dockable)
         {
-            var dockedSize = NativeMethods.GetExtendedFrameBounds(docked);
+            var position = GetDockedPosition(docked);
+            if (position != null)
+            {
+                var dockedSize = NativeMethods.GetExtendedFrameBounds(docked);
 
-            var position = _dockedWindows[docked];
-            double top;
-            double left;
+                double top;
+                double left;
+                double width = docked.Width;
+                double height = docked.Height;
 
-            if (position.dockedTo.HasFlag(DockedTo.Top_Primary))
-                top = mainSize.Top - dockedSize.Height;
-            else if (position.dockedTo.HasFlag(DockedTo.Bottom_Primary))
-                top = mainSize.Top + mainSize.Height;
-            else if (position.dockedTo.HasFlag(DockedTo.Top_Secondary))
-                top = _main.Top;
-            else if (position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
-                top = _main.Top + (mainSize.Height - dockedSize.Height);
-            else
-                top = _main.Top + position.offset.Y;
+                if (position.dockedTo.HasFlag(DockedTo.Top_Secondary) && position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
+                {
+                    top = _main.Top;
+                    height = _main.Height;
+                }
+                else if (position.dockedTo.HasFlag(DockedTo.Bottom_Primary))
+                    top = mainSize.Top + mainSize.Height;
+                else if (position.dockedTo.HasFlag(DockedTo.Top_Primary))
+                    top = mainSize.Top - dockedSize.Height;
+                else if (position.dockedTo.HasFlag(DockedTo.Top_Secondary))
+                    top = _main.Top;
+                else if (position.dockedTo.HasFlag(DockedTo.Bottom_Secondary))
+                    top = _main.Top + (mainSize.Height - dockedSize.Height);
+                else
+                    top = _main.Top + position.offset.Y;
 
 
-            if (position.dockedTo.HasFlag(DockedTo.Left_Primary))
-                left = _main.Left - dockedSize.Width;
-            else if (position.dockedTo.HasFlag(DockedTo.Right_Primary))
-                left = _main.Left + mainSize.Width;
-            else if (position.dockedTo.HasFlag(DockedTo.Left_Secondary))
-                left = _main.Left;
-            else if (position.dockedTo.HasFlag(DockedTo.Right_Secondary))
-                left = _main.Left + (mainSize.Width - dockedSize.Width);
-            else
-                left = _main.Left + position.offset.X;
+                if (position.dockedTo.HasFlag(DockedTo.Left_Secondary) && position.dockedTo.HasFlag(DockedTo.Right_Secondary))
+                {
+                    left = _main.Left;
+                    width = _main.Width;
+                }
+                else if (position.dockedTo.HasFlag(DockedTo.Left_Primary))
+                    left = _main.Left - dockedSize.Width;
+                else if (position.dockedTo.HasFlag(DockedTo.Right_Primary))
+                    left = _main.Left + mainSize.Width;
+                else if (position.dockedTo.HasFlag(DockedTo.Left_Secondary))
+                    left = _main.Left;
+                else if (position.dockedTo.HasFlag(DockedTo.Right_Secondary))
+                    left = _main.Left + (mainSize.Width - dockedSize.Width);
+                else
+                    left = _main.Left + position.offset.X;
 
-            docked.Top = top;
-            docked.Left = left;
+                docked.Top = top;
+                docked.Left = left;
+                docked.Width = width;
+                docked.Height = height;
+            }
         }
     }
 
     private IntPtr Dockable_WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
         // https://github.com/StrongCod3r/SnapWindow/blob/master/WpfExample/SnapWindow.cs#L23
-        if (msg == NativeMethods.WM_EXITSIZEMOVE)
+
+        switch (msg)
         {
-            Window? dockable = GetDockableWithHandle(hwnd);
+            case NativeMethods.WM_EXITSIZEMOVE:
+                TryToDock(GetDockableWithHandle(hwnd));
+                break;
+        }
+        return IntPtr.Zero;
+    }
 
-            if (dockable != null)
+    private void _dockable_SizeChanged(object? sender, EventArgs e)
+    {
+        TryToDock(sender as Window);
+    }
+
+    private void _dockable_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (sender is Window w && w.IsVisible)
+            PositionDockedWindows();
+    }
+
+    private void Dockable_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (sender is Window dockable)
+        {
+            dockable.MouseUp -= Dockable_MouseUp;
+            TryToDock(dockable);
+        }
+    }
+
+    private void TryToDock(Window? dockable)
+    {
+        if (dockable != null)
+        {
+            var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
+            var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
+
+            DockedTo dockTo = GetPrimaryDock(mainSize, dockableSize);
+            dockTo |= GetSeconadryDock(mainSize, dockableSize, dockTo);
+
+            if (dockTo == DockedTo.None)
             {
-                var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
-                var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
-
-                DockedTo dockTo = GetPrimaryDock(mainSize, dockableSize);
-                dockTo |= GetSeconadryDock(mainSize, dockableSize, dockTo);
-
-                if (dockTo == DockedTo.None)
-                {
-                    if (GetDockedPosition(dockable) != null)
-                        SetDockedPosition(dockable, null);
-                }
-                else
-                {
-                    SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
-                    PositionDockedWindows();
-                }
+                if (GetDockedPosition(dockable) != null)
+                    SetDockedPosition(dockable, null);
+            }
+            else
+            {
+                SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
+                PositionDockedWindows();
             }
         }
-
-        return IntPtr.Zero;
     }
 
     private DockedTo GetPrimaryDock(NativeMethods.RECT mainSize, NativeMethods.RECT dockableSize)
@@ -327,12 +411,7 @@ internal class DockableWindows : IDisposable
             var right = dockableSize.Dist_RightToRight(mainSize);
 
             if (left <= SnapDistance && right <= SnapDistance)
-            {
-                if (left <= right)
-                    return DockedTo.Left_Secondary;
-                else
-                    return DockedTo.Right_Secondary;
-            }
+                return DockedTo.Left_Secondary | DockedTo.Right_Secondary;
             else if (left <= SnapDistance)
                 return DockedTo.Left_Secondary;
             else if (right <= SnapDistance)
@@ -343,12 +422,7 @@ internal class DockableWindows : IDisposable
             var top = dockableSize.Dist_TopToTop(mainSize);
             var bottom = dockableSize.Dist_BottomToBottom(mainSize);
             if (top <= SnapDistance && bottom <= SnapDistance)
-            {
-                if (top <= bottom)
-                    return DockedTo.Top_Secondary;
-                else
-                    return DockedTo.Bottom_Secondary;
-            }
+                return DockedTo.Top_Secondary | DockedTo.Bottom_Secondary;
             else if (top <= SnapDistance)
                 return DockedTo.Top_Secondary;
             else if (bottom <= SnapDistance)
@@ -358,15 +432,15 @@ internal class DockableWindows : IDisposable
         return DockedTo.None;
     }
 
-    private void MainWindow_SizeOrLocationChanged(object? sender, EventArgs e)
+    private void MainWindow_LocationChanged(object? sender, EventArgs e)
     {
         PositionDockedWindows();
     }
 
     public void Dispose()
     {
-        _main.LocationChanged -= MainWindow_SizeOrLocationChanged;
-        _main.SizeChanged -= MainWindow_SizeOrLocationChanged;
+        _main.LocationChanged -= MainWindow_LocationChanged;
+        _main.SizeChanged -= MainWindow_LocationChanged;        
 
         foreach (var dw in _dockable.ToList())
             RemoveDockable(dw);

@@ -41,6 +41,7 @@
         <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowControls}" Executed="SettingsCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowProgress}" Executed="SettingsCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" Executed="SettingsCommand_Executed"/>
+        <CommandBinding Command="{x:Static ui:SettingsCommands.HideShowPlaylist}" Executed="SettingsCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:SettingsCommands.SignOut}" Executed="SettingsCommand_Executed"/>
         <CommandBinding Command="{x:Static ui:SettingsCommands.ChangeZoom}" Executed="SettingsCommand_Executed"/>
     </Window.CommandBindings>

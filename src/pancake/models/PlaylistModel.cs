@@ -1,5 +1,7 @@
-﻿using pancake.lib;
+﻿using Microsoft.Extensions.Logging;
+using pancake.lib;
 using pancake.spotify;
+using pancake.ui;
 using SpotifyAPI.Web;
 using System;
 using System.Collections.Generic;
@@ -12,19 +14,27 @@ using System.Threading.Tasks;
 
 namespace pancake.models
 {
-    internal class PlaylistModel : INotifyPropertyChanged, IDisposable
+    public interface IPlaylistModel
+    {
+        PlayableItemModel? Playing { get; }
+        int QueuedLength { get; set; }
+        ObservableCollection<PlayableItemModel> Queued { get; }
+    }
+
+    public class PlaylistModel : INotifyPropertyChanged, IDisposable, IPlaylistModel
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private readonly IPlayerModel _playerModel;
         private readonly IAPI _api;
-        public IPlayableItem? _playing;
+        public PlayableItemModel? _playing;
         private ISpotifyClient? _client = null;
 
         private RepeatingRun _queueRefresher;
+        private readonly IDispatchProvider _dispatch;
+        private readonly ILogger _log;
 
-        public ObservableCollection<PlayableItemModel> Played { get; private set; }
-        public IPlayableItem? Playing
+        public PlayableItemModel? Playing
         {
             get => _playing;
             private set
@@ -35,16 +45,20 @@ namespace pancake.models
         }
         public ObservableCollection<PlayableItemModel> Queued { get; private set; }
 
-        public PlaylistModel(IPlayerModel playerModel, IConfig config, IAPI api, ILogging logging)
+        public int QueuedLength { get; set; } = 4;
+
+        public PlaylistModel(IPlayerModel playerModel, IConfig config, IDispatchProvider dispatch, IAPI api, ILogging logging)
         {
+            _log = logging.Create<PlaylistModel>();
+
             _api = api;
             _api.PropertyChanged += _api_PropertyChanged;
 
             _playerModel = playerModel;
             _playerModel.PropertyChanged += _playerModel_PropertyChanged;
 
+            _dispatch = dispatch;
 
-            Played = new ObservableCollection<PlayableItemModel>();
             Queued = new ObservableCollection<PlayableItemModel>();
             Playing = null;
 
@@ -91,30 +105,20 @@ namespace pancake.models
             await _api.TryApiCall(async client =>
             {
                 var response = await client.Player.GetQueue(cancelToken);
-                var queue = response.Queue.Select(r => new PlayableItemModel(r)).ToList();
+                var queue = response.Queue.Select(r => new PlayableItemModel(r)).Take(QueuedLength).ToList();
 
-                Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
-            });
-        }
+                _log.LogInformation("queue data updated. num items:{0}", response.Queue.Count());
 
-        private async Task RefreshPlayed(CancellationToken cancelToken = default(CancellationToken))
-        {
-            await _api.TryApiCall(async client =>
-            {
-                var played = new List<PlayableItemModel>();
-
-                var response = await client.Player.GetRecentlyPlayed(cancelToken);                
-                if (response != null && response.Items != null)
-                    played = response.Items.Select(r => r.Track).OfType<IPlayableItem>().Select(r => new PlayableItemModel(r)).ToList();
-
-                Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Played, played, r => r.Id);
-            });
+                _dispatch.Invoke(() =>
+                {
+                    Differ<PlayableItemModel>.Instance.ApplyDiffsToOld(this.Queued, queue, r => r.Id!);
+                });
+            });            
         }
 
         private async Task ChangePlaying(IPlayableItem? currentlyPlaying)
         {
-            Playing = currentlyPlaying;
-            await RefreshPlayed();
+            Playing = currentlyPlaying != null ? new PlayableItemModel(currentlyPlaying) : null;
             await RefreshQueue();
         }
 

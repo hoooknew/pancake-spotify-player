@@ -11,20 +11,24 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace pancake
 {
-    public partial class MainWindow : BaseWindow
+    public partial class MainWindow : BaseWindow, IDisposable
     {
         readonly ILogger<MainWindow> _logger;
         private readonly IAuthentication _auth;
         private readonly IAPI _api;
         readonly IPlayerModel _model;
         bool _commandExecuting = false;
+        readonly DockableWindows _dockable;
+        readonly PlaylistWindow _playlist;
 
-        public MainWindow(ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
+        public MainWindow(PlaylistWindow playlist, ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
         {
             InitializeComponent();
+
             this.Loaded += MainWindow_Loaded;
 
             _logger = logging.Create<MainWindow>();
@@ -32,6 +36,36 @@ namespace pancake
             _api = api;
             _api.Error += _api_Error;
             _model = model;
+
+            _dockable = new DockableWindows(this);
+
+            _playlist = playlist;
+            _setupPlaylist();
+        }
+
+        private void _setupPlaylist()
+        {
+            _playlist.Closing += (s, e) =>
+            {
+                e.Cancel = true;
+                _playlist.Hide();
+                Settings.Instance.PlaylistVisible = false;
+            };
+            _dockable.DockWindowTo(_playlist, DockableWindows.DockedTo.Top_Primary | DockableWindows.DockedTo.Left_Secondary | DockableWindows.DockedTo.Right_Secondary);
+
+
+            SetPlaylistVisibility();
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            if (_playlist != null)
+            {
+                //this makes the playlist visible if it's behind another window and the main window is activated.
+                _playlist.Topmost = true;
+                _playlist.Topmost = false;
+            }
+            base.OnActivated(e);
         }
 
         private void _api_Error(object? sender, ApiErrorEventArgs e)
@@ -149,14 +183,43 @@ namespace pancake
                     {
                         Settings.Instance.UiScale = uiScale;
                         Settings.Instance.Save();
+                        this.Dispatcher.BeginInvoke(() => _dockable.PositionDockedWindows(), DispatcherPriority.Background);
                     }
                 }
             }
+            else if (e.Command == SettingsCommands.HideShowPlaylist)
+            {
+                Settings.Instance.PlaylistVisible = !Settings.Instance.PlaylistVisible;
+                SetPlaylistVisibility();
+            }
+        }
+
+        private void SetPlaylistVisibility()
+        {
+            if (Settings.Instance.PlaylistVisible)
+                this.ShowPlaylist();
+            else
+                this.HidePlaylist();
+        }
+
+        private void ShowPlaylist()
+        {
+            _playlist.Show();
+        }
+
+        private void HidePlaylist()
+        {
+            _playlist.Hide();
         }
 
         private void OpenInSpotify_Executed(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
         {
             Spotify.Open(e.Parameter);
+        }
+
+        public void Dispose()
+        {
+            _dockable?.Dispose();
         }
     }
 }

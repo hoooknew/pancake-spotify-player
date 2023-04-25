@@ -17,54 +17,59 @@
             <s:Double x:Key="scale150">1.5</s:Double>
             <s:Double x:Key="scale200">2.0</s:Double>
         </ContextMenu.Resources>
-        <MenuItem Header="Settings">
-            <MenuItem Header="Always On Top" 
-                          Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
-                          IsChecked="{Binding AlwaysOnTop, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-            <MenuItem Header="Zoom">
-                <MenuItem Header="100%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale100}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale100}"/>
-                <MenuItem Header="125%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale125}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale125}"/>
-                <MenuItem Header="150%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale150}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale150}"/>
-                <MenuItem Header="200%"
-                              IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale200}}"
-                              Command="{x:Static ui:SettingsCommands.ChangeZoom}"
-                              CommandParameter="{StaticResource scale200}"/>
-            </MenuItem>
-            <MenuItem Header="Show or Hide">
-                <MenuItem Header="Controls" 
-                          Command="{x:Static ui:SettingsCommands.HideShowControls}" 
-                          IsChecked="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-                <MenuItem Header="Progress" 
-                          Command="{x:Static ui:SettingsCommands.HideShowProgress}" 
-                          IsChecked="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-                <MenuItem Header="Taskbar" 
-                          Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" 
-                          IsChecked="{Binding TaskbarVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
-            </MenuItem>
-            <MenuItem Header="Themes">
-                <MenuItem Header="Light" 
-                              Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
-                              CommandParameter="light"
-                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=light}"/>
-                <MenuItem Header="Dark" 
-                              Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
-                              CommandParameter="dark"
-                              IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=dark}"/>
-            </MenuItem>
+
+        <MenuItem Header="Show or Hide">
+            <MenuItem Header="Controls" 
+                      Command="{x:Static ui:SettingsCommands.HideShowControls}" 
+                      IsChecked="{Binding ControlsVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+            <MenuItem Header="Progress" 
+                      Command="{x:Static ui:SettingsCommands.HideShowProgress}" 
+                      IsChecked="{Binding ProgressVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+            <MenuItem Header="Taskbar" 
+                      Command="{x:Static ui:SettingsCommands.HideShowTaskbar}" 
+                      IsChecked="{Binding TaskbarVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+            <MenuItem Header="Playlist" 
+                      Command="{x:Static ui:SettingsCommands.HideShowPlaylist}" 
+                      IsChecked="{Binding PlaylistVisible, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
         </MenuItem>
+
+        <MenuItem Header="Always On Top" 
+                  Command="{x:Static ui:SettingsCommands.ToggleAlwaysOnTop}" 
+                  IsChecked="{Binding AlwaysOnTop, Source={x:Static lib:Settings.Instance}, Mode=OneWay}"/>
+
+        <MenuItem Header="Zoom">
+            <MenuItem Header="100%"
+                      IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale100}}"
+                      Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                      CommandParameter="{StaticResource scale100}"/>
+            <MenuItem Header="125%"
+                      IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale125}}"
+                      Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                      CommandParameter="{StaticResource scale125}"/>
+            <MenuItem Header="150%"
+                      IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale150}}"
+                      Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                      CommandParameter="{StaticResource scale150}"/>
+            <MenuItem Header="200%"
+                      IsChecked="{Binding UiScale, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource scale200}}"
+                      Command="{x:Static ui:SettingsCommands.ChangeZoom}"
+                      CommandParameter="{StaticResource scale200}"/>
+        </MenuItem>
+        
+        <MenuItem Header="Themes">
+            <MenuItem Header="Light" 
+                      Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
+                      CommandParameter="light"
+                      IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=light}"/>
+            <MenuItem Header="Dark" 
+                      Command="{x:Static ui:SettingsCommands.ChangeTheme}" 
+                      CommandParameter="dark"
+                      IsChecked="{Binding Theme, Source={x:Static lib:Settings.Instance}, Mode=OneWay, Converter={StaticResource IsEqualConverter}, ConverterParameter=dark}"/>
+        </MenuItem>        
         <MenuItem Header="Account">
             <MenuItem Header="Sign Out" 
-                          IsEnabled="{Binding NeedToken, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource False}}"
-                          Command="{x:Static ui:SettingsCommands.SignOut}"/>
+                      IsEnabled="{Binding NeedToken, Converter={StaticResource IsEqualConverter}, ConverterParameter={StaticResource False}}"
+                      Command="{x:Static ui:SettingsCommands.SignOut}"/>
         </MenuItem>
     </ContextMenu>
 </ResourceDictionary>

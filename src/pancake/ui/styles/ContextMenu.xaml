@@ -626,6 +626,8 @@
                 Value="False"/>
         <Setter Property="Template"
                 Value="{StaticResource MP_SubmenuItemTemplateKey}"/>
+        <!--https://stackoverflow.com/questions/3921712/wpf-custom-command-in-context-menu-are-disabled-until-any-button-clicked-->
+        <Setter Property="CommandTarget" Value="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
         <Style.Triggers>
             <Trigger Property="Role"
                      Value="TopLevelHeader">
@@ -699,12 +701,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <ControlTemplate.Resources>
-                        <Style TargetType="MenuItem" BasedOn="{StaticResource MP_MenuItemStyle}">
-                            <!--https://stackoverflow.com/questions/3921712/wpf-custom-command-in-context-menu-are-disabled-until-any-button-clicked-->
-                            <Setter Property="CommandTarget" Value="{Binding Path=PlacementTarget, RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
-                        </Style>
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource MP_MenuItemStyle}"/>
                     </ControlTemplate.Resources>
-
                     <Border Name="ContextMenuBorder" Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}">
