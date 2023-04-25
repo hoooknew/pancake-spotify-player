@@ -19,6 +19,7 @@ namespace pancake
     public partial class App : Application
     {
         public static IHost? Host { get; private set; }
+        private readonly ILogger<App> _log;
 
         public App()
         {
@@ -28,6 +29,10 @@ namespace pancake
                     ConfigureServices(services);
                 })
                 .Build();
+
+            var logging = Host.Services.GetRequiredService<ILogging>();
+            _log = logging.Create<App>();
+            _log.LogInformation("starting...");
         }
 
         private void ConfigureServices(IServiceCollection services)
@@ -66,6 +71,8 @@ namespace pancake
 
         protected override async void OnExit(ExitEventArgs e)
         {
+            _log.LogInformation("exiting...");
+
             (Host?.Services.GetService(typeof(MainWindow)) as IDisposable)?.Dispose();
             (Host?.Services.GetService(typeof(IPlayerModel)) as IDisposable)?.Dispose();
 

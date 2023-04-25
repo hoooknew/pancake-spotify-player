@@ -3,7 +3,6 @@ using pancake.lib;
 using pancake.models;
 using pancake.ui.controls;
 using SpotifyAPI.Web;
-using Swan.Parsers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
