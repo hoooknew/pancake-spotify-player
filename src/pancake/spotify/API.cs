@@ -1,7 +1,9 @@
-﻿using pancake.lib;
+﻿using Microsoft.Extensions.Logging;
+using pancake.lib;
 using pancake.models;
 using pancake.ui.controls;
 using SpotifyAPI.Web;
+using Swan.Parsers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,10 +39,12 @@ namespace pancake.spotify
         private readonly IAuthentication _auth;
         private object? _token;
         private bool _clientAvailable = false;
+        private readonly ILogger _log;
 
-        public API(IAuthentication auth) 
+        public API(IAuthentication auth, ILogging logging) 
         {
             _auth = auth;
+            _log = logging.Create<API>();
         }
 
         public void SetToken(object? token)
@@ -48,6 +52,8 @@ namespace pancake.spotify
             _token = token;
             _client = null;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasToken)));
+
+            _log.LogInformation("token set: {0}", token != null ? "<NOT NULL>" : "<NULL>");
         }
 
         public bool HasToken => _token != null;
@@ -71,6 +77,8 @@ namespace pancake.spotify
 
                 var config = SpotifyClientConfig.CreateDefault()
                 .WithAuthenticator(authenticator);
+
+                _log.LogInformation("create client, token: {0}", _token != null ? "<NOT NULL>" : "<NULL>");
 
                 return new SpotifyClient(config);
             }
@@ -103,26 +111,31 @@ namespace pancake.spotify
                     catch (APITooManyRequestsException e)
                     {
                         await Task.Delay(e.RetryAfter);
+                        _log.LogError("Too Many Requests Error");
                     }
                     catch (APIException e) when (e.Message == "Player command failed: Restriction violated")
                     {
                         //retry
+                        _log.LogError("API Error: {0}", e.Message);
                     }
                     catch (APIException e) when
                         (e.Message == "Service unavailable")
                     {
                         //fail silently
+                        _log.LogError("API Error: {0}", e.Message);
                         break;
                     }
                     catch (APIException e) when
                         (e.Message == "Player command failed: No active device found")
                     {
                         ClientAvailable = false;
+                        _log.LogError("API Error: {0}", e.Message);
                         break;
                     }
                     catch (HttpRequestException e) when
                         (e.Message == "No such host is known. (api.spotify.com:443)")
                     {
+                        _log.LogError("Http Request Error: {0}", e.Message);
                         //should we have a no connection state?
                         break;
                     }
@@ -142,6 +155,7 @@ namespace pancake.spotify
             catch (APIException e) when (e is not APITooManyRequestsException)
             {
                 //_dispatcher.Invoke(() => _HandleAPIError(e));
+                _log.LogError("API Error: {0}", e.Message);
                 HandleAPIError(e);
                 return false;
             }
