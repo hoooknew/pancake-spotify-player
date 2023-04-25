@@ -27,6 +27,8 @@ namespace pancake.lib
                     lb.AddConfiguration(config.Logging);
 
                 lb.AddDebug();
+                var baseDir = AppContext.BaseDirectory;
+                lb.AddFile(o => o.RootPath = baseDir);
             });
             _default = _factory.CreateLogger<Logging>();
         }

@@ -53,6 +53,7 @@
     <ROW Component="AI_INSTALLPERUSER" ComponentId="{8883573E-5BE5-479A-A5D6-DAB9F98B99E5}" Directory_="APPDIR" Attributes="4" KeyPath="AI_INSTALLPERUSER" Options="1"/>
     <ROW Component="APPDIR" ComponentId="{8A062CA9-17CB-4F14-9C3F-6EE236D1FB51}" Directory_="APPDIR" Attributes="0"/>
     <ROW Component="EmbedIO.dll" ComponentId="{1009E805-FCE7-414C-A1E1-3E82B8F65442}" Directory_="APPDIR" Attributes="0" KeyPath="EmbedIO.dll"/>
+    <ROW Component="Karambolo.Extensions.Logging.File.dll" ComponentId="{98EC30C5-7982-4B0B-871B-FD198F465795}" Directory_="APPDIR" Attributes="0" KeyPath="Karambolo.Extensions.Logging.File.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.Abstractions.dll" ComponentId="{A05C2235-DBEF-4102-A295-8395D5291B35}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Abstractions.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.Binder.dll" ComponentId="{66A9C093-1F6B-4B0F-94ED-F61584E27C6E}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.Binder.dll"/>
     <ROW Component="Microsoft.Extensions.Configuration.CommandLine.dll" ComponentId="{00DE5FB6-4E9D-499E-BD20-DDCB32E4C091}" Directory_="APPDIR" Attributes="0" KeyPath="Microsoft.Extensions.Configuration.CommandLine.dll"/>
@@ -147,6 +148,7 @@
     <ROW File="System.Diagnostics.EventLog.dll_3" Component_="System.Diagnostics.EventLog.dll_3" FileName="SYSTEM~1.DLL|System.Diagnostics.EventLog.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Diagnostics.EventLog.dll" SelfReg="false"/>
     <ROW File="System.Text.Encodings.Web.dll_2" Component_="System.Text.Encodings.Web.dll_2" FileName="SYSTEM~2.DLL|System.Text.Encodings.Web.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Encodings.Web.dll" SelfReg="false"/>
     <ROW File="System.Text.Json.dll" Component_="System.Text.Json.dll" FileName="SYSTEM~3.DLL|System.Text.Json.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\System.Text.Json.dll" SelfReg="false"/>
+    <ROW File="Karambolo.Extensions.Logging.File.dll" Component_="Karambolo.Extensions.Logging.File.dll" FileName="KARAMB~1.DLL|Karambolo.Extensions.Logging.File.dll" Attributes="0" SourcePath="..\pancake\bin\Release\net6.0-windows\Karambolo.Extensions.Logging.File.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.AiPersistentPropComponent">
     <ROW Property="AI_INSTALLPERUSER" Registry="AI_INSTALLPERUSER" HklmSearch="AI_INSTALLPERUSER" HkcuSearch="AI_INSTALLPERUSER_1"/>
@@ -282,6 +284,7 @@
     <ROW Feature_="MainFeature" Component_="pancake.exe_1"/>
     <ROW Feature_="MainFeature" Component_="pancake.lib.dll_1"/>
     <ROW Feature_="MainFeature" Component_="SHORTCUTDIR"/>
+    <ROW Feature_="MainFeature" Component_="Karambolo.Extensions.Logging.File.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="pancake.exe" SourcePath="..\..\media\pancake.ico" Index="0"/>
