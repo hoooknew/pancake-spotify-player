@@ -25,7 +25,7 @@ namespace pancake
         readonly DockableWindows _dockable;
         readonly PlaylistWindow _playlist;
 
-        public MainWindow(PlaylistWindow playlist, ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api)
+        public MainWindow(PlaylistWindow playlist, ILogging logging, IAuthentication auth, IPlayerModel model, IAPI api, IDispatchProvider dispatchProvider)
         {
             InitializeComponent();
 
@@ -37,7 +37,7 @@ namespace pancake
             _api.Error += _api_Error;
             _model = model;
 
-            _dockable = new DockableWindows(this);
+            _dockable = new DockableWindows(this, logging, dispatchProvider);
 
             _playlist = playlist;
             _setupPlaylist();

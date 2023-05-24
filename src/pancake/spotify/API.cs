@@ -39,6 +39,7 @@ namespace pancake.spotify
         private object? _token;
         private bool _clientAvailable = false;
         private readonly ILogger _log;
+        private readonly Random _random = new Random();
 
         public API(IAuthentication auth, ILogging logging) 
         {
@@ -112,23 +113,28 @@ namespace pancake.spotify
                         await Task.Delay(e.RetryAfter);
                         _log.LogError("Too Many Requests Error");
                     }
-                    catch (APIException e) when (e.Message == "Player command failed: Restriction violated")
+                    catch (APIException e) when (
+                        e.Message == "Player command failed: Restriction violated"
+                        || e.Message == "server_error"
+                        || e.Message == "Bad gateway."
+                        )
                     {
                         //retry
-                        _log.LogError("API Error: {0}", e.Message);
+                        _log.LogError("API Error, retrying... : {0}", e.Message);
+                        await RandomWait(100, 500);
                     }
                     catch (APIException e) when
                         (e.Message == "Service unavailable")
                     {
                         //fail silently
-                        _log.LogError("API Error: {0}", e.Message);
+                        _log.LogError("API Error, failing... : {0}", e.Message);
                         break;
                     }
                     catch (APIException e) when
                         (e.Message == "Player command failed: No active device found")
                     {
                         ClientAvailable = false;
-                        _log.LogError("API Error: {0}", e.Message);
+                        _log.LogError("API Error, missing client: {0}", e.Message);
                         break;
                     }
                     catch (HttpRequestException e) when
@@ -158,6 +164,13 @@ namespace pancake.spotify
                 HandleAPIError(e);
                 return false;
             }
+        }
+        
+        
+        private async Task RandomWait(int minWaitMS, int maxWaitMS)
+        {
+            var wait = _random.Next(maxWaitMS - minWaitMS) + minWaitMS;
+            await Task.Delay(wait);
         }
 
         public void HandleAPIError(Exception e)

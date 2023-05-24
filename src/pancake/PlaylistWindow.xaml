@@ -11,7 +11,8 @@
         ui:WindowPlacement.Save="PlaylistPlacement"
         SizeToContent="Height"
         MouseDoubleClick="_queued_MouseDoubleClick"
-        Title="PlaylistWindow" Height="120" Width="300">
+        Title="PlaylistWindow" Height="120" Width="300"
+        ShowInTaskbar="False">
     <Border BorderBrush="{DynamicResource DefaultBorderBrush}" BorderThickness="1">
         <Border.LayoutTransform>
             <ScaleTransform 
