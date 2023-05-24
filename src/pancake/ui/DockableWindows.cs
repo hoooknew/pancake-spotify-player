@@ -1,4 +1,7 @@
-﻿using pancake.ui.controls;
+﻿using Microsoft.Extensions.Logging;
+using pancake.lib;
+using pancake.ui;
+using pancake.ui.controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -145,9 +148,9 @@ internal class DockableWindows : IDisposable
     #endregion
 
     #region DockedPosition Attached Property
-    public static DockedPosition? GetDockedPosition(DependencyObject obj) => 
+    public static DockedPosition? GetDockedPosition(DependencyObject obj) =>
         (DockedPosition)obj.GetValue(DockedPositionProperty);
-    
+
     public static void SetDockedPosition(DependencyObject obj, DockedPosition? value) =>
         obj.SetValue(DockedPositionProperty, value);
 
@@ -186,16 +189,25 @@ internal class DockableWindows : IDisposable
     public bool AllowLeft { get; set; } = true;
     public bool AllowRight { get; set; } = true;
 
-    public DockableWindows(Window main, double snapDistance = DEFAULT_SNAP_DISTANCE)
+    private readonly ILogger _log;
+    private readonly IDispatchProvider _dispatchProvider;
+
+    public DockableWindows(Window main, ILogging logging, IDispatchProvider dispatchProvider, double snapDistance = DEFAULT_SNAP_DISTANCE)
     {
         _main = main;
         _main.LocationChanged += MainWindow_LocationChanged;
-        _main.SizeChanged += MainWindow_LocationChanged;        
+        _main.SizeChanged += MainWindow_LocationChanged;
 
         _snapDistance = snapDistance;
 
         _dockable = new List<Window>();
-    }    
+
+        _log = logging.Create<DockedPosition>();
+
+        _log.LogInformation($"created {nameof(DockableWindows)}");
+
+        _dispatchProvider = dispatchProvider;
+    }
 
     void AddHook(Window w, HwndSourceHook callback)
     {
@@ -218,7 +230,7 @@ internal class DockableWindows : IDisposable
         source?.RemoveHook(callback);
     }
 
-    public void AddDockable(Window w)
+    private void AddDockable(Window w)
     {
         if (!_dockable.Contains(w))
         {
@@ -228,12 +240,16 @@ internal class DockableWindows : IDisposable
             AddHook(w, Dockable_WndProc);
             if (w is BaseWindow bw)
                 bw.Resized += _dockable_SizeChanged;
+
+            _log.LogInformation("added window {0} to dockable list.", GetWindowName(w));
         }
+        else
+            _log.LogInformation("did not add window {0} to dockable list. already in list", GetWindowName(w));
     }
 
-    
 
-    public void RemoveDockable(Window w)
+
+    private void RemoveDockable(Window w)
     {
         if (_dockable.Contains(w))
         {
@@ -242,22 +258,28 @@ internal class DockableWindows : IDisposable
             _dockable.Remove(w);
             if (w is BaseWindow bw)
                 bw.Resized -= _dockable_SizeChanged;
+
+            _log.LogInformation("removed window {0} to dockable list.", GetWindowName(w));
         }
+        else
+            _log.LogInformation("did not remove window {0} to dockable list. it was not in list", GetWindowName(w));
 
         SetDockedPosition(w, null);
     }
 
     public void DockWindowTo(Window dockable, DockedTo dockTo)
     {
-        if (!_dockable.Contains(dockable))
-            AddDockable(dockable);
+        AddDockable(dockable);
 
         var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
         var dockableSize = NativeMethods.GetExtendedFrameBounds(dockable);
 
         SetDockedPosition(dockable, new DockedPosition(new Point(dockableSize.Left - mainSize.Left, dockableSize.Top - mainSize.Top), dockTo));
         if (_main.IsLoaded && _main.IsVisible)
+        {
+            _log.LogInformation("new docked window is visible.");
             PositionDockedWindows();
+        }
     }
 
     private Window? GetDockableWithHandle(IntPtr h)
@@ -265,6 +287,8 @@ internal class DockableWindows : IDisposable
 
     public void PositionDockedWindows()
     {
+        _log.LogInformation("starting to position docked windows...");
+
         var mainSize = NativeMethods.GetExtendedFrameBounds(_main);
 
         foreach (var docked in _dockable)
@@ -327,7 +351,9 @@ internal class DockableWindows : IDisposable
         switch (msg)
         {
             case NativeMethods.WM_EXITSIZEMOVE:
-                TryToDock(GetDockableWithHandle(hwnd));
+                var dockable = GetDockableWithHandle(hwnd);
+                _log.LogInformation($"docked window location/size changed: {GetWindowName(dockable)}");
+                TryToDock(dockable);
                 break;
         }
         return IntPtr.Zero;
@@ -335,13 +361,20 @@ internal class DockableWindows : IDisposable
 
     private void _dockable_SizeChanged(object? sender, EventArgs e)
     {
-        TryToDock(sender as Window);
+        if (sender is Window dockable)
+        {
+            _log.LogInformation($"docked window size changed: {GetWindowName(dockable)}");
+            TryToDock(dockable);
+        }
     }
 
     private void _dockable_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
     {
         if (sender is Window w && w.IsVisible)
+        {
+            _log.LogInformation("docked window visibility changed: {0}", GetWindowName(w));
             PositionDockedWindows();
+        }
     }
 
     private void Dockable_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -349,6 +382,7 @@ internal class DockableWindows : IDisposable
         if (sender is Window dockable)
         {
             dockable.MouseUp -= Dockable_MouseUp;
+            _log.LogInformation("dockable window mouse up: {0}", GetWindowName(dockable));
             TryToDock(dockable);
         }
     }
@@ -434,13 +468,24 @@ internal class DockableWindows : IDisposable
 
     private void MainWindow_LocationChanged(object? sender, EventArgs e)
     {
-        PositionDockedWindows();
+        //sizing and positioning for the window may not be correct when this event
+        //is called at startup. The `BeginInvoke()` give the window a chance to update.
+        _dispatchProvider.BeginInvoke(() =>
+        {
+            _log.LogInformation($"main window location changed: {GetWindowName(_main)}");
+
+            PositionDockedWindows();
+        });
+
     }
+
+    private string GetWindowName(Window? w) =>
+         w == null ? "<NULL>" : $"{w.GetType().FullName ?? "<NULL>"}/\"{w.Name}\"/{w.Left},{w.Top}/{w.Width},{w.Height}";
 
     public void Dispose()
     {
         _main.LocationChanged -= MainWindow_LocationChanged;
-        _main.SizeChanged -= MainWindow_LocationChanged;        
+        _main.SizeChanged -= MainWindow_LocationChanged;
 
         foreach (var dw in _dockable.ToList())
             RemoveDockable(dw);

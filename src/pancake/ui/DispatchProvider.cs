@@ -10,6 +10,7 @@ namespace pancake.ui
     public interface IDispatchProvider
     {
         void Invoke(Action callback);
+        void BeginInvoke(Action callback);
     }
 
     internal class DispatchProvider : IDispatchProvider
@@ -24,6 +25,11 @@ namespace pancake.ui
         public void Invoke(Action callback)
         {
             _dispatcher.Invoke(callback);
+        }
+
+        public void BeginInvoke(Action callback)
+        {
+            _dispatcher.BeginInvoke(callback);
         }
     }
 }
